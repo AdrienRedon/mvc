@@ -1,12 +1,12 @@
 <?php 
 
-require_once(ROOT.'libs/form.php');
+require_once(ROOT . 'libs/form.php');
 
 class View
 {
 	public $content;
-	public $layout = 'default';
-	public $title = 'MVC';
+	public $layout = DEFAULT_LAYOUT;
+	public $title  = DEFAULT_TITLE;
 
 	public function __construct()
 	{
