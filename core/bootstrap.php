@@ -10,7 +10,7 @@ class Bootstrap
 	{
 		$url = $this->parseUrl();
 
-		if(file_exists(ROOT.'controllers/' . $url[0] . '.php'))
+		if(file_exists(ROOT . 'controllers/' . $url[0] . '.php'))
 		{
 			$this->controller = $url[0];
 			unset($url[0]);
@@ -20,7 +20,7 @@ class Bootstrap
 			$this->errors();
 		}
 
-		require_once(ROOT.'controllers/' . $this->controller . '.php');
+		require_once(ROOT . 'controllers/' . $this->controller . '.php');
 
 		$this->controller = new $this->controller;
 
@@ -67,7 +67,7 @@ class Bootstrap
 	 */
 	private function errors()
 	{
-		require_once(ROOT.'controllers/errors.php');
+		require_once(ROOT . 'controllers/errors.php');
 		$this->controller = new Errors;
 		$this->controller->_404();
 		exit;

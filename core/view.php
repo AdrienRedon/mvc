@@ -13,6 +13,12 @@ class View
 		
 	}
 
+	/**
+	 * Affiche la vue
+	 * @param $name  Nom de la vue à afficher
+	 * @param $data  Ensemble des variables à injecter dans la vue
+	 * @param $title Titre de la page
+	 */
 	public function render($name, $data = null, $title = null)
 	{
 		if(isset($title))
@@ -43,6 +49,11 @@ class View
 		}
 	}
 
+	/**
+	 * Renvoie les données en JSON
+	 * @param $data   Ensemble des données à envoyer
+	 * @param $header Numéro d'entête à envoyer
+	 */
 	public function json($data, $header = 200)
 	{
 		if($header == 500)
