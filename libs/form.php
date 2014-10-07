@@ -59,7 +59,7 @@ class Form
 	public function textarea($name, $value = '', $placeholder = '')
 	{
 		?>
-			<textarea<?php if(isset($input, $input[$name])) { ?> name="<?= $input[$name] ?>"<?php } else { name="<?= $name ?>"<?php } if($placeholder != '') { ?> placeholder="<?= $placeholder ?>" <?php } ?>><?= $value ?></textarea>
+			<textarea<?php $input = $this->session->get('input'); if(isset($input, $input[$name])) { ?> name="<?= $input[$name] ?>"<?php } else { name="<?= $name ?>"<?php } if($placeholder != '') { ?> placeholder="<?= $placeholder ?>" <?php } ?>><?= $value ?></textarea>
 		<?php
 	}
 
