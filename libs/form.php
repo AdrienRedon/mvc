@@ -46,7 +46,7 @@ class Form
 	public function input($type, $name, $value = '', $placeholder = '')
 	{
 		?>
-			<input type="<?= $type ?>"<?php $input = $this->session->get('input'); if(isset($input, $input[$name])) { ?> name="<?= $input[$name] ?>"<?php } elseif($name != '') { ?> name="<?= $name ?>"<?php } if($value != '') { ?> value="<?= $value ?>"<?php } if($placeholder != '') { ?> placeholder="<?= $placeholder ?>"<?php } ?>>
+			<input type="<?= $type ?>"<?php $input = $this->session->get('input'); if(isset($input, $input[$name]) && $type != 'password') { ?> name="<?= $input[$name] ?>"<?php } elseif($name != '') { ?> name="<?= $name ?>"<?php } if($value != '') { ?> value="<?= $value ?>"<?php } if($placeholder != '') { ?> placeholder="<?= $placeholder ?>"<?php } ?>>
 		<?php
 	}
 
