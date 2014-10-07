@@ -1,6 +1,13 @@
 <?php
 
-class Form {
+class Form 
+{
+	protected $session;
+	
+	public function __construct(SessionInterface $session)
+	{
+		$this->session = $session;
+	}
 
 	/**
 	 * Ouvre un nouveau formulaire
@@ -14,7 +21,7 @@ class Form {
 		?>
 			<form action="<?= WEBROOT . $url ?>" method="<?= $method ?>"<?php if($file) { ?> enctype="multipart/form-data"<?php } ?>>
 			<?php if($token) { ?>
-				<input type="hidden" name="token" value="<?= $config['token'] ?>">
+				<input type="hidden" name="token" value="<?= /* Token */ ?>">
 			<?php } ?>
 		<?php
 	}
@@ -39,7 +46,7 @@ class Form {
 	public function input($type, $name, $value = '', $placeholder = '')
 	{
 		?>
-			<input type="<?= $type ?>"<?php if($name != '') { ?> name="<?= $name ?>"<?php } if($value != '') { ?> value="<?= $value ?>"<?php } if($placeholder != '') { ?> placeholder="<?= $placeholder ?>"<?php } ?>>
+			<input type="<?= $type ?>"<?php $input = $this->session->get('input'); if(isset($input, $input[$name])) { ?> name="<?= $input[$name] ?>"<?php } elseif($name != '') { ?> name="<?= $name ?>"<?php } if($value != '') { ?> value="<?= $value ?>"<?php } if($placeholder != '') { ?> placeholder="<?= $placeholder ?>"<?php } ?>>
 		<?php
 	}
 
@@ -52,7 +59,7 @@ class Form {
 	public function textarea($name, $value = '', $placeholder = '')
 	{
 		?>
-			<textarea name="<?= $name ?>"<?php if($placeholder != '') { ?> placeholder="<?= $placeholder ?>" <?php } ?>><?= $value ?></textarea>
+			<textarea<?php if(isset($input, $input[$name])) { ?> name="<?= $input[$name] ?>"<?php } else { name="<?= $name ?>"<?php } if($placeholder != '') { ?> placeholder="<?= $placeholder ?>" <?php } ?>><?= $value ?></textarea>
 		<?php
 	}
 
