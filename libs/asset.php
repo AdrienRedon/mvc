@@ -5,14 +5,14 @@ class Asset
 	public function css($src)
 	{
 		?>
-			<link rel="stylesheet" href="<?= WEBROOT . $src ?>">
+			<link rel="stylesheet" href="<?= WEBROOT . 'css/' . $src ?>">
 		<?php
 	}
 
 	public function script($src)
 	{
 		?>
-			<script src="<?= WEBROOT . $src ?>"></script>
+			<script src="<?= WEBROOT . 'js/' . $src ?>"></script>
 		<?php
 	}
 }
