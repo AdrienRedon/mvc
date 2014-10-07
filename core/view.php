@@ -10,6 +10,7 @@ class View
 	protected $flash;
 	protected $html;
 	protected $asset;
+	protected $form;
 
 	public function __construct()
 	{
@@ -17,6 +18,7 @@ class View
 		$this->flash = new Flash($this->session);
 		$this->html = new Html;
 		$this->asset = new Asset;
+		$this->form = new Form($this->session);
 	}
 
 	/**

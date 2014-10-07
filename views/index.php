@@ -15,12 +15,11 @@
 </div>
 
 <?php 
-	$form = new Form();
-	$form->open('sessions/login');
-	$form->text('login');
-	$form->password('password');
-	$form->submit('Se connecter');
-	$form->close();
+	$this->form->open('sessions/login');
+	$this->form->text('login');
+	$this->form->password('password');
+	$this->form->submit('Se connecter');
+	$this->form->close();
 ?>
 
 

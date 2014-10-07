@@ -20,7 +20,7 @@ class Controller
 
 		$this->view = new View;
 		$this->auth = new Auth($this->session);
-		$this->redirect = new Redirect;
+		$this->redirect = new Redirect($this->session);
 		$this->flash = new Flash($this->session);
 
 		if(isset($_POST))

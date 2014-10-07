@@ -21,7 +21,7 @@ class Form
 		?>
 			<form action="<?= WEBROOT . $url ?>" method="<?= $method ?>"<?php if($file) { ?> enctype="multipart/form-data"<?php } ?>>
 			<?php if($token) { ?>
-				<input type="hidden" name="token" value="<?= /* Token */ ?>">
+				<input type="hidden" name="token" value="<?= 'token' ?>">
 			<?php } ?>
 		<?php
 	}
@@ -31,9 +31,10 @@ class Form
 	 */
 	public function close()
 	{
-	?>
-		</form>
-	<?php
+		$this->session->destroy('input');
+		?>
+			</form>
+		<?php
 	}
 
 	/**
@@ -46,7 +47,7 @@ class Form
 	public function input($type, $name, $value = '', $placeholder = '')
 	{
 		?>
-			<input type="<?= $type ?>"<?php $input = $this->session->get('input'); if(isset($input, $input[$name]) && $type != 'password') { ?> name="<?= $input[$name] ?>"<?php } elseif($name != '') { ?> name="<?= $name ?>"<?php } if($value != '') { ?> value="<?= $value ?>"<?php } if($placeholder != '') { ?> placeholder="<?= $placeholder ?>"<?php } ?>>
+			<input type="<?= $type ?>"<?php if($name != '') { ?> name="<?= $name ?>"<?php } $input = $this->session->get('input'); if(isset($input, $input[$name]) && $type != 'password') { ?> value="<?= $input[$name] ?>"<?php } else { ?> value="<?= $value ?>"<?php } if($placeholder != '') { ?> placeholder="<?= $placeholder ?>"<?php } ?>>
 		<?php
 	}
 
@@ -59,7 +60,7 @@ class Form
 	public function textarea($name, $value = '', $placeholder = '')
 	{
 		?>
-			<textarea<?php $input = $this->session->get('input'); if(isset($input, $input[$name])) { ?> name="<?= $input[$name] ?>"<?php } else { name="<?= $name ?>"<?php } if($placeholder != '') { ?> placeholder="<?= $placeholder ?>" <?php } ?>><?= $value ?></textarea>
+			<textarea<?php $input = $this->session->get('input'); if(isset($input, $input[$name])) { ?> name="<?= $input[$name] ?>"<?php } else { ?> name="<?= $name ?>"<?php } if($placeholder != '') { ?> placeholder="<?= $placeholder ?>" <?php } ?>><?= $value ?></textarea>
 		<?php
 	}
 

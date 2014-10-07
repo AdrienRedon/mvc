@@ -35,13 +35,14 @@ class Sessions extends Controller
 			if($logged)
 			{
 				$this->flash->set('Vous êtes bien connecté');
+				$this->redirect->back();
 			}
 			else
 			{
 				$this->flash->set('Les identifiants sont incorrects');
+				$this->redirect->backWithInput($this->data);
 			}
 
-			$this->redirect->back();
 		}
 	}
 
