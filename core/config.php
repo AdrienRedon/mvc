@@ -18,5 +18,5 @@ define('DEFAULT_ARGS', null); // Unique argument car 'define' n'accepte pas de t
 /**
  * Configuration des vues
  */
-define('DEFAULT_LAYOUT', 'layout');
+define('DEFAULT_LAYOUT', 'default');
 define('DEFAULT_TITLE', 'MVC');

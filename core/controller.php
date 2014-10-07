@@ -1,13 +1,27 @@
 <?php 
 
-require_once(ROOT . 'libs/auth.php');
-
 class Controller
 {
+	protected $session;
+	protected $view;
+	protected $auth;
+	protected $redirect;
+	protected $flash;
+
+	/**
+	 * Données passées en POST
+	 * @var Array
+	 */
+	protected $data;
+
 	public function __construct()
 	{
-		$this->view = new View();
-		$this->auth = new Auth();
+		$this->session = new Session;
+
+		$this->view = new View;
+		$this->auth = new Auth($this->session);
+		$this->redirect = new Redirect;
+		$this->flash = new Flash($this->session);
 
 		if(isset($_POST))
 		{

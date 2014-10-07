@@ -12,7 +12,7 @@ class Form {
 	public function open($url, $method = 'POST', $token = false, $file = false)
 	{
 		?>
-			<form action="<?= $url ?>" method="<?= $method ?>"<?php if($file) { ?> enctype="multipart/form-data"<?php } ?>>
+			<form action="<?= WEBROOT . $url ?>" method="<?= $method ?>"<?php if($file) { ?> enctype="multipart/form-data"<?php } ?>>
 			<?php if($token) { ?>
 				<input type="hidden" name="token" value="<?= $config['token'] ?>">
 			<?php } ?>

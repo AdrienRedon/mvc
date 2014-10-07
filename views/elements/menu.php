@@ -1,5 +1,5 @@
 <nav class="menu">
 	<ul>
-		<li><a href="<?= WEBROOT ?>">Accueil</a></li>
+		<li><?= $this->html->link('', 'Accueil') ?></li>
 	</ul>
 </nav>

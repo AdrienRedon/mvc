@@ -34,25 +34,29 @@ class Sessions extends Controller
 		{
 			if($logged)
 			{
-				die('Vous êtes bien connecté');
+				$this->flash->set('Vous êtes bien connecté');
 			}
 			else
 			{
-				die('Identifiant incorrect');
+				$this->flash->set('Les identifiants sont incorrects');
 			}
+
+			$this->redirect->back();
 		}
 	}
 
 	public function logout()
 	{
 		$this->auth->logout();
+		
 		if($this->isAjax())
 		{
 			$this->view->json(['logged_out' => true]);
 		}
 		else
 		{
-			die('Vous êtes bien déconnecté');
+			$this->flash->set('Vous êtes bien déconnecté');
+			$this->redirect->home();
 		}
 	}
 

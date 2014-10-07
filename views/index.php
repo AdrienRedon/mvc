@@ -5,7 +5,9 @@
 <div class="text-logged">
 	<?php if (isset($user)) { ?>
 		<br>
-		Bienvenue <?= $user->login ?>
+		Bienvenue <?= $user->login ?> <br>
+		Voulez-vous vous déconnecter ?
+		<?= $this->html->link('sessions/logout', 'Se déconnecter') ?>
 	<?php } else { ?>
 		<br>
 		Vous n'êtes pas connecté !
@@ -14,7 +16,7 @@
 
 <?php 
 	$form = new Form();
-	$form->open(WEBROOT . 'sessions/login');
+	$form->open('sessions/login');
 	$form->text('login');
 	$form->password('password');
 	$form->submit('Se connecter');

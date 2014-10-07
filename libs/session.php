@@ -1,26 +1,29 @@
 <?php 
 
-class Session
+require_once(ROOT . 'libs/interfaces/session_interface.php');
+
+class Session implements SessionInterface
 {
-	protected $name;
-
-	public function __construct($name)
+	public function __construct()
 	{
-		$this->name = $name;
+		if(!isset($_SESSION))
+		{
+			session_start();
+		}
 	}
 
-	public function set($value)
+	public function set($key, $value)
 	{
-		$_SESSION[$this->name] = $value;
+		$_SESSION[$key] = $value;
 	}
 
-	public function get()
+	public function get($key)
 	{
-		return isset($_SESSION[$this->name]) ? $_SESSION[$this->name] : null;
+		return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
 	}
 
-	public function destroy()
+	public function destroy($key)
 	{
-		unset($_SESSION[$this->name]);
+		unset($_SESSION[$key]);
 	}
 }

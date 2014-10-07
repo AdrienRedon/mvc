@@ -7,6 +7,14 @@
 	</head>
 	<body>
 
+		<?php $flash = $this->flash->get(); if(isset($flash)) { ?>
+			
+			<div class="flash">
+				<?= $flash ?>
+			</div>
+
+		<?php } ?>
+
 		<?php include(ROOT.'views/elements/menu.php'); ?>
 
 		<?= $content_for_layout ?>

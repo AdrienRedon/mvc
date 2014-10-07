@@ -1,16 +1,22 @@
 <?php 
 
-require_once(ROOT . 'libs/form.php');
-
 class View
 {
-	public $content;
-	public $layout = DEFAULT_LAYOUT;
-	public $title  = DEFAULT_TITLE;
+	protected $content;
+	protected $layout = DEFAULT_LAYOUT;
+	protected $title  = DEFAULT_TITLE;
+
+	protected $session;
+	protected $flash;
+	protected $html;
+	protected $asset;
 
 	public function __construct()
 	{
-		
+		$this->session = new Session;
+		$this->flash = new Flash($this->session);
+		$this->html = new Html;
+		$this->asset = new Asset;
 	}
 
 	/**

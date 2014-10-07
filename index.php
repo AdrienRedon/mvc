@@ -4,15 +4,11 @@
  * By Adrien REDON (@AdrienRedon)
  */
 
-if(!isset($_SESSION))
-{
-	session_start();
-}
-
 define('WEBROOT', str_replace('index.php', '', $_SERVER['SCRIPT_NAME']));
 define('ROOT', str_replace('index.php', '', $_SERVER['SCRIPT_FILENAME']));
 
 require_once(ROOT . 'core/config.php');
+require_once(ROOT . 'libs/autoload.php');
 
 require_once(ROOT . 'core/model.php');
 require_once(ROOT . 'core/view.php');

@@ -1,16 +1,17 @@
 <?php
 
-require_once(ROOT . 'libs/session.php');
+require_once(ROOT . 'libs/interfaces/session_interface.php');
 
 class Auth 
 {
 	protected $session;
 	protected $user;
+	const KEY = 'user';
 
-	public function __construct()
+	public function __construct(SessionInterface $session)
 	{
 		$this->user = Model::load('user');
-		$this->session = new Session('user');
+		$this->session = $session;
 	}
 
 	/**
@@ -19,7 +20,7 @@ class Auth
 	 */
 	public function check()
 	{
-		$id = $this->session->get();
+		$id = $this->session->get(self::KEY);
 		return isset($id) && $this->user->find(['conditions' => 'id = ' . $id]);
 	}
 
@@ -48,7 +49,7 @@ class Auth
 	 */
 	public function id()
 	{
-		$id = $this->session->get();
+		$id = $this->session->get(self::KEY);
 		return $id;
 	}
 
@@ -79,7 +80,7 @@ class Auth
 	 */
 	public function login($user)
 	{
-		$this->session->set($user->id);
+		$this->session->set(self::KEY, $user->id);
 	}
 
 	/**
@@ -87,7 +88,7 @@ class Auth
 	 */
 	public function logout()
 	{
-		$this->session->destroy();
+		$this->session->destroy(self::KEY);
 	}
 
 

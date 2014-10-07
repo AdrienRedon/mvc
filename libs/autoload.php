@@ -16,4 +16,5 @@ require_once(ROOT . 'libs/auth.php');
 require_once(ROOT . 'libs/flash.php');
 require_once(ROOT . 'libs/redirect.php');
 require_once(ROOT . 'libs/html.php');
+require_once(ROOT . 'libs/asset.php');
 require_once(ROOT . 'libs/form.php');
