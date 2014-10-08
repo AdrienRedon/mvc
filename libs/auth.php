@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT . 'libs/interfaces/session_interface.php');
+namespace Libs;
 
 class Auth 
 {
@@ -8,9 +8,9 @@ class Auth
 	protected $user;
 	const KEY = 'user';
 
-	public function __construct(SessionInterface $session)
+	public function __construct(\Libs\interfaces\SessionInterface $session)
 	{
-		$this->user = Model::load('user');
+		$this->user = \Model::load('user');
 		$this->session = $session;
 	}
 

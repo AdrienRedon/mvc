@@ -1,13 +1,13 @@
 <?php
 
-require_once(ROOT . 'libs/interfaces/session_interface.php');
+namespace Libs;
 
 class Flash
 {
 	protected $session;
 	const KEY = 'flash';
 
-	public function __construct(SessionInterface $session)
+	public function __construct(\Libs\interfaces\SessionInterface $session)
 	{
 		$this->session = $session;
 	}

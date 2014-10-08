@@ -1,5 +1,7 @@
 <?php
 
+namespace Libs;
+
 class Asset
 {
 	public function css($src)

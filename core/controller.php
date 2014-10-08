@@ -16,12 +16,13 @@ class Controller
 
 	public function __construct()
 	{
-		$this->session = new Session;
+		$this->session = new \Libs\Session;
 
+		$this->auth = new \Libs\Auth($this->session);
+		$this->redirect = new \Libs\Redirect($this->session);
+		$this->flash = new \Libs\Flash($this->session);
+		
 		$this->view = new View;
-		$this->auth = new Auth($this->session);
-		$this->redirect = new Redirect($this->session);
-		$this->flash = new Flash($this->session);
 
 		if(isset($_POST))
 		{

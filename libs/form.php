@@ -1,10 +1,12 @@
 <?php
 
+namespace Libs;
+
 class Form 
 {
 	protected $session;
 	
-	public function __construct(SessionInterface $session)
+	public function __construct(\Libs\interfaces\SessionInterface $session)
 	{
 		$this->session = $session;
 	}

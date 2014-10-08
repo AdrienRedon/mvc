@@ -14,11 +14,11 @@ class View
 
 	public function __construct()
 	{
-		$this->session = new Session;
-		$this->flash = new Flash($this->session);
-		$this->html = new Html;
-		$this->asset = new Asset;
-		$this->form = new Form($this->session);
+		$this->session = new \Libs\Session;
+		$this->flash = new \Libs\Flash($this->session);
+		$this->html = new \Libs\Html;
+		$this->asset = new \Libs\Asset;
+		$this->form = new \Libs\Form($this->session);
 	}
 
 	/**

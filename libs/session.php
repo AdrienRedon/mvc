@@ -1,8 +1,8 @@
 <?php 
 
-require_once(ROOT . 'libs/interfaces/session_interface.php');
+namespace Libs;
 
-class Session implements SessionInterface
+class Session implements \Libs\interfaces\SessionInterface
 {
 	public function __construct()
 	{
