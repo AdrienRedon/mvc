@@ -40,7 +40,7 @@ class Auth
 	public function user()
 	{
 		$id = $this->id();
-		return $this->user->find(['conditions' => 'id = ' . $id]);
+		return $this->user->first(['conditions' => 'id = ' . $id]);
 	}
 
 	/**
@@ -61,7 +61,7 @@ class Auth
 	 */
 	public function attempt($login, $password)
 	{
-		$user = $this->user->find(['conditions' => "login = '$login' AND password = '$password'"]);
+		$user = $this->user->first(['conditions' => "login = '$login' AND password = '$password'"]);
 
 		if(isset($user))
 		{

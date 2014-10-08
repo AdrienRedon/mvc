@@ -13,7 +13,7 @@ class Pages extends Controller
 	public function index()
 	{
 		$user = $this->auth->user();
-		$content = $this->page->find(['conditions' => 'id = 1'])->content;
+		$content = $this->page->first(['conditions' => 'id = 1'])->content;
 
 		if($this->isAjax())
 		{

@@ -102,6 +102,29 @@ class Model
 		$limit = isset($data['limit']) ? $data['limit'] : '';
 		$order = isset($data['order']) ? $data['order'] : 'id DESC';
 		$sql = "SELECT $fields FROM {$this->table} WHERE $conditions ORDER BY $order $limit";
+		$result = $this->db->query($sql);
+		
+		foreach ($this->hidden as $hidden) 
+		{
+			if(isset($result->$hidden))
+			{
+				unset($result->$hidden);
+			}
+		}
+		return $result;
+	}
+
+	/*
+	 * Permet de récupérer la première ligne dans la base de données
+	 * @param $data conditions de récupérations
+	 */
+	public function first($data = array())
+	{
+		$conditions = isset($data['conditions']) ? $data['conditions'] : '1=1';
+		$fields = isset($data['fields']) ? $data['fields'] : '*';
+		$limit = isset($data['limit']) ? $data['limit'] : '';
+		$order = isset($data['order']) ? $data['order'] : 'id DESC';
+		$sql = "SELECT $fields FROM {$this->table} WHERE $conditions ORDER BY $order $limit";
 		$result = $this->db->queryFirst($sql);
 		
 		foreach ($this->hidden as $hidden) 
