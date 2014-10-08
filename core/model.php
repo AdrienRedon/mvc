@@ -13,9 +13,15 @@ class Model
 	protected $id;
 	protected $db;
 
+	/**
+	 * Champs cachés
+	 */
+	protected $hidden;
+
 	public function __construct()
 	{
 		$this->db = new Database(SQL_HOST, SQL_BASE, SQL_LOGIN, SQL_PASS);
+		$this->hidden = [];
 	}
 
 	/*
@@ -96,7 +102,16 @@ class Model
 		$limit = isset($data['limit']) ? $data['limit'] : '';
 		$order = isset($data['order']) ? $data['order'] : 'id DESC';
 		$sql = "SELECT $fields FROM {$this->table} WHERE $conditions ORDER BY $order $limit";
-		return $this->db->queryFirst($sql);
+		$result = $this->db->queryFirst($sql);
+		
+		foreach ($this->hidden as $hidden) 
+		{
+			if(isset($result->$hidden))
+			{
+				unset($result->$hidden);
+			}
+		}
+		return $result;
 	}
 
 	/*

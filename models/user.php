@@ -6,6 +6,7 @@ class User extends Model
 	{
 		parent::__construct();
 		$this->table = "users";
+		$this->hidden = ['password'];
 	}
 
 
