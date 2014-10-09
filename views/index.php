@@ -7,21 +7,21 @@
 		<br>
 		Bienvenue <?= $user->login ?> <br>
 		Voulez-vous vous déconnecter ?
-		<?= $this->html->link('sessions/logout', 'Se déconnecter') ?>
+		<?= $this->html->link('sessions/logout', 'Se déconnecter') ?> <br>
 	<?php } else { ?>
 		<br>
 		Vous n'êtes pas connecté !
+		<?php 
+			$this->form->open('sessions/login');
+			$this->form->text('login');
+			$this->form->password('password');
+			$this->form->submit('Se connecter');
+			$this->form->close();
+		?>
 	<?php } ?>
 </div>
 
-<?php 
-	$this->form->open('sessions/login');
-	$this->form->text('login');
-	$this->form->password('password');
-	$this->form->submit('Se connecter');
-	$this->form->close();
-?>
-
+<br>
 
 <code>
 

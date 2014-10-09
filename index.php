@@ -16,4 +16,4 @@ require_once(ROOT . 'core/controller.php');
 
 require_once(ROOT . 'core/bootstrap.php');
 
-$app = new Bootstrap();
+$app = new \Core\Bootstrap();

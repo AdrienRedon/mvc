@@ -1,5 +1,7 @@
 <?php 
 
+namespace Core;
+
 require_once(ROOT . 'core/database.php');
 
 

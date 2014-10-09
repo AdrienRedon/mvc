@@ -1,13 +1,13 @@
 <?php 
 
-class Pages extends Controller
+class Pages extends \Core\Controller
 {
 	protected $page;
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->page = Model::load('page');
+		$this->page = \Core\Model::load('page');
 	}
 
 	public function index()

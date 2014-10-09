@@ -1,5 +1,7 @@
 <?php 
 
+namespace Core;
+
 class Database
 {
 
@@ -7,7 +9,7 @@ class Database
 
 	public function __construct($host, $base, $login, $password)
 	{
-		$this->db = new PDO("mysql:host=$host;dbname=$base", $login, $password);
+		$this->db = new \PDO("mysql:host=$host;dbname=$base", $login, $password);
 	}
 
 	/**
@@ -19,7 +21,7 @@ class Database
 	{
 		$req = $this->db->prepare($sql);
 		$req->execute();
-		return $req->fetchAll(PDO::FETCH_OBJ);
+		return $req->fetchAll(\PDO::FETCH_OBJ);
 	}
 
 	/**

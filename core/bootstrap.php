@@ -1,5 +1,7 @@
 <?php 
 
+namespace Core;
+
 class Bootstrap
 {
 	protected $controller = DEFAULT_CONTROLLER;
@@ -68,7 +70,7 @@ class Bootstrap
 	private function errors()
 	{
 		require_once(ROOT . 'controllers/errors.php');
-		$this->controller = new Errors;
+		$this->controller = new \Errors;
 		$this->controller->_404();
 		exit;
 	}

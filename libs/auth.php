@@ -10,7 +10,7 @@ class Auth
 
 	public function __construct(\Libs\interfaces\SessionInterface $session)
 	{
-		$this->user = \Model::load('user');
+		$this->user = \Core\Model::load('user');
 		$this->session = $session;
 	}
 

@@ -1,6 +1,6 @@
 <?php
 
-class Sessions extends Controller
+class Sessions extends \Core\Controller
 {
 	public function __construct()
 	{
