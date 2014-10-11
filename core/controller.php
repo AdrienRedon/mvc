@@ -9,6 +9,7 @@ class Controller
 	protected $auth;
 	protected $redirect;
 	protected $flash;
+	protected $validation;
 
 	/**
 	 * Données passées en POST

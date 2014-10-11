@@ -9,40 +9,64 @@ class Sessions extends \Core\Controller
 
 	public function login()
 	{
-		if(isset($this->data['login'], $this->data['password']))
+		$input = [
+			'login'            => $this->data['login'], 
+			'password'         => $this->data['password'],
+			'password_confirm' => $this->data['password_confirm']
+		];
+
+		$rules = [
+			'login'    => 'required|min:3',
+			'password' => 'required|confirmed'
+		];
+
+		$this->validation = new \Libs\Validation($input, $rules);
+
+		if($this->validation->passes())
 		{
-			$logged = $this->auth->attempt($this->data['login'], $this->data['password']);
+			$logged = $this->auth->attempt($input['login'], $input['password']);
+
+			if($this->isAjax())
+			{
+				if($logged)
+				{
+					$user = $this->auth->user();
+					$this->view->json(compact('logged', 'user'));
+				}
+				else
+				{
+					$this->view->json(compact('logged', 500));
+				}
+			}
+			else
+			{
+				if($logged)
+				{
+					$this->flash->set('Vous êtes bien connecté');
+					$this->redirect->back();
+				}
+				else
+				{
+					$this->flash->set('Les identifiants sont incorrects');
+					$this->redirect->backWithInput($input);
+				}
+
+			}
+
 		}
 		else
 		{
 			$logged = false;
-		}
 
-		if($this->isAjax())
-		{
-			if($logged)
+			if($this->isAjax())
 			{
-				$user = $this->auth->user();
-				$this->view->json(compact('logged', 'user'));
+				$this->view->json(compact('logged'), 500);
 			}
 			else
 			{
-				$this->view->json(compact('logged', 500));
+				$this->flash->set($this->validation->getErrors());
+				$this->redirect->backWithInput($input);
 			}
-		}
-		else
-		{
-			if($logged)
-			{
-				$this->flash->set('Vous êtes bien connecté');
-				$this->redirect->back();
-			}
-			else
-			{
-				$this->flash->set('Les identifiants sont incorrects');
-				$this->redirect->backWithInput($this->data);
-			}
-
 		}
 	}
 

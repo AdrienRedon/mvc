@@ -3,21 +3,39 @@
 <?= $content ?>
 
 <div class="text-logged">
-	<?php if (isset($user)) { ?>
-		<br>
-		Bienvenue <?= $user->login ?> <br>
-		Voulez-vous vous déconnecter ?
-		<?= $this->html->link('sessions/logout', 'Se déconnecter') ?> <br>
+
+	<?php if(isset($user)) { ?>
+
+		<p>
+			Bienvenue <?= $user->login ?>.
+			Voulez-vous vous déconnecter ?
+			<?= $this->html->link('sessions/logout', 'Se déconnecter') ?>
+		</p>
+
 	<?php } else { ?>
-		<br>
-		Vous n'êtes pas connecté !
-		<?php 
-			$this->form->open('sessions/login');
-			$this->form->text('login');
-			$this->form->password('password');
-			$this->form->submit('Se connecter');
-			$this->form->close();
-		?>
+
+		<p>Vous n'êtes pas connecté !</p>
+
+		<?= $this->form->open('sessions/login') ?>
+
+			<div>
+				<?= $this->form->text('login','', 'Login') ?>
+			</div>
+
+			<div>
+				<?= $this->form->password('password', '', 'Password') ?>
+			</div>
+
+			<div>
+				<?= $this->form->password('password_confirm','', 'Confirm password') ?>
+			</div>
+
+			<div>
+				<?= $this->form->submit('Se connecter') ?>
+			</div>
+
+		<?= $this->form->close() ?>
+
 	<?php } ?>
 </div>
 
@@ -25,10 +43,10 @@
 
 <code>
 
-$.post('sessions/login', {'login' : 'admin', 'password' : 'admin'}).done(function(data, text, jqxhr) { 
+$.post('sessions/login', {'login' : 'admin', 'password' : 'admin', 'password_confirm' : 'admin'}).done(function(data, text, jqxhr) { 
 	response = JSON.parse(jqxhr.responseText); 
 	if(response.logged == true) { 
-		$('.text-logged').text('Bienvenue ' + response.user.login); 
+		$('.text-logged').text('Bienvenue ' + response.user.login'); 
 	} 
 });
 
