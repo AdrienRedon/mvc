@@ -11,7 +11,7 @@ if($argv[1] == 'generate')
     if($argv[2] == 'controller' && isset($argv[3]))
     {
         $file = fopen("controllers/{$argv[3]}.php", 'w') or die("Impossible de generer le fichier");
-        fwrite($file, "<?php\n\nclass {$argv[3]} extends \Core\Controller\n{\n\t\n}");
+        fwrite($file, "<?php\n\nclass {$argv[3]} extends \Core\Controller\n{\n\tpublic function __construct()\n\t{\n\t\tparent::__construct();\n\t}\n}");
     }
     else if($argv[2] == 'model' && isset($argv[3]))
     {
