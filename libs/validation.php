@@ -72,10 +72,6 @@ class Validation
                             return false;
                         }
                     }
-
-					/**
-					 * Email, Phone number, numeric, alpha, confirmed (for password)
-					 */
 				}
 			}
 		}
