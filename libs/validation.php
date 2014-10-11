@@ -64,6 +64,14 @@ class Validation
 							return false;
 						}
 					}
+                    else if($rule == 'email')
+                    {
+                        if(!filter_var($value, FILTER_VALIDATE_EMAIL))
+                        {
+                            $this->errors = "Le champs $data doit contenir une adresse mail valide.";
+                            return false;
+                        }
+                    }
 
 					/**
 					 * Email, Phone number, numeric, alpha, confirmed (for password)
