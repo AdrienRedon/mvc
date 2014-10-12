@@ -15,7 +15,7 @@ if($argv[1] == 'generate')
         if(!file_exists($filename))
         {
             $file = fopen($filename, 'w') or die("Impossible de generer le fichier");
-            fwrite($file, "<?php\n\nclass {$argv[3]} extends \Core\Controller\n{\n\tpublic function __construct()\n\t{\n\t\tparent::__construct();\n\t}\n}");
+            fwrite($file, "<?php\n\nclass {$argv[3]} extends \Core\Controller\n{\n\tpublic function __construct()\n\t{\n\t\tparent::__construct();\n\t\t\$this->page = \Core\Model::load('model_name');\n\t}\n}");
         }
         else
         {
