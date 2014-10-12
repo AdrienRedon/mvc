@@ -43,7 +43,7 @@ class Sessions extends \Core\Controller
 				if($logged)
 				{
 					$this->flash->set('Vous êtes bien connecté');
-					$this->redirect->back();
+					$this->redirect->home();
 				}
 				else
 				{

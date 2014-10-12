@@ -15,6 +15,10 @@ class Validation
 		$this->errors = '';
 	}
 
+    /**
+     * Détermine si la validation passe
+     * @return bool
+     */
 	public function passes()
 	{
 		foreach ($this->data as $data => $value) 
@@ -78,11 +82,19 @@ class Validation
 		return true;
 	}
 
+    /**
+     * Détermine si la validation échoue
+     * @return bool
+     */
 	public function fails()
 	{
 		return !$this->passes();
 	}
 
+    /**
+     * Retourne les erreurs de validation
+     * @return string
+     */
 	public function getErrors()
 	{
 		return $this->errors;

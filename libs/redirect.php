@@ -24,11 +24,11 @@ class Redirect
 
 	public function to($url)
 	{
-		header('Location: ' . $url);
+		header('Location: ' . WEBROOT. $url);
 	}
 
 	public function home()
 	{
-		$this->to(WEBROOT . DEFAULT_CONTROLLER . '/' . DEFAULT_METHOD);
+		$this->to(DEFAULT_CONTROLLER . '/' . DEFAULT_METHOD);
 	}
 }
