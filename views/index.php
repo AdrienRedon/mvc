@@ -43,7 +43,7 @@
 
 <code>
 
-$.post('sessions/login', {'login' : 'admin', 'password' : 'admin', 'password_confirm' : 'admin'}).done(function(data, text, jqxhr) { 
+$.post('session/login', {'login' : 'admin', 'password' : 'admin', 'password_confirm' : 'admin'}).done(function(data, text, jqxhr) {
 	response = JSON.parse(jqxhr.responseText); 
 	if(response.logged == true) { 
 		$('.text-logged').text('Bienvenue ' + response.user.login);
