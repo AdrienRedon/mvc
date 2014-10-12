@@ -1,6 +1,6 @@
 <?php 
 
-class Errors extends \Core\Controller
+class ErrorController extends \Core\Controller
 {
 	public function __construct()
 	{

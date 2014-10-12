@@ -1,6 +1,6 @@
 <?php 
 
-class Pages extends \Core\Controller
+class PageController extends \Core\Controller
 {
 	protected $page;
 

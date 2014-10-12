@@ -9,14 +9,14 @@
 		<p>
 			Bienvenue <?= $user->login ?>.
 			Voulez-vous vous déconnecter ?
-			<?= $this->html->link('sessions/logout', 'Se déconnecter') ?>
+			<?= $this->html->link('session/logout', 'Se déconnecter') ?>
 		</p>
 
 	<?php } else { ?>
 
 		<p>Vous n'êtes pas connecté !</p>
 
-		<?= $this->form->open('sessions/login') ?>
+		<?= $this->form->open('session/login') ?>
 
 			<div>
 				<?= $this->form->text('login','', 'Login') ?>

@@ -12,19 +12,22 @@ class Bootstrap
 	{
 		$url = $this->parseUrl();
 
-		if(file_exists(ROOT . 'controllers/' . $url[0] . '.php'))
+        $filename = ROOT . 'controllers/' . $url[0] . '_controller.php';
+
+		if(file_exists($filename))
 		{
-			$this->controller = $url[0];
-			unset($url[0]);
+			$this->controller = $url[0] . 'Controller';
 		}
 		else
 		{
 			$this->errors();
 		}
 
-		require_once(ROOT . 'controllers/' . $this->controller . '.php');
+		require_once($filename);
 
 		$this->controller = new $this->controller;
+
+        unset($url[0]);
 
 		if(isset($url[1]))
 		{
@@ -69,8 +72,8 @@ class Bootstrap
 	 */
 	private function errors()
 	{
-		require_once(ROOT . 'controllers/errors.php');
-		$this->controller = new \Errors;
+		require_once(ROOT . 'controllers/error_controller.php');
+		$this->controller = new \ErrorController;
 		$this->controller->_404();
 		exit;
 	}

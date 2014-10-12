@@ -11,7 +11,7 @@ define('SQL_PASS', '');
 /**
  * Configuration du controller et de la méthode à appeller par défaut
  */
-define('DEFAULT_CONTROLLER', 'pages');
+define('DEFAULT_CONTROLLER', 'page');
 define('DEFAULT_METHOD', 'index');
 define('DEFAULT_ARGS', null); // Unique argument car 'define' n'accepte pas de tableau
 

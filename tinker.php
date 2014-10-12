@@ -8,35 +8,61 @@
 
 if($argv[1] == 'generate')
 {
-    if($argv[2] == 'controller' && isset($argv[3]))
+    if($argv[2] == 'resource' && isset($argv[3]))
     {
-        $filename = "controllers/{$argv[3]}.php";
-
-        if(!file_exists($filename))
-        {
-            $file = fopen($filename, 'w') or die("Impossible de generer le fichier");
-            fwrite($file, "<?php\n\nclass {$argv[3]} extends \Core\Controller\n{\n\tpublic function __construct()\n\t{\n\t\tparent::__construct();\n\t\t\$this->page = \Core\Model::load('model_name');\n\t}\n}");
-        }
-        else
-        {
-            die("Le controller est deja present");
-        }
+        createRessource($argv[3]);
+    }
+    else if($argv[2] == 'controller' && isset($argv[3]))
+    {
+        createController($argv[3]);
     }
     else if($argv[2] == 'model' && isset($argv[3]))
     {
-        $filename = "models/{$argv[3]}.php";
 
-        if (!file_exists($filename)) {
-            $file = fopen($filename, 'w') or die("Impossible de generer le fichier");
-            fwrite($file, "<?php\n\nclass {$argv[3]} extends \Core\Model\n{\n\tpublic function __construct()\n\t{\n\t\tparent::__construct();\n\t\t\$this->table = \"table_name\";\n\t\t\$this->hidden = [];\n\t}\n}");
-        }
-        else
-        {
-            die("Le model est deja present");
-        }
     }
     else
     {
-        echo 'Les arguments entrés ne sont pas corrects';
+        die('Wrong commands !');
+    }
+
+    exit;
+}
+
+function createController($name)
+{
+    $filename = "controllers/{$name}_controller.php";
+
+    if(!file_exists($filename))
+    {
+        $file = fopen($filename, 'w') or die('Unable to open the file');
+        fwrite($file, "<?php\n\nclass {$name}Controller extends \Core\Controller\n{\n\tpublic function __construct()\n\t{\n\t\tparent::__construct();\n\t\t\$this->page = \Core\Model::load('model_name');\n\t}\n}");
+    }
+    else
+    {
+        die("The $name controller already exists");
     }
 }
+
+
+function createModel($name)
+{
+    $filename = "models/$name.php";
+
+    if (!file_exists($filename)) {
+        $file = fopen($filename, 'w') or die('Unable to open the file');
+        fwrite($file, "<?php\n\nclass $name extends \Core\Model\n{\n\tpublic function __construct()\n\t{\n\t\tparent::__construct();\n\t\t\$this->table = 'table_name';\n\t\t\$this->hidden = [];\n\t}\n}");
+    }
+    else
+    {
+        die("The $name model already exists");
+    }
+}
+
+function createRessource($name)
+{
+    createController($name);
+    createModel($name);
+}
+
+
+
