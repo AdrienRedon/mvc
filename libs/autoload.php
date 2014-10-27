@@ -19,3 +19,4 @@ require_once(ROOT . 'libs/html.php');
 require_once(ROOT . 'libs/asset.php');
 require_once(ROOT . 'libs/form.php');
 require_once(ROOT . 'libs/validation.php');
+require_once(ROOT . 'libs/collection.php');

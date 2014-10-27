@@ -21,22 +21,12 @@ class Database
 	{
 		$req = $this->db->prepare($sql);
 		$req->execute();
-		return $req->fetchAll(\PDO::FETCH_OBJ);
+		return new \Libs\Collection($req->fetchAll(\PDO::FETCH_OBJ));
 	}
 
-	/**
-	 * Execute une requête SQL et retourne le premier résultat trouvé
-	 * @param  $sql   Requête à executer
-	 * @return Object Première ligne retourné par la requête sous forme d'objet
-	 */
-	public function queryFirst($sql)
-	{
-		$data = $this->query($sql);
-		return count($data) > 0 ? $data[0] : null;
-	}
 
 	public function getLastInsertedId()
 	{
-		return $db->lastInsertedId();
+		return $this->db->lastInsertedId();
 	}
 }

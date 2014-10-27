@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use Libs\Collection;
+
 require_once(ROOT . 'core/database.php');
 
 
@@ -93,41 +95,64 @@ class Model
 		}
 	}
 
-	/*
-	 * Permet de récupérer plusieurs lignes dans la base de données
-	 * @param $data conditions de récupérations
-	 */
-	public function find($data = array())
+    /**
+     * @param array $conditions
+     * @return Collection
+     */
+	public function where(array $conditions)
 	{
-		$conditions = isset($data['conditions']) ? $data['conditions'] : '1=1';
-		$fields = isset($data['fields']) ? $data['fields'] : '*';
-		$limit = isset($data['limit']) ? $data['limit'] : '';
-		$order = isset($data['order']) ? $data['order'] : 'id DESC';
-		$sql = "SELECT $fields FROM {$this->table} WHERE $conditions ORDER BY $order $limit";
-		$result = $this->db->query($sql);
+        $sql = "SELECT * FROM {$this->table} WHERE 1 = 1";
+        foreach($conditions as $fields => $value)
+        {
+            $sql .= " AND $fields = '$value'";
+        }
+
+		$results = $this->db->query($sql);
 		
-		foreach ($this->hidden as $hidden) 
+		foreach ($this->hidden as $hidden)
 		{
-			if(isset($result->$hidden))
-			{
-				unset($result->$hidden);
-			}
+            foreach($results as $result)
+            {
+                if(isset($result->$hidden))
+                {
+                    unset($result->$hidden);
+                }
+            }
 		}
-		return $result;
+		return $results;
 	}
+
+    /**
+     * @return Collection
+     */
+    public function all()
+    {
+        return $this->where([]);
+    }
+
+    public function find($id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE id='$id'";
+        $result = $this->db->query($sql)->first();
+
+        foreach ($this->hidden as $hidden)
+        {
+            if(isset($result->$hidden))
+            {
+                unset($result->$hidden);
+            }
+        }
+        return $result;
+    }
 
 	/*
 	 * Permet de récupérer la première ligne dans la base de données
-	 * @param $data conditions de récupérations
+	 * @param fields colonnes devant être récupérées
 	 */
-	public function first($data = array())
+	public function first($fields = '*')
 	{
-		$conditions = isset($data['conditions']) ? $data['conditions'] : '1=1';
-		$fields = isset($data['fields']) ? $data['fields'] : '*';
-		$limit = isset($data['limit']) ? $data['limit'] : '';
-		$order = isset($data['order']) ? $data['order'] : 'id DESC';
-		$sql = "SELECT $fields FROM {$this->table} WHERE $conditions ORDER BY $order $limit";
-		$result = $this->db->queryFirst($sql);
+		$sql = "SELECT $fields FROM {$this->table}";
+		$result = $this->db->query($sql)->first();
 		
 		foreach ($this->hidden as $hidden) 
 		{
@@ -149,7 +174,7 @@ class Model
 		{
 			$id = $this->id;
 		}
-		$sql = "DELTE FROM {$this->table} WHERE id=$id";
+		$sql = "DELETE FROM {$this->table} WHERE id=$id";
 		$this->db->query($sql);
 	}
 

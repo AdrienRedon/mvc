@@ -21,7 +21,7 @@ class Auth
 	public function check()
 	{
 		$id = $this->session->get(self::KEY);
-		return isset($id) && $this->user->find(['conditions' => 'id = ' . $id]);
+		return isset($id) && $this->user->find($id);
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Auth
 	public function user()
 	{
 		$id = $this->id();
-		return $this->user->first(['conditions' => 'id = ' . $id]);
+		return $this->user->find($id);
 	}
 
 	/**
@@ -61,7 +61,7 @@ class Auth
 	 */
 	public function attempt($login, $password)
 	{
-		$user = $this->user->first(['conditions' => "login = '$login' AND password = '" . sha1($password) . "'"]);
+		$user = $this->user->where(['login' => $login, 'password' => sha1($password)])->first();
 
 		if(isset($user))
 		{

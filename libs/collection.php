@@ -60,10 +60,116 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      */
     public function delete($key)
     {
-        if($this->has($key))
+        if ($this->has($key))
         {
             unset($this->items[$key]);
         }
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     * @return array
+     */
+    public function lists($key, $value)
+    {
+        $results = [];
+
+        foreach ($this->items as $item)
+        {
+            $results[$item[$key]] = $item[$value];
+        }
+
+        return new Collection($results);
+    }
+
+    /**
+     * @param $key
+     * @return array
+     */
+    public function extract($key)
+    {
+        $results = [];
+
+        foreach ($this->items as $item)
+        {
+            if(isset($item->$key))
+            {
+                $results[] = $item->$key;
+            }
+        }
+
+        return new Collection($results);
+    }
+
+    public function join($glue)
+    {
+        return implode($glue, $this->items);
+    }
+
+    public function max($key = false)
+    {
+        if (!$key)
+        {
+            return max($this->items);
+        } else
+        {
+            return $this->extract($key)->max();
+        }
+    }
+
+    public function min($key = false)
+    {
+        if (!$key)
+        {
+            return min($this->items);
+        } else
+        {
+            return $this->extract($key)->min();
+        }
+    }
+
+    public function first($key = false)
+    {
+        if (!$key)
+        {
+            $array = $this->items;
+            return array_shift($array);
+        } else
+        {
+            return $this->extract($key)->first();
+        }
+    }
+
+    public function last($key = false)
+    {
+        if (!$key)
+        {
+            $array = $this->items;
+            return array_pop($array);
+        } else
+        {
+            return $this->extract($key)->last();
+        }
+    }
+
+    public function limit($length, $start = 0)
+    {
+        $results = $this->items;
+        return new Collection(array_slice($results, $start, $length));
+    }
+
+    public function offset($length)
+    {
+        $results = $this->items;
+        return new Collection(array_slice($results, $length));
+    }
+
+    public function order($keys, $direction = 'ASC')
+    {
+        $array = array($this->items);
+        uasort($array, [$this, strtoupper($direction) == 'ASC' ? 'asc' : 'desc']);
+        return new Collection($array);
     }
 
 
@@ -120,5 +226,19 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     public function getIterator()
     {
         return new \ArrayIterator($this->items);
+    }
+
+    /**
+     * Private function
+     */
+
+    private function asc($a, $b)
+    {
+        return $a < $b;
+    }
+
+    private function desc($a, $b)
+    {
+        return $a > $b;
     }
 }

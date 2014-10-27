@@ -18,7 +18,7 @@ if($argv[1] == 'generate')
     }
     else if($argv[2] == 'model' && isset($argv[3]))
     {
-
+        createModel($argv[3]);
     }
     else
     {

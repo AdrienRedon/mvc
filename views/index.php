@@ -37,13 +37,21 @@
 		<?= $this->form->close() ?>
 
 	<?php } ?>
+
+    <?php foreach($posts as $post) { ?>
+        <h2><?= $post->name ?></h2>
+        <p><?= $post->content ?></p>
+    <?php } ?>
+
+    <h2>Last Post : <?= $last_post ?></h2>
+
 </div>
 
 <br>
 
 <code>
 
-$.post('session/login', {'login' : 'admin', 'password' : 'admin', 'password_confirm' : 'admin'}).done(function(data, text, jqxhr) {
+$.post('<?= WEBROOT ?>session/login', {'login' : 'admin', 'password' : 'admin', 'password_confirm' : 'admin'}).done(function(data, text, jqxhr) {
 	response = JSON.parse(jqxhr.responseText); 
 	if(response.logged == true) { 
 		$('.text-logged').text('Bienvenue ' + response.user.login);
