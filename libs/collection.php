@@ -20,6 +20,11 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         $this->items = $items;
     }
 
+    public function toArray()
+    {
+        return $this->items;
+    }
+
     /**
      * @param array $items
      */
@@ -118,6 +123,11 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         }
     }
 
+    /**
+     * Return the min item of the collection
+     * @param $key
+     * @return mixed
+     */
     public function min($key = false)
     {
         if (!$key)
@@ -129,6 +139,11 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         }
     }
 
+    /**
+     * Return the first item of the collection
+     * @param $key
+     * @return mixed
+     */
     public function first($key = false)
     {
         if (!$key)
@@ -153,23 +168,54 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         }
     }
 
+    /**
+     * Add a limit to the collection
+     * @param $length
+     * @param int $start
+     * @return Collection
+     */
     public function limit($length, $start = 0)
     {
         $results = $this->items;
         return new Collection(array_slice($results, $start, $length));
     }
 
+    /**
+     * Add an offset to the collection
+     * @param $length
+     * @return Collection
+     */
     public function offset($length)
     {
         $results = $this->items;
         return new Collection(array_slice($results, $length));
     }
 
-    public function order($keys, $direction = 'ASC')
+    /**
+     * Order the collection by a specific key given in parameter
+     * @param $key
+     * @param string $direction
+     * @return Collection
+     */
+    public function orderBy($key, $direction = 'ASC')
     {
-        $array = array($this->items);
-        uasort($array, [$this, strtoupper($direction) == 'ASC' ? 'asc' : 'desc']);
-        return new Collection($array);
+
+        $arrayKey = $this->extract($key)->toArray();
+        strtoupper($direction) == 'ASC' ? asort($arrayKey) : arsort($arrayKey);
+        $array = $this->items;
+        $results = [];
+        foreach ($arrayKey as $name => $value) 
+        {
+            foreach ($array as $k => $v) 
+            {
+                if($k == $name)
+                {
+                    $results[$k] = $v;
+                    unset($array[$k]);
+                }
+            }
+        }
+        return new Collection($results);
     }
 
 
