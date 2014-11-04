@@ -16,7 +16,7 @@ class Validation
 	}
 
     /**
-     * Détermine si la validation passe
+     * Check if the validation passes
      * @return bool
      */
 	public function passes()
@@ -76,6 +76,13 @@ class Validation
                             return false;
                         }
                     }
+                    else if(substr($rule, 0, 6) == 'before')
+                    {
+                        $rule = explode(':', $rule);
+                        $date1 = new \DateTime($value);
+                        $date2 = new \DateTime($$rule[1]);
+                        $date1->diff($date2);
+                    }
 				}
 			}
 		}
@@ -83,7 +90,7 @@ class Validation
 	}
 
     /**
-     * Détermine si la validation échoue
+     * Check if the validation fails
      * @return bool
      */
 	public function fails()
@@ -92,11 +99,12 @@ class Validation
 	}
 
     /**
-     * Retourne les erreurs de validation
+     * Return the validation errors
      * @return string
      */
 	public function getErrors()
 	{
 		return $this->errors;
 	}
+
 }

@@ -13,6 +13,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     protected $items;
 
     /**
+     * Create a new collection of items
      * @param array $items
      */
     public function __construct(array $items)
@@ -20,20 +21,26 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         $this->items = $items;
     }
 
+    /**
+     * Convert the collection in array
+     * @return array
+     */
     public function toArray()
     {
         return $this->items;
     }
 
     /**
+     * Add the items to the collection
      * @param array $items
      */
-    public function merge(array $items)
+    public function add(array $items)
     {
         array_merge($this->items, $items);
     }
 
     /**
+     * Get a value by its key
      * @param $key
      * @return $value
      */
@@ -43,6 +50,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
+     * Set a value at a given key
      * @param $key
      * @param $value
      */
@@ -52,6 +60,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
+     * Check if the collection has the key
      * @param $key
      * @return bool
      */
@@ -61,6 +70,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
+     * Delete an item by its key
      * @param $key
      */
     public function delete($key)
@@ -112,6 +122,11 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         return implode($glue, $this->items);
     }
 
+    /**
+     * Return the max item of the collection
+     * @param $key
+     * @return mixed
+     */
     public function max($key = false)
     {
         if (!$key)
@@ -156,6 +171,11 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         }
     }
 
+    /**
+     * Return the last item of the collection
+     * @param $key
+     * @return mixed
+     */
     public function last($key = false)
     {
         if (!$key)
@@ -192,7 +212,18 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * Order the collection by a specific key given in parameter
+     * Paginate the collection
+     * @param $page
+     * @param $elements
+     * @return Collection
+     */
+    public function paginate($page, $elements)
+    {
+        return $this->limit($elements, ($page - 1) * $elements);
+    }
+
+    /**
+     * Order the collection by a specific key given
      * @param $key
      * @param string $direction
      * @return Collection
