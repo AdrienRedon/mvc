@@ -7,7 +7,7 @@ use Libs\Collection;
 require_once(ROOT . 'core/database.php');
 
 
-/*
+/**
  * Objet Model
  * Permet les interactions avec la base de données
  */
@@ -28,7 +28,7 @@ class Model
 		$this->hidden = [];
 	}
 
-	/*
+	/**
 	 * Lit une ligne dans la base de données par rapport à l'id de l'objet
 	 * @param $fields Liste des champs à récupérer
 	 */
@@ -48,7 +48,7 @@ class Model
 		}
 	}
 
-	/*
+	/**
 	 * Sauvegarde les données passées en paramètre dans la base de données
 	 * @param $data Données à sauvegarder
 	 */
@@ -164,7 +164,7 @@ class Model
 		return $result;
 	}
 
-	/*
+	/**
 	 * Permet de supprimer une ligne dans la base de données
 	 * @param $id ID de la ligne à supprimer
 	 */
@@ -178,6 +178,11 @@ class Model
 		$this->db->query($sql);
 	}
 
+    /**
+     * Load the given model
+     * @param $name
+     * @return Model
+     */
 	static function load($name)
 	{
 		require_once(ROOT."models/$name.php");
