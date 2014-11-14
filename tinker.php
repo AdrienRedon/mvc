@@ -10,7 +10,7 @@ if($argv[1] == 'generate')
 {
     if($argv[2] == 'resource' && isset($argv[3]))
     {
-        createRessource($argv[3]);
+        createResource($argv[3]);
     }
     else if($argv[2] == 'controller' && isset($argv[3]))
     {
@@ -19,6 +19,10 @@ if($argv[1] == 'generate')
     else if($argv[2] == 'model' && isset($argv[3]))
     {
         createModel($argv[3]);
+    }
+    else if($arg[2] == 'view' && isset($argv[3], $argv[4]))
+    {
+        createView($argv[3], $argv[4]);
     }
     else
     {
@@ -58,7 +62,22 @@ function createModel($name)
     }
 }
 
-function createRessource($name)
+function createView($resource, $name)
+{
+    $filename = "views/$resource/$name.php";
+    
+    if(!file_exists($filename))
+    {
+        $file = fopen($filename, 'w') or die('Unable to open the file');
+        fwrite($file, "");
+    }
+    else
+    {
+        die("The $name view already exists");
+    }
+}
+
+function createResource($name)
 {
     createController($name);
     createModel($name);
