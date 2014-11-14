@@ -6,11 +6,6 @@ use Libs\Collection;
 
 require_once(ROOT . 'core/database.php');
 
-
-/**
- * Objet Model
- * Permet les interactions avec la base de données
- */
 class Model
 {
 	protected $table;
@@ -18,7 +13,7 @@ class Model
 	protected $db;
 
 	/**
-	 * Champs cachés
+	 * Hidden fields
 	 */
 	protected $hidden;
 
@@ -30,7 +25,7 @@ class Model
 
 	/**
 	 * Lit une ligne dans la base de données par rapport à l'id de l'objet
-	 * @param $fields Liste des champs à récupérer
+	 * @param $fields
 	 */
 	public function read($fields = null)
 	{
@@ -49,8 +44,8 @@ class Model
 	}
 
 	/**
-	 * Sauvegarde les données passées en paramètre dans la base de données
-	 * @param $data Données à sauvegarder
+	 * Save the given data
+	 * @param $data
 	 */
 	public function save($data)
 	{
@@ -96,7 +91,8 @@ class Model
 	}
 
     /**
-     * @param array $conditions
+     * Return the line with the given conditions from the table
+     * @param $conditions
      * @return Collection
      */
 	public function where(array $conditions)
@@ -123,6 +119,7 @@ class Model
 	}
 
     /**
+     * Return all the data
      * @return Collection
      */
     public function all()
@@ -130,6 +127,11 @@ class Model
         return $this->where([]);
     }
 
+    /**
+     * Return the line with the given id from the table
+     * @param $id
+     * @return $result
+     */
     public function find($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id='$id'";
@@ -145,9 +147,10 @@ class Model
         return $result;
     }
 
-	/*
-	 * Permet de récupérer la première ligne dans la base de données
-	 * @param fields colonnes devant être récupérées
+	/**
+	 * Return the first line from the table
+	 * @param $fields
+     * @return $result
 	 */
 	public function first($fields = '*')
 	{
@@ -165,8 +168,8 @@ class Model
 	}
 
 	/**
-	 * Permet de supprimer une ligne dans la base de données
-	 * @param $id ID de la ligne à supprimer
+	 * Delete a line from the table
+	 * @param $id
 	 */
 	public function delete($id = null)
 	{
