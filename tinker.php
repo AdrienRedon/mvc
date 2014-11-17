@@ -11,6 +11,10 @@ if($argv[1] == 'generate')
     if($argv[2] == 'resource' && isset($argv[3]))
     {
         createResource($argv[3]);
+        for($i = 4; $i < size($argv); $i++)
+        {
+            createView($argv[3], $argv[$i]);
+        }
     }
     else if($argv[2] == 'controller' && isset($argv[3]))
     {
@@ -40,6 +44,7 @@ function createController($name)
     {
         $file = fopen($filename, 'w') or die('Unable to open the file');
         fwrite($file, "<?php\n\nclass {$name}Controller extends \Core\Controller\n{\n\tpublic function __construct()\n\t{\n\t\tparent::__construct();\n\t\t\$this->page = \Core\Model::load('model_name');\n\t}\n}");
+        fclose($file);
     }
     else
     {
@@ -55,6 +60,7 @@ function createModel($name)
     if (!file_exists($filename)) {
         $file = fopen($filename, 'w') or die('Unable to open the file');
         fwrite($file, "<?php\n\nclass $name extends \Core\Model\n{\n\tpublic function __construct()\n\t{\n\t\tparent::__construct();\n\t\t\$this->table = 'table_name';\n\t\t\$this->hidden = [];\n\t}\n}");
+        fclose($file);
     }
     else
     {
@@ -70,6 +76,7 @@ function createView($resource, $name)
     {
         $file = fopen($filename, 'w') or die('Unable to open the file');
         fwrite($file, "");
+        fclose($file);
     }
     else
     {
