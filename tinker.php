@@ -6,23 +6,24 @@
  * Time: 09:45
  */
 
-if($argv[1] == 'generate')
+
+if($argv[1] == 'generate' && isset($argv[2]))
 {
     if($argv[2] == 'resource' && isset($argv[3]))
     {
-        createResource($argv[3]);
-        for($i = 4; $i < size($argv); $i++)
-        {
-            createView($argv[3], $argv[$i]);
-        }
+        $methods = array_slice($argv, 4);
+        createResource($argv[3], $methods);
     }
     else if($argv[2] == 'controller' && isset($argv[3]))
     {
-        createController($argv[3]);
+        $methods = array_slice($argv, 4);
+        createController($argv[3], $methods);
+
     }
     else if($argv[2] == 'model' && isset($argv[3]))
     {
         createModel($argv[3]);
+
     }
     else if($arg[2] == 'view' && isset($argv[3], $argv[4]))
     {
@@ -30,20 +31,56 @@ if($argv[1] == 'generate')
     }
     else
     {
-        die('Wrong commands !');
+        die('Wrong command !');
+        exit;
     }
 
+    die("{$argv[3]} {$argv[2]} has been created");
+    exit;
+}
+else if($argv[1] == 'delete' && isset($argv[2]))
+{
+    if($argv[2] == 'resource' && isset($argv[3]))
+    {
+        $methods = array_slice($argv, 4);
+        deleteResource($argv[3], $methods);
+    }
+    else if($argv[2] == 'controller' && isset($argv[3]))
+    {
+        deleteController($argv[3]);
+    }
+    else if($argv[2] == 'model' && isset($argv[3]))
+    {
+        deleteModel($argv[3]);
+    }
+    else if($argv[2] == 'view' && isset($argv[3], $argv[4]))
+    {
+        deleteView($argv[3], $argv[4]);
+    }
+    else
+    {
+        die('Wrong command !');
+        exit;
+    }
+
+    die("{$argv[3]} {$argv[2]} has been deleted");
     exit;
 }
 
-function createController($name)
+function createController($name, $methods = array())
 {
     $filename = "controllers/{$name}_controller.php";
 
     if(!file_exists($filename))
     {
         $file = fopen($filename, 'w') or die('Unable to open the file');
-        fwrite($file, "<?php\n\nclass {$name}Controller extends \Core\Controller\n{\n\tpublic function __construct()\n\t{\n\t\tparent::__construct();\n\t\t\$this->page = \Core\Model::load('model_name');\n\t}\n}");
+        $str = "<?php\n\nclass {$name}Controller extends \Core\Controller\n{\n\tpublic function __construct()\n\t{\n\t\tparent::__construct();\n\t\t\$this->page = \Core\Model::load('model_name');\n\t}";
+        for($i = 0; $i < count($methods); $i++)
+        {
+            $str .= "\n\n\tpublic function {$methods[$i]}()\n\t{\n\t}";
+        }
+        $str .= "\n}";
+        fwrite($file, $str);
         fclose($file);
     }
     else
@@ -52,6 +89,11 @@ function createController($name)
     }
 }
 
+function deleteController($name)
+{
+    $filename = "controllers/$name.php";
+    unlink($filename);
+}
 
 function createModel($name)
 {
@@ -68,10 +110,22 @@ function createModel($name)
     }
 }
 
+function deleteModel($name)
+{
+    $filename = "models/$name.php";
+    unlink($filename);
+}
+
 function createView($resource, $name)
 {
-    $filename = "views/$resource/$name.php";
-    
+    $folder = "views/$resource";
+    $filename = "$folder/$name.php";
+
+    if(!file_exists($folder) || !is_dir($folder))
+    {
+        mkdir($folder);
+    }
+
     if(!file_exists($filename))
     {
         $file = fopen($filename, 'w') or die('Unable to open the file');
@@ -84,10 +138,30 @@ function createView($resource, $name)
     }
 }
 
-function createResource($name)
+function deleteView($resource, $name)
 {
-    createController($name);
+    $filename = "views/$resource/$name.php";
+    unlink($filename);
+}
+
+function createResource($name, $methods)
+{
+    createController($name, $methods);
     createModel($name);
+    for($i = 0; $i < count($methods); $i++)
+    {
+        createView($name, $methods[$i]);
+    }
+}
+
+function deleteResource($name, $methods)
+{
+    deleteController($name);
+    deleteModel($name);
+    for($i = 0; $i < count($methods); $i++)
+    {
+        DeleteView($name, $methods[$i]);
+    }
 }
 
 

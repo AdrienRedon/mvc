@@ -12,15 +12,27 @@ class Model
 	protected $id;
 	protected $db;
 
+    /**
+     * Relationships
+     */
+    protected $has_one = array();
+    protected $has_many = array();
+    protected $belongs_to = array();
+    protected $has_and_belongs_to = array();
+
 	/**
 	 * Hidden fields
 	 */
-	protected $hidden;
+	protected $hidden = array();
 
 	public function __construct()
 	{
 		$this->db = new Database(SQL_HOST, SQL_BASE, SQL_LOGIN, SQL_PASS);
-		$this->hidden = [];
+
+        $this->has_one($this->has_one);
+        $this->has_one($this->has_many);
+        $this->belongs_to($this->belongs_to);
+        $this->has_and_belongs_to($this->has_and_belongs_to);
 	}
 
 	/**
@@ -191,4 +203,41 @@ class Model
 		require_once(ROOT."models/$name.php");
 		return new $name();
 	}
+
+    /**
+     * Create a relationship 'has_one' with the given models
+     * @param array $models
+     */
+    protected function has_one($models = array())
+    {
+        foreach($models as $model)
+        {
+            $field = strtolower($model).'_id';
+            $this->$model = Model::load($model)->find($this->$field);
+        }
+    }
+
+    protected function has_many($models = array())
+    {
+        foreach($models as $model)
+        {
+            $field = strtolower(get_class($this)).'_id';
+            $this->$model = Model::load($model)->where([$field => $this->id]);
+        }
+    }
+
+    protected function belongs_to($models = array())
+    {
+        foreach($models as $model)
+        {
+            $field = strtolower(get_class($this)).'_id';
+            $this->$model = Model::load($model)->where([$field => $this->id])->id;
+        }
+    }
+
+    protected function has_and_belongs_to($models = array())
+    {
+        $this->has_many($models);
+        $this->belongs_to($models);
+    }
 }

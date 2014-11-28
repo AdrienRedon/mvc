@@ -2,12 +2,7 @@
 
 class User extends \Core\Model
 {
-	public function __construct()
-	{
-		parent::__construct();
-		$this->table = "users";
-		$this->hidden = ['password'];
-	}
-
-
+    protected $table = "users";
+    protected $hidden = ['password'];
+    protected $has_many = ['Post'];
 }
