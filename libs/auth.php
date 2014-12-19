@@ -61,7 +61,7 @@ class Auth
 	 */
 	public function attempt($login, $password)
 	{
-		$user = $this->user->where(['login' => $login, 'password' => sha1($password)])->first();
+		$user = $this->user->first(['login' => $login, 'password' => sha1($password)]);
 
 		if(isset($user))
 		{

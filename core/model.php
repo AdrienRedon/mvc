@@ -20,6 +20,8 @@ class Model
     protected $belongs_to = array();
     protected $has_and_belongs_to = array();
 
+    // Ajouter les model aux requètes (find, first, etc...)
+
 	/**
 	 * Hidden fields
 	 */
@@ -29,10 +31,10 @@ class Model
 	{
 		$this->db = new Database(SQL_HOST, SQL_BASE, SQL_LOGIN, SQL_PASS);
 
-        $this->has_one($this->has_one);
-        $this->has_one($this->has_many);
-        $this->belongs_to($this->belongs_to);
-        $this->has_and_belongs_to($this->has_and_belongs_to);
+        //$this->has_one($this->has_one);
+        //$this->has_many($this->has_many);
+        //$this->belongs_to($this->belongs_to);
+        //$this->has_and_belongs_to($this->has_and_belongs_to);
 	}
 
 	/**
@@ -115,9 +117,20 @@ class Model
             $sql .= " AND $fields = '$value'";
         }
 
-		$results = $this->db->query($sql);
-		
-		foreach ($this->hidden as $hidden)
+        $results = $this->db->query($sql);
+
+        foreach($results as $k=>$result)
+        {
+            $class = get_class($this);
+            $object = new $class;
+            foreach($result as $attribute=>$value)
+            {
+                $object->$attribute = $value;
+            }
+            $results[$k] = $object;
+        }
+
+        foreach ($this->hidden as $hidden)
 		{
             foreach($results as $result)
             {
@@ -141,29 +154,34 @@ class Model
 
     /**
      * Return the line with the given id from the table
-     * @param $id
-     * @return $result
+     * @param $id integer
+     * @return mixed $result Object
      */
     public function find($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id='$id'";
-        $result = $this->db->query($sql)->first();
-
-        foreach ($this->hidden as $hidden)
-        {
-            if(isset($result->$hidden))
+        $result = $this->where(['id' =>$id])->first();
+        if(isset($result)) {
+            foreach($this->has_many as $model)
             {
-                unset($result->$hidden);
+                $field = strtolower(get_class($this)).'_id';
+                $result->$model = Model::load($model);
+                $result->$model = $result->$model->where([$field => $id]);
+            }
+            foreach($this->has_one as $model)
+            {
+                $field = strtolower(get_class($this)).'_id';
+                $result->$model = Model::load($model);
+                $result->$model = $result->$model->where([$field => $id])->first();
             }
         }
         return $result;
     }
 
-	/**
-	 * Return the first line from the table
-	 * @param $fields
-     * @return $result
-	 */
+    /**
+     * Return the first line from the table
+     * @param string $fields
+     * @return mixed $result
+     */
 	public function first($fields = '*')
 	{
 		$sql = "SELECT $fields FROM {$this->table}";
@@ -176,6 +194,12 @@ class Model
 				unset($result->$hidden);
 			}
 		}
+
+        if(isset($result))
+        {
+            $result = $this->find($result->id);
+        }
+
 		return $result;
 	}
 
@@ -210,31 +234,45 @@ class Model
      */
     protected function has_one($models = array())
     {
-        foreach($models as $model)
-        {
-            $field = strtolower($model).'_id';
-            $this->$model = Model::load($model)->find($this->$field);
-        }
+//        foreach($models as $model)
+//        {
+//            $field = strtolower($model).'_id';
+//            $this->$model = Model::load($model);
+//            $this->$model = $this->$model->find($this->$field);
+//        }
     }
 
+    /**
+     * Create a relationship 'has many' with the given models
+     * @param array $models
+     */
     protected function has_many($models = array())
     {
-        foreach($models as $model)
-        {
-            $field = strtolower(get_class($this)).'_id';
-            $this->$model = Model::load($model)->where([$field => $this->id]);
-        }
+//        foreach($models as $model)
+//        {
+//            $field = strtolower(get_class($this)).'_id';
+//            $this->$model = Model::load($model);
+//            $this->$model = $this->$model->where([$field => $this->id]);
+//        }
     }
 
+    /**
+     * Create a relationship 'belongs to' with the given models
+     * @param array $models
+     */
     protected function belongs_to($models = array())
     {
-        foreach($models as $model)
-        {
-            $field = strtolower(get_class($this)).'_id';
-            $this->$model = Model::load($model)->where([$field => $this->id])->id;
-        }
+//        foreach($models as $model)
+//        {
+//            $field = strtolower(get_class($this)).'_id';
+//            $this->$model = Model::load($model)->where([$field => $this->id])->id;
+//        }
     }
 
+    /**
+     * Create a relationship 'has and belongs_to' with the given models
+     * @param array $models
+     */
     protected function has_and_belongs_to($models = array())
     {
         $this->has_many($models);

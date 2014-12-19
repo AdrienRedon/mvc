@@ -10,13 +10,14 @@ class PageController extends \Core\Controller
 		parent::__construct();
 		$this->page = \Core\Model::load('page');
 		$this->posts = \Core\Model::load('post');
+        $this->user = \Core\Model::load('user');
 	}
 
 	public function index()
 	{
 		$user = $this->auth->user();
 		$content = $this->page->first()->content;
-        $posts = $this->user->post->all();
+        $posts = $this->user->find(1)->post;//->all();
         $last_post = $posts->orderBy('name', 'asc')->last('name');
 
 		if($this->isAjax())

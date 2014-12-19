@@ -69,6 +69,11 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         return array_key_exists($key, $this->items);
     }
 
+    public function is_empty()
+    {
+        return empty($this->items);
+    }
+
     /**
      * Delete an item by its key
      * @param $key

@@ -14,7 +14,7 @@ class Database
 
 	/**
 	 * Execute une requête SQL et retourne le résultat
-	 * @param  $sql     Requête à exécuter
+	 * @param  $sql     string Requête à exécuter
 	 * @return Object[] Tableau contenant l'ensemble des lignes retournées par la requête sous forme d'objet.
 	 */
 	public function query($sql)
