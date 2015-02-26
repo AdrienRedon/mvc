@@ -9,7 +9,7 @@ require_once(ROOT . 'core/database.php');
 class Model
 {
 	protected $table;
-	protected $id;
+	public $id;
 	protected $db;
 
     /**
@@ -228,54 +228,4 @@ class Model
 		return new $name();
 	}
 
-    /**
-     * Create a relationship 'has_one' with the given models
-     * @param array $models
-     */
-    protected function has_one($models = array())
-    {
-//        foreach($models as $model)
-//        {
-//            $field = strtolower($model).'_id';
-//            $this->$model = Model::load($model);
-//            $this->$model = $this->$model->find($this->$field);
-//        }
-    }
-
-    /**
-     * Create a relationship 'has many' with the given models
-     * @param array $models
-     */
-    protected function has_many($models = array())
-    {
-//        foreach($models as $model)
-//        {
-//            $field = strtolower(get_class($this)).'_id';
-//            $this->$model = Model::load($model);
-//            $this->$model = $this->$model->where([$field => $this->id]);
-//        }
-    }
-
-    /**
-     * Create a relationship 'belongs to' with the given models
-     * @param array $models
-     */
-    protected function belongs_to($models = array())
-    {
-//        foreach($models as $model)
-//        {
-//            $field = strtolower(get_class($this)).'_id';
-//            $this->$model = Model::load($model)->where([$field => $this->id])->id;
-//        }
-    }
-
-    /**
-     * Create a relationship 'has and belongs_to' with the given models
-     * @param array $models
-     */
-    protected function has_and_belongs_to($models = array())
-    {
-        $this->has_many($models);
-        $this->belongs_to($models);
-    }
 }
