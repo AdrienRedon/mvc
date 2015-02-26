@@ -17,7 +17,7 @@ class PageController extends \Core\Controller
 	{
 		$user = $this->auth->user();
 		$content = $this->page->first()->content;
-        $posts = $this->user->find(1)->post;//->all();
+        $posts = $this->user->first()->post;//->all();
         $last_post = $posts->orderBy('name', 'asc')->last('name');
 
 		if($this->isAjax())
