@@ -9,7 +9,7 @@ class PageController extends \Core\Controller
 	{
 		parent::__construct();
 		$this->page = \Core\Model::load('page');
-		$this->posts = \Core\Model::load('post');
+		$this->post = \Core\Model::load('post');
         $this->user = \Core\Model::load('user');
 	}
 
