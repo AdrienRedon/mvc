@@ -1,6 +1,11 @@
 <?php 
 
 /**
+ * Mode debug
+ */
+define('DEBUG', true);
+
+/**
  * Configuration de la base de données MySQL
  */
 define('SQL_HOST', 'localhost');
