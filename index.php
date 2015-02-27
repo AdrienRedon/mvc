@@ -16,4 +16,9 @@ require_once(ROOT . 'core/controller.php');
 
 require_once(ROOT . 'core/bootstrap.php');
 
+function dd($var) 
+{
+	die(var_dump($var));
+}
+
 $app = new \Core\Bootstrap();
