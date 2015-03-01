@@ -2,6 +2,11 @@
 
 namespace Core;
 
+use \Libs\Session;
+use \Libs\Auth;
+use \Libs\Redirect;
+use \Libs\Flash;
+
 class Controller
 {
 	protected $session;
@@ -19,11 +24,11 @@ class Controller
 
 	public function __construct()
 	{
-		$this->session = new \Libs\Session;
+		$this->session = new Session;
 
-		$this->auth = new \Libs\Auth($this->session);
-		$this->redirect = new \Libs\Redirect($this->session);
-		$this->flash = new \Libs\Flash($this->session);
+		$this->auth = new Auth($this->session);
+		$this->redirect = new Redirect($this->session);
+		$this->flash = new Flash($this->session);
 		
 		$this->view = new View;
 
