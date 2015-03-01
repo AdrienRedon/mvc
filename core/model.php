@@ -251,15 +251,9 @@ class Model
             }
             return $this->$key;
         }
-        /*else if(in_array($key, $this->belongs_to_many))
-        {
-            if(!isset($this->$key))
-            {
-                $field = strtolower(get_class($this)).'_id';
-                $this->$key = Model::load($key)->find($this->$field);
-            }
-            return $this->$key;
-        }*/
+        /**
+         * @todo belongs_to_many
+         */
     }
 
 }
