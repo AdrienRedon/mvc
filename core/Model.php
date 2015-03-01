@@ -4,8 +4,6 @@ namespace Core;
 
 use Libs\Collection;
 
-require_once(ROOT . 'core/database.php');
-
 class Model
 {
 	protected $table;
