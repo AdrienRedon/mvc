@@ -29,6 +29,7 @@ class Redirect
 
 	public function home()
 	{
-		$this->to(DEFAULT_CONTROLLER . '/' . DEFAULT_METHOD);
+		$config = \Core\Config::getInstance();
+		$this->to($config->get('default_controller') . '/' . $config->get('default_method'));
 	}
 }
