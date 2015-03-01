@@ -4,12 +4,16 @@ namespace Core;
 
 class Bootstrap
 {
-	protected $controller = DEFAULT_CONTROLLER;
-	protected $method     = DEFAULT_METHOD;
-	protected $params     = DEFAULT_ARGS;
+	protected $controller;
+	protected $method;
+	protected $params;
 
 	public function __construct()
 	{
+		$this->controller = Config::getInstance()->get('default_controller');
+		$this->method     = Config::getInstance()->get('default_method');
+		$this->params     = Config::getInstance()->get('default_args');
+
 		$url = $this->parseUrl();
 
         $filename = ROOT . 'controllers/' . $url[0] . '_controller.php';

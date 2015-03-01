@@ -5,8 +5,8 @@ namespace Core;
 class View
 {
 	protected $content;
-	protected $layout = DEFAULT_LAYOUT;
-	protected $title  = DEFAULT_TITLE;
+	protected $layout;
+	protected $title;
 
 	protected $session;
 	protected $flash;
@@ -16,6 +16,9 @@ class View
 
 	public function __construct()
 	{
+		$this->layout = Config::getInstance()->get('default_layout');
+		$this->title  = Config::getInstance()->get('default_title');
+
 		$this->session = new \Libs\Session;
 		$this->flash = new \Libs\Flash($this->session);
 		$this->html = new \Libs\Html;

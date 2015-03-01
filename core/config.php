@@ -1,27 +1,34 @@
 <?php 
 
-/**
- * Mode debug
- */
-define('DEBUG', true);
+namespace Core;
 
-/**
- * Configuration de la base de données MySQL
- */
-define('SQL_HOST', 'localhost');
-define('SQL_BASE', 'mvc');
-define('SQL_LOGIN', 'root');
-define('SQL_PASS', '');
+class Config
+{
 
-/**
- * Configuration du controller et de la méthode à appeller par défaut
- */
-define('DEFAULT_CONTROLLER', 'page');
-define('DEFAULT_METHOD', 'index');
-define('DEFAULT_ARGS', null); // Unique argument car 'define' n'accepte pas de tableau
+	private $settings = array();
+	private static $_instance;
 
-/**
- * Configuration des vues
- */
-define('DEFAULT_LAYOUT', 'default');
-define('DEFAULT_TITLE', 'MVC');
+	public static function getInstance() 
+	{
+		if(is_null(self::$_instance))
+		{
+			self::$_instance = new Config();
+		}
+		return self::$_instance;
+	}
+
+	public function __construct()
+	{
+		$this->settings = require dirname(__DIR__) . '/config/config.php';
+	}
+
+	public function get($key)
+	{
+		if(!isset($this->settings[$key]))
+		{
+			return null;
+		}
+		return $this->settings[$key];
+	}
+
+}
