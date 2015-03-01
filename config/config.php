@@ -16,7 +16,7 @@ return [
 	'sql_password' => '',
 
 	/**
-	 * Configuration du controller et de la méthode à appeller par défaut
+	 * Configuration du controller et de la méthode à appeler par défaut
 	 */
 	'default_controller' => 'page',
 	'default_method' => 'index',
