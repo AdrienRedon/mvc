@@ -10,9 +10,10 @@ class Bootstrap
 
 	public function __construct()
 	{
-		$this->controller = Config::getInstance()->get('default_controller');
-		$this->method     = Config::getInstance()->get('default_method');
-		$this->params     = Config::getInstance()->get('default_args');
+		$config = Config::getInstance();
+		$this->controller = $config->get('default_controller');
+		$this->method     = $config->get('default_method');
+		$this->params     = $config->get('default_args');
 
 		$url = $this->parseUrl();
 
