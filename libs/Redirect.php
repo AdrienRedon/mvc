@@ -2,6 +2,8 @@
 
 namespace Libs;
 
+use \Core\Config;
+
 class Redirect
 {
 	protected $session;
@@ -29,7 +31,7 @@ class Redirect
 
 	public function home()
 	{
-		$config = \Core\Config::getInstance();
+		$config = Config::getInstance();
 		$this->to($config->get('default_controller') . '/' . $config->get('default_method'));
 	}
 }
