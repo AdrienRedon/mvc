@@ -17,7 +17,7 @@ class Bootstrap
 
 		$url = $this->parseUrl();
 
-        $filename = ROOT . 'controllers/' . $url[0] . '_controller.php';
+        $filename = ROOT . 'controllers/' . ucfirst($url[0]) . 'Controller.php';
 
 		if(file_exists($filename))
 		{
@@ -77,7 +77,7 @@ class Bootstrap
 	 */
 	private function errors()
 	{
-		require_once(ROOT . 'controllers/error_controller.php');
+		require_once(ROOT . 'controllers/ErrorController.php');
 		$this->controller = new \ErrorController;
 		$this->controller->_404();
 		exit;
