@@ -29,7 +29,12 @@ class Model
 
 	public function __construct()
 	{
-		$this->db = new Database(SQL_HOST, SQL_BASE, SQL_LOGIN, SQL_PASS);
+        $host = Config::getInstance()->get('sql_host');
+        $base = Config::getInstance()->get('sql_base');
+        $login = Config::getInstance()->get('sql_login');
+        $password = Config::getInstance()->get('sql_password');
+        
+		$this->db = new Database($host, $base, $login, $password);
 	}
 
 	/**
@@ -122,46 +127,6 @@ class Model
             {
                 $object->$attribute = $value;
             }
-            
-            foreach($this->has_one as $model)
-            {
-                $field = strtolower($class).'_id';
-                $object->$model = Model::load($model);
-                $object->$model = $object->$model->where([$field => $object->id])->first();
-            }
-            foreach($this->has_many as $model)
-            {
-                $field = strtolower($class).'_id';
-                $object->$model = Model::load($model);
-                $object->$model = $object->$model->where([$field => $object->id]);
-            }
-            foreach ($this->belongs_to as $model) 
-            {
-                $field = strtolower($model).'_id';
-                $object->$model = Model::load($model);
-                $object->$model = $object->$model->_find($object->$field);
-
-            }
-            foreach ($this->belongs_to_many as $model) 
-            {
-                $field = strtolower($model).'_id';
-                $object->$model = Model::load($model);
-                $object->$model = $object->$model->_find($object->$field);
-            }
-            // TODO
-            /*foreach ($this->has_and_belongs_to as $model) 
-            {
-                $field = strtolower(get_class($this)).'_id';
-                $object->$model = Model::load($model);
-                $object->$model = $object->$model->where([$field => $object->id])->first();
-            }*/
-            // TODO
-            /*foreach ($this->has_and_belongs_to_many as $model) 
-            {
-                $field = strtolower(get_class($this)).'_id';
-                $object->$model = Model::load($model);
-                $object->$model = $object->$model->where([$field => $object->id]);
-            }*/
             $results[$k] = $object;
         }
 
@@ -178,46 +143,6 @@ class Model
         }
         return $results;
     }
-
-    /**
-     * Return the line with the given conditions from the table whitout relationship
-     * @param $conditions
-     * @return Collection
-     */
-	private function _where(array $conditions)
-	{
-        $sql = "SELECT * FROM {$this->table} WHERE 1 = 1";
-        foreach($conditions as $fields => $value)
-        {
-            $sql .= " AND $fields = '$value'";
-        }
-
-        $results = $this->db->query($sql);
-
-        foreach($results as $k=>$result)
-        {
-            $class = get_class($this);
-            $object = new $class;
-            foreach($result as $attribute=>$value)
-            {
-                $object->$attribute = $value;
-            }
-            $results[$k] = $object;
-        }
-
-
-        foreach ($this->hidden as $hidden)
-		{
-            foreach($results as $result)
-            {
-                if(isset($result->$hidden))
-                {
-                    unset($result->$hidden);
-                }
-            }
-		}
-		return $results;
-	}
 
     /**
      * Return all the data
@@ -240,17 +165,6 @@ class Model
     }
 
     /**
-     * Return the line with the given id from the table
-     * @param $id integer
-     * @return mixed $result Object
-     */
-    private function _find($id)
-    {
-        $result = $this->_where(['id' =>$id])->first();
-        return $result;
-    }
-
-    /**
      * Return the first line from the table
      * @param string $fields
      * @return mixed $result
@@ -268,17 +182,19 @@ class Model
 			}
 		}
 
-        if(isset($result))
+        $class = get_class($this);
+        $object = new $class;
+        foreach($result as $attribute=>$value)
         {
-            $result = $this->find($result->id);
+            $object->$attribute = $value;
         }
 
-		return $result;
+		return $object;
 	}
 
 	/**
 	 * Delete a line from the table
-	 * @param $id
+	 * @param int $id
 	 */
 	public function delete($id = null)
 	{
@@ -292,13 +208,58 @@ class Model
 
     /**
      * Load the given model
-     * @param $name
-     * @return Model
+     * @param string $name Name of the model to load
+     * @return Object Model loaded
      */
 	static function load($name)
 	{
 		require_once(ROOT."models/$name.php");
 		return new $name();
 	}
+
+/**
+ * Get and create (if first time) field from relationship between models
+ * @param  string $key Name of the field
+ * @return Object $this->$key
+ */
+    public function __get($key)
+    {
+        if(in_array($key, $this->has_one)) 
+        {
+            if(!isset($this->$key))
+            {
+                $field = strtolower(get_class($this)).'_id';
+                $this->$key = Model::load($key)->where([$field => $this->id])->first();
+            }
+            return $this->$key;
+        }
+        else if(in_array($key, $this->has_many)) 
+        {
+            if(!isset($this->$key))
+            {
+                $field = strtolower(get_class($this)).'_id';
+                $this->$key = Model::load($key)->where([$field => $this->id]);
+            }
+            return $this->$key;
+        }
+        else if(in_array($key, $this->belongs_to))
+        {
+            if(!isset($this->$key))
+            {
+                $field = strtolower(get_class($this)).'_id';
+                $this->$key = Model::load($key)->find($this->$field);
+            }
+            return $this->$key;
+        }
+        /*else if(in_array($key, $this->belongs_to_many))
+        {
+            if(!isset($this->$key))
+            {
+                $field = strtolower(get_class($this)).'_id';
+                $this->$key = Model::load($key)->find($this->$field);
+            }
+            return $this->$key;
+        }*/
+    }
 
 }
