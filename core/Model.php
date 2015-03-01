@@ -213,7 +213,7 @@ class Model
      */
 	static function load($name)
 	{
-		require_once(ROOT."models/$name.php");
+		require_once(ROOT."models/".ucfirst($name).".php");
 		return new $name();
 	}
 
