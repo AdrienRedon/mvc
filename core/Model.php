@@ -17,8 +17,6 @@ class Model
     protected $has_many = array();
     protected $belongs_to = array();
     protected $belongs_to_many = array();
-    protected $has_and_belongs_to = array();
-    protected $has_and_belongs_to_many = array();
 
 	/**
 	 * Hidden fields
@@ -57,10 +55,13 @@ class Model
 
 	/**
 	 * Save the given data
-	 * @param $data
+	 * @param $data array
 	 */
-	public function save($data)
+	public function save($data = array())
 	{
+		if(isset($this->id)) {
+			$data = $this;
+		}
 		if(isset($data['id']) && !empty($data['id']))
 		{
 			$sql = "UPDATE {$this->table} SET ";
