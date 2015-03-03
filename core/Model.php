@@ -2,7 +2,7 @@
 
 namespace Core;
 
-use Libs\Collection;
+use \Libs\Collection;
 
 class Model
 {
