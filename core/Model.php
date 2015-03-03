@@ -39,14 +39,17 @@ class Model
 	}
 
 	/**
-	 * Read the given fields of a record from the database
+	 * Read the given fields of the current record from the database
 	 * @param $fields array
 	 */
 	public function read($fields = array())
 	{
 	    foreach($fields as $k => $field)
 		{
-		    unset($fields[$k])
+			if(!in_array($field, $this->fields))
+			{
+				unset($fields[$k]);	
+			}
 		}
 
 		if(empty($fields))
@@ -106,14 +109,14 @@ class Model
 	    		}
 	    	}
 	    } 
-	    else
-	    {
+        else
+        {
 		    foreach ($data as $k => $v) 
 		    {
 		    	if(k != 'id')
-		    	{
-		    		$sql .= "$k = '$v',";
-	    		}
+                {
+	                $sql .= "$k = '$v',";
+                }
 	    	}
 	    }
 	    
