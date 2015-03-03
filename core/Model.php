@@ -23,6 +23,9 @@ class Model
 	 */
 	protected $hidden = array();
 
+	/**
+	 * Constructor
+	 */ 
 	public function __construct()
 	{
         $host = Config::getInstance()->get('sql_host');
@@ -34,7 +37,7 @@ class Model
 	}
 
 	/**
-	 * Lit une ligne dans la base de données par rapport à l'id de l'objet
+	 * Read the given fields of a record from the database
 	 * @param $fields
 	 */
 	public function read($fields = null)
