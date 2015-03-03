@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use \PDO;
+
 class Database
 {
 
@@ -9,7 +11,7 @@ class Database
 
 	public function __construct($host, $base, $login, $password)
 	{
-		$this->db = new \PDO("mysql:host=$host;dbname=$base", $login, $password);
+		$this->db = new PDO("mysql:host=$host;dbname=$base", $login, $password);
 	}
 
 	/**
