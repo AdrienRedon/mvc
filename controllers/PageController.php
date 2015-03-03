@@ -1,5 +1,7 @@
 <?php 
 
+use \Core\Model;
+
 class PageController extends \Core\Controller
 {
 	protected $page;
@@ -8,9 +10,9 @@ class PageController extends \Core\Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->page = \Core\Model::load('page');
-		$this->post = \Core\Model::load('post');
-        $this->user = \Core\Model::load('user');
+		$this->page = Model::load('page');
+		$this->post = Model::load('post');
+        $this->user = Model::load('user');
 	}
 
 	public function index()
@@ -20,6 +22,12 @@ class PageController extends \Core\Controller
         $posts = $this->user->first()->post;
 
         $last_post = $posts->orderBy('name', 'asc')->last('name');
+
+        $new_post = new $this->post;
+        $new_post->name = 'test';
+        $new_post->content = 'blablabla';
+        $new_post->user_id = $user->id;
+        $new_post->save();
 
 		if($this->isAjax())
 		{
