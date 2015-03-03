@@ -3,12 +3,13 @@
 namespace Libs;
 
 use \Core\Config;
+use \Libs\interfaces\SessionInterface;
 
 class Redirect
 {
 	protected $session;
 	
-	public function __construct(\Libs\interfaces\SessionInterface $session)
+	public function __construct(SessionInterface $session)
 	{
 		$this->session = $session;
 	}

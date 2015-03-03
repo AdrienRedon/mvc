@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Adrien
- * Date: 11/10/2014
- * Time: 09:45
- */
-
 
 if($argv[1] == 'generate' && isset($argv[2]))
 {

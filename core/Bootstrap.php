@@ -4,82 +4,82 @@ namespace Core;
 
 class Bootstrap
 {
-	protected $controller;
-	protected $method;
-	protected $params;
+    protected $controller;
+    protected $method;
+    protected $params;
 
-	public function __construct()
-	{
-		$config = Config::getInstance();
-		$this->controller = $config->get('default_controller');
-		$this->method     = $config->get('default_method');
-		$this->params     = $config->get('default_args');
+    public function __construct()
+    {
+        $config = Config::getInstance();
+        $this->controller = $config->get('default_controller');
+        $this->method     = $config->get('default_method');
+        $this->params     = $config->get('default_args');
 
-		$url = $this->parseUrl();
+        $url = $this->parseUrl();
 
         $filename = ROOT . 'controllers/' . ucfirst($url[0]) . 'Controller.php';
 
-		if(file_exists($filename))
-		{
-			$this->controller = $url[0] . 'Controller';
-		}
-		else
-		{
-			$this->errors();
-		}
+        if(file_exists($filename))
+        {
+            $this->controller = $url[0] . 'Controller';
+        }
+        else
+        {
+            $this->errors();
+        }
 
-		require_once($filename);
+        require_once($filename);
 
-		$this->controller = new $this->controller;
+        $this->controller = new $this->controller;
 
         unset($url[0]);
 
-		if(isset($url[1]))
-		{
-			if(method_exists($this->controller, $url[1]))
-			{
-				$this->method = $url[1];
-				unset($url[1]);
-			}
-			else
-			{
-				$this->errors();
-			}
-		}
+        if(isset($url[1]))
+        {
+            if(method_exists($this->controller, $url[1]))
+            {
+                $this->method = $url[1];
+                unset($url[1]);
+            }
+            else
+            {
+                $this->errors();
+            }
+        }
 
-		$this->params = $url ? array_values($url) : [];
+        $this->params = $url ? array_values($url) : [];
 
-		call_user_func_array([$this->controller, $this->method], $this->params);
-	}
+        call_user_func_array([$this->controller, $this->method], $this->params);
+    }
 
-	/**
-	 * Sépare le controller, la méthode et les arguments de l'url
-	 * @return $url Tableau contenant le controller, la méthode et les arguments
-	 */
-	private function parseUrl()
-	{
-		if(isset($_GET['url']))
-		{
-			return $url = explode('/', filter_var(rtrim($_GET['url'], '/'), FILTER_SANITIZE_URL));
-		}
-		else 
-		{
-			return $url = [
-				$this->controller,
-				$this->method,
-				$this->params
-			];
-		}
-	}
+    /**
+     * Sépare le controller, la méthode et les arguments de l'url
+     * @return $url Tableau contenant le controller, la méthode et les arguments
+     */
+    private function parseUrl()
+    {
+        if(isset($_GET['url']))
+        {
+            return $url = explode('/', filter_var(rtrim($_GET['url'], '/'), FILTER_SANITIZE_URL));
+        }
+        else 
+        {
+            return $url = [
+                $this->controller,
+                $this->method,
+                $this->params
+            ];
+        }
+    }
 
-	/**
-	 * Appelle la méthode affichant une erreur 404
-	 */
-	private function errors()
-	{
-		require_once(ROOT . 'controllers/ErrorController.php');
-		$this->controller = new \ErrorController;
-		$this->controller->_404();
-		exit;
-	}
+    /**
+     * Appelle la méthode affichant une erreur 404
+     */
+    private function errors()
+    {
+        require_once(ROOT . 'controllers/ErrorController.php');
+        $this->controller = new \ErrorController;
+        $this->controller->_404();
+        exit;
+    }
 }
