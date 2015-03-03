@@ -1,5 +1,7 @@
 <?php
 
+use \Libs\Validation;
+
 class SessionController extends \Core\Controller
 {
 	public function __construct()
@@ -20,7 +22,7 @@ class SessionController extends \Core\Controller
 			'password' => 'required|confirmed'
 		];
 
-		$this->validation = new \Libs\Validation($input, $rules);
+		$this->validation = new Validation($input, $rules);
 
 		if($this->validation->passes())
 		{
