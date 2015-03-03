@@ -3,6 +3,7 @@
 namespace Core;
 
 use \PDO;
+use \Libs\Collection;
 
 class Database
 {
@@ -16,19 +17,28 @@ class Database
 
 	/**
 	 * Execute une requête SQL et retourne le résultat
-	 * @param  $sql     string Requête à exécuter
-	 * @return Object[] Tableau contenant l'ensemble des lignes retournées par la requête sous forme d'objet.
+	 * @param $sql string Requête à exécuter
+	 * @return Collection Collection of object return by the query
 	 */
-	public function query($sql)
+	public function query($sql, $args = array())
 	{
 		$req = $this->db->prepare($sql);
-		$req->execute();
-		return new \Libs\Collection($req->fetchAll(\PDO::FETCH_OBJ));
+		$req->execute($args);
+		return new Collection($req->fetchAll(PDO::FETCH_OBJ));
+	}
+
+	public function execute($sql, $args = array())
+	{
+		var_dump($sql);
+		var_dump($args);
+		$req = $this->db->prepare($sql);
+		$req->execute($args);
+		return $this->getLastInsertedId();
 	}
 
 
 	public function getLastInsertedId()
 	{
-		return $this->db->lastInsertedId();
+		return $this->db->lastInsertId();
 	}
 }
