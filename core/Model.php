@@ -40,14 +40,19 @@ class Model
 
 	/**
 	 * Read the given fields of a record from the database
-	 * @param $fields
+	 * @param $fields array
 	 */
-	public function read($fields = null)
+	public function read($fields = array())
 	{
-		if($fields == null)
+	    foreach($fields as $k => $field)
+		{
+		    unset($fields[$k])
+		}
+
+		if(empty($fields))
 		{
 			$fields = '*';
-		}
+		} 
 
 		$sql = "SELECT $fields FROM {$this->table} WHERE id={$this->id}";
 		$data = $this->db->query($sql);
@@ -91,15 +96,29 @@ class Model
 	public function update($data = array())
 	{
 	    $sql = "UPDATE {$this->table} SET ";
-		foreach ($data as $k => $v) 
-		{
-			if(k != 'id')
-			{
-				$sql .= "$k = '$v',";
-			}
-		}
-		$sql = substr($sql, 0, -1);
-		$sql .= "WHERE id={$data['id']}";
+	    if(empty($data))
+	    {
+	        foreach ($this->fields as $field) 
+		    {
+		    	if(isset($this->field) && $field != 'id')
+		    	{
+		    		$sql .= "$field = '$this->$field',";
+	    		}
+	    	}
+	    } 
+	    else
+	    {
+		    foreach ($data as $k => $v) 
+		    {
+		    	if(k != 'id')
+		    	{
+		    		$sql .= "$k = '$v',";
+	    		}
+	    	}
+	    }
+	    
+	    $sql = substr($sql, 0, -1);
+	    $sql .= "WHERE id={$data['id']}";
 		
 		$this->db->query($sql);	
 	}
