@@ -29,8 +29,6 @@ class Database
 
 	public function execute($sql, $args = array())
 	{
-		var_dump($sql);
-		var_dump($args);
 		$req = $this->db->prepare($sql);
 		$req->execute($args);
 		return $this->getLastInsertedId();

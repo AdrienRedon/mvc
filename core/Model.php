@@ -117,11 +117,8 @@ class Model
         }
         $sql = substr($sql, 0, -2);
         $sql .= ")";
-        var_dump($sql);
-        var_dump($args);
 
         $this->id = $this->db->execute($sql, $args); // set the id for the new record
-        var_dump($this->id);
     }
     
     /**
