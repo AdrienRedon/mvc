@@ -52,6 +52,48 @@ class Model
 			$this->k = $v;
 		}
 	}
+	
+	/**
+	 * Create a record with th given data
+	 * @param $data array
+	 */ 
+	public function create($data = array())
+	{
+		$sql = "INSERT INTO {$this->table} (";
+		unset($data['id']);
+		foreach ($data as $k => $v) 
+		{
+			$sql .= "$k,";
+		}
+		$sql = substr($sql, 0, -1);
+		$sql .= ") VALUES (";
+		foreach ($data as $k => $v) 
+		{
+			$sql .= "'$v',";
+		}
+		$sql = substr($sql, 0, -1);
+		$sql .= ")";
+		$this->db->query($sql);
+	
+	    // set the id for the new record
+		$this->id = $this->db->getLastInsertedId();
+	}
+	
+	public function update($data = array())
+	{
+	    $sql = "UPDATE {$this->table} SET ";
+		foreach ($data as $k => $v) 
+		{
+			if(k != 'id')
+			{
+				$sql .= "$k = '$v',";
+			}
+		}
+		$sql = substr($sql, 0, -1);
+		$sql .= "WHERE id={$data['id']}";
+		
+		$this->db->query($sql);	
+	}
 
 	/**
 	 * Save the given data
@@ -59,47 +101,13 @@ class Model
 	 */
 	public function save($data = array())
 	{
-		if(isset($this->id)) {
-			$data = $this;
-		}
 		if(isset($data['id']) && !empty($data['id']))
 		{
-			$sql = "UPDATE {$this->table} SET ";
-			foreach ($data as $k => $v) 
-			{
-				if(k != 'id')
-				{
-					$sql .= "$k = '$v',";
-				}
-			}
-			$sql = substr($sql, 0, -1);
-			$sql .= "WHERE id={$data['id']}";
+			$this->update($data);
 		}
 		else
 		{
-			$sql = "INSERT INTO {$this->table} (";
-			unset($data['id']);
-			foreach ($data as $k => $v) 
-			{
-				$sql .= "$k,";
-			}
-			$sql = substr($sql, 0, -1);
-			$sql .= ") VALUES (";
-			foreach ($data as $k => $v) 
-			{
-				$sql .= "'$v',";
-			}
-			$sql = substr($sql, 0, -1);
-			$sql .= ")";
-		}
-
-		if(!isset($data['id']))
-		{
-			$this->id = $this->db->getLastInsertedId();
-		}
-		else
-		{
-			$this->id = $data['id'];
+			$this->create($data);
 		}
 	}
 
