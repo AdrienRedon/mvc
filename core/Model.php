@@ -33,7 +33,7 @@ class Model
         $login = Config::getInstance()->get('sql_login');
         $password = Config::getInstance()->get('sql_password');
         
-		$this->db = new Database($host, $base, $login, $password);
+        $this->db = new Database($host, $base, $login, $password);
 	}
 
 	/**
