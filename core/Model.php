@@ -83,8 +83,8 @@ class Model
 	}
 	
 	/**
-	 * Update the record into the database
-	 * @param $data array Must contain the id of the record
+	 * Update the current record into the database
+	 * @param $data array
 	 */ 
 	public function update($data = array())
 	{
@@ -108,7 +108,7 @@ class Model
 	 */
 	public function save($data = array())
 	{
-		if(isset($data['id']) && !empty($data['id']))
+		if(isset($this->id))
 		{
 			$this->update($data);
 		}
