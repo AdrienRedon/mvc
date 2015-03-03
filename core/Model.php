@@ -9,6 +9,8 @@ class Model
 	protected $table;
 	public $id;
 	protected $db;
+	
+	protected $fields;
 
     /**
      * Relationships
