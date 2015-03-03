@@ -54,7 +54,7 @@ class Model
 	}
 	
 	/**
-	 * Create a record with th given data
+	 * Create a record with the given data
 	 * @param $data array
 	 */ 
 	public function create($data = array())
@@ -79,6 +79,10 @@ class Model
 		$this->id = $this->db->getLastInsertedId();
 	}
 	
+	/**
+	 * Update the record into the database
+	 * @param $data array Must contain the id of the record
+	 */ 
 	public function update($data = array())
 	{
 	    $sql = "UPDATE {$this->table} SET ";
