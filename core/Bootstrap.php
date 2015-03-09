@@ -2,35 +2,44 @@
 
 namespace Core;
 
+use \Core\Controller;
+
 class Bootstrap
 {
+    protected $routes;
+    
     protected $controller;
     protected $method;
     protected $params;
 
     public function __construct()
     {
+        $this->routes = Router::getInstance();
+
         $config = Config::getInstance();
         $this->controller = $config->get('default_controller');
         $this->method     = $config->get('default_method');
         $this->params     = $config->get('default_args');
 
-        $url = $this->parseUrl();
+        $url = array();
 
-        $filename = ROOT . 'controllers/' . ucfirst($url[0]) . 'Controller.php';
 
-        if(file_exists($filename))
+        if($this->isCustomRoute()) 
         {
-            $this->controller = $url[0] . 'Controller';
+            $url[0] = $this->routes->getController($_GET['url']);
+            $url[1] = $this->routes->getMethod($_GET['url']);
+            $url = array_merge($url, explode('/', substr_replace($_GET['url'], '', 0, strlen(implode('/', $url)) + 1)));
         }
         else
         {
-            $this->errors();
+            $url = $this->parseUrl();
         }
+        
+        $this->controller = $url[0] . 'Controller';
 
-        require_once($filename);
+        $controller = '\Controllers\\' . $this->controller;
 
-        $this->controller = new $this->controller;
+        $this->controller = new $controller;
 
         unset($url[0]);
 
@@ -49,12 +58,13 @@ class Bootstrap
 
         $this->params = $url ? array_values($url) : [];
 
+
         call_user_func_array([$this->controller, $this->method], $this->params);
     }
 
     /**
-     * Sépare le controller, la méthode et les arguments de l'url
-     * @return $url Tableau contenant le controller, la méthode et les arguments
+     * Split the controller, the method and the args from the url
+     * @return $url array Array with the controller, the method and the args
      */
     private function parseUrl()
     {
@@ -73,13 +83,29 @@ class Bootstrap
     }
 
     /**
-     * Appelle la méthode affichant une erreur 404
+     * Check if the url is a custom route in the config folder
+     * @return boolean [description]
+     */
+    private function isCustomRoute()
+    {
+        if(isset($_GET['url']))
+        {
+            if($this->routes->get($_GET['url']))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Call the method for 404
      */
     private function errors()
     {
-        require_once(ROOT . 'controllers/ErrorController.php');
-        $this->controller = new \ErrorController;
-        $this->controller->_404();
+        $this->controller = new Controller;
+        $this->controller->notFound();
         exit;
     }
 }
