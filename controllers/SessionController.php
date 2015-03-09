@@ -1,5 +1,7 @@
 <?php
 
+namespace Controllers;
+
 use \Libs\Validation;
 
 class SessionController extends \Core\Controller
