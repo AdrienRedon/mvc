@@ -25,6 +25,7 @@ class Model
 
     /**
      * Querying Relations
+     * @var array Name of the field => model to query
      */
     protected $has_one = array();
     protected $has_many = array();
@@ -130,6 +131,7 @@ class Model
         $sql = "UPDATE {$this->table} SET ";
         if(empty($data))
         {
+            $id = $this->id;
             foreach ($this->fields as $field) 
             {
                 if(isset($this->field))
@@ -140,6 +142,7 @@ class Model
         } 
         else
         {
+            $id = $data['id'];
             foreach ($data as $field => $value) 
             {
                 if($k != 'id')
@@ -150,7 +153,7 @@ class Model
         }
         
         $sql = substr($sql, 0, -1);
-        $sql .= "WHERE id={$data['id']}";
+        $sql .= "WHERE id=$id";
         
         $this->db->execute($sql, $data); 
     }
@@ -161,7 +164,7 @@ class Model
      */
     public function save($data = array())
     {
-        if(isset($this->id))
+        if(isset($this->id) || isset($data['id']))
         {
             $this->update($data);
         }
@@ -291,33 +294,36 @@ class Model
  */
     public function __get($key)
     {
-        if(in_array($key, $this->has_one)) 
+        if(array_key_exists($key, $this->has_one)) 
         {
             if(!isset($this->$key))
             {
                 $field = strtolower(get_class($this)).'_id';
-                $this->$key = Model::load($key)->where([$field => $this->id])->first();
+                $this->$key = Model::load($this->has_one[$key])->where([$field => $this->id])->first();
             }
             return $this->$key;
         }
-        else if(in_array($key, $this->has_many)) 
+
+        if(array_key_exists($key, $this->has_many)) 
         {
             if(!isset($this->$key))
             {
                 $field = strtolower(get_class($this)).'_id';
-                $this->$key = Model::load($key)->where([$field => $this->id]);
+                $this->$key = Model::load($this->has_many[$key])->where([$field => $this->id]);
             }
             return $this->$key;
         }
-        else if(in_array($key, $this->belongs_to))
+
+        if(array_key_exists($key, $this->belongs_to))
         {
             if(!isset($this->$key))
             {
                 $field = strtolower(get_class($this)).'_id';
-                $this->$key = Model::load($key)->find($this->$field);
+                $this->$key = Model::load($this->has_one[$key])->find($this->$field);
             }
             return $this->$key;
         }
+        
         /**
          * @todo belongs_to_many
          */
