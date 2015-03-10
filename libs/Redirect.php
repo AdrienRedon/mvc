@@ -16,7 +16,14 @@ class Redirect
 	
 	public function back()
 	{
-		header('Location: ' . $_SERVER['HTTP_REFERER']);
+		if(array_key_exists('HTTP_REFERER', $_SERVER))
+		{
+			header('Location: ' . $_SERVER['HTTP_REFERER']);
+		}
+		else
+		{
+			$this->home();
+		}
 	}
 	
 	public function backWithInput($input)
