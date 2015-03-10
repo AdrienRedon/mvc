@@ -9,17 +9,17 @@
 		<p>
 			Bienvenue <?= $user->login ?>.
 			Voulez-vous vous déconnecter ?
-			<?= $this->html->link('session/logout', 'Se déconnecter') ?>
+			<?= $this->html->link('logout', 'Se déconnecter') ?>
 		</p>
 
 	<?php } else { ?>
 
 		<p>Vous n'êtes pas connecté !</p>
 
-		<?= $this->form->open('session/login') ?>
+		<?= $this->form->open('login') ?>
 
 			<div>
-				<?= $this->form->text('login','', 'Login') ?>
+				<?= $this->form->text('login', '', 'Login') ?>
 			</div>
 
 			<div>
@@ -27,7 +27,7 @@
 			</div>
 
 			<div>
-				<?= $this->form->password('password_confirm','', 'Confirm password') ?>
+				<?= $this->form->password('password_confirm', '', 'Confirm password') ?>
 			</div>
 
 			<div>
@@ -37,13 +37,6 @@
 		<?= $this->form->close() ?>
 
 	<?php } ?>
-
-    <?php foreach($posts as $post) { ?>
-        <h2><?= $post->name ?></h2>
-        <p><?= $post->content ?></p>
-    <?php } ?>
-
-    <h2>Last Post : <?= $last_post ?></h2>
 
 </div>
 
