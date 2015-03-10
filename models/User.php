@@ -5,5 +5,5 @@ class User extends \Core\Model
     protected $table = "users";
     protected $fields = ['login'];
     protected $hidden = ['password'];
-    protected $has_many = ['post'];
+    protected $has_many = ['posts' => 'post'];
 }
