@@ -46,4 +46,28 @@ class Controller
     {
         return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
     }
+
+    public function notFound()
+    {
+        if($this->isAjax())
+        {
+            $this->view->json('Page introuvable', 404);
+        }
+        else
+        {
+            $this->view->render('errors/404');
+        }
+    }
+
+    public function notAllowed()
+    {
+        if($this->isAjax())
+        {
+            $this->view->json('Accès refusé', 403);
+        }
+        else
+        {
+            $this->view->render('errors/403');
+        }
+    }
 }
