@@ -6,14 +6,8 @@ use \Core\Model;
 
 class PostController extends \Core\Controller
 {
-    protected $posts;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->post = Model::load('post');
-        $this->user = Model::load('user');
-    }
+    protected $post = Model::load('post');
+    protected $user = Model::load('user');
 
     public function index()
     {
@@ -35,11 +29,11 @@ class PostController extends \Core\Controller
 
         if($this->isAjax())
         {
-            $this->view->json(compact('$post'));
+            $this->view->json(compact('post'));
         }
         else
         {
-            $this->view->render('post/index', compact('post'));
+            $this->view->render('post/show', compact('post'));
         }
     }
 

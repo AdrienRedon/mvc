@@ -6,11 +6,6 @@ use \Libs\Validation;
 
 class SessionController extends \Core\Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function login()
     {
         $input = [
@@ -39,7 +34,7 @@ class SessionController extends \Core\Controller
                 }
                 else
                 {
-                    $this->view->json(compact('logged', 500));
+                    $this->notAllowed();
                 }
             }
             else
@@ -54,7 +49,6 @@ class SessionController extends \Core\Controller
                     $this->flash->set('Les identifiants sont incorrects');
                     $this->redirect->backWithInput($input);
                 }
-
             }
 
         }
