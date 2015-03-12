@@ -6,8 +6,12 @@ use \Core\Model;
 
 class PostController extends \Core\Controller
 {
-    protected $post = Model::load('post');
-    protected $user = Model::load('user');
+    public function __construct()
+    {
+        parent::__construct();
+        $this->post = Model::load('post');
+        $this->user = Model::load('user');
+    }
 
     public function index()
     {

@@ -6,9 +6,13 @@ use \Core\Model;
 
 class PageController extends \Core\Controller
 {
-    protected $page = Model::load('page');
-    protected $post = Model::load('post');
-    protected $user = Model::load('user');
+    public function __construct()
+    {
+        parent::__construct();
+        $this->page = Model::load('page');
+        $this->post = Model::load('post');
+        $this->user = Model::load('user');
+    }
 
     public function index()
     {
