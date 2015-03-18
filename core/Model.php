@@ -10,6 +10,8 @@ class Model
     
     protected $table;
     
+    protected timestamps = false;
+    
     public $id;
 
     /**
@@ -116,6 +118,13 @@ class Model
                 $args[$field] = $value;
             }
         }
+        
+        if($timestamps)
+        {
+            $sql .= "created_at = ?,";
+            $args['created_at'] = date('d/m/Y H:i:s');
+        }
+        
         $sql = substr($sql, 0, -2);
         $sql .= ")";
 
@@ -136,7 +145,7 @@ class Model
             {
                 if(isset($this->field))
                 {
-                    $sql .= "$field = ?,";
+                    $sql .= "$field = ?, ";
                 }
             }
         } 
@@ -147,12 +156,17 @@ class Model
             {
                 if($k != 'id')
                 {
-                    $sql .= "$field = ?,";
+                    $sql .= "$field = ?, ";
                 }
             }
         }
+        if($timestamps)
+        {
+            $sql .= "updated_at = ?, ";
+            $data[] = date('d/m/Y H:i:s');
+        }
         
-        $sql = substr($sql, 0, -1);
+        $sql = substr($sql, 0, -2);
         $sql .= "WHERE id=$id";
         
         $this->db->execute($sql, $data); 
