@@ -31,6 +31,7 @@ class Model
     protected $has_many = array();
     protected $belongs_to = array();
     protected $belongs_to_many = array();
+    protected $jas_and_belongs_to_many = array();
 
     /**
      * Constructor
@@ -326,6 +327,10 @@ class Model
         
         /**
          * @todo belongs_to_many
+         */
+        
+        /**
+         * @todo has_and_belongs_to_many
          */
     }
 
