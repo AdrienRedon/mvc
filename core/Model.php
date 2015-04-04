@@ -10,7 +10,7 @@ class Model
     
     protected $table;
     
-    protected timestamps = false;
+    protected $timestamps = false;
     
     public $id;
 
