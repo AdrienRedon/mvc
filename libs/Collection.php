@@ -30,7 +30,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      */
     public function add(array $items)
     {
-        array_merge($this->items, $items);
+        $this->items = array_merge($this->items, $items);
     }
 
     /**
