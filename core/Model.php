@@ -33,7 +33,6 @@ class Model
     protected $has_many = array();
     protected $belongs_to = array();
     protected $belongs_to_many = array();
-    protected $jas_and_belongs_to_many = array();
 
     /**
      * Constructor
@@ -342,10 +341,34 @@ class Model
         /**
          * @todo belongs_to_many
          */
+        if(array_key_exists($key, $this->belongs_to_many))
+        {
+            if(!isset($this->$key))
+            {
+                $first = strtolower(get_class($this));
+                $second = strtolower($this->belongs_to_many[$key][0]);
+
+                $first_field = $first.'_id';
+                $second_field = $second.'_id';
+
+                $ids = $this->db->query("
+                    SELECT $second_field 
+                    FROM {$this->belongs_to_many[$key][1]} 
+                    WHERE $first_field = {$this->id}");
+
+                $this->$key = new Collection([]);
+
+                $model = Model::load($this->belongs_to_many[$key][0]);
+
+                foreach($ids as $id) 
+                {
+                    $item = array($model->find($id->$second_field));
+                    $this->$key->add($item);
+                }
+            }
+            return $this->$key;
+        }
         
-        /**
-         * @todo has_and_belongs_to_many
-         */
     }
 
 }
