@@ -10,9 +10,15 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      * Create a new collection of items
      * @param array $items
      */
-    public function __construct(array $items)
+    public function __construct($items = null)
     {
-        $this->items = $items;
+        if(isset($items)) {
+            $this->items = is_array($items) ? $items : func_get_args();
+        }
+        else 
+        {
+            $this->items = array();
+        }
     }
 
     /**
