@@ -338,9 +338,6 @@ class Model
             return $this->$key;
         }
         
-        /**
-         * @todo belongs_to_many
-         */
         if(array_key_exists($key, $this->belongs_to_many))
         {
             if(!isset($this->$key))
@@ -356,7 +353,7 @@ class Model
                     FROM {$this->belongs_to_many[$key][1]} 
                     WHERE $first_field = {$this->id}");
 
-                $this->$key = new Collection([]);
+                $this->$key = new Collection();
 
                 $model = Model::load($this->belongs_to_many[$key][0]);
 
