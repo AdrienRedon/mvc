@@ -37,14 +37,9 @@ class Model
     /**
      * Constructor
      */ 
-    public function __construct()
+    public function __construct(Database $db)
     {
-        $host = Config::getInstance()->get('sql_host');
-        $base = Config::getInstance()->get('sql_base');
-        $login = Config::getInstance()->get('sql_login');
-        $password = Config::getInstance()->get('sql_password');
-        
-        $this->db = new Database($host, $base, $login, $password);
+        $this->db = $db;
     }
 
     /**
@@ -267,7 +262,10 @@ class Model
         }
 
         $class = get_class($this);
-        $object = new $class;
+
+        $app = DIC::getInstance();
+
+        $object = new $class($app->get('Database'));
         foreach($result as $attribute=>$value)
         {
             $object->$attribute = $value;
@@ -297,8 +295,9 @@ class Model
      */
     static function load($name)
     {
+        $app = DIC::getInstance();
         require_once(ROOT."models/".ucfirst($name).".php");
-        return new $name();
+        return new $name($app->get('Database'));
     }
 
 /**
