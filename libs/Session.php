@@ -1,6 +1,7 @@
 <?php 
 
 namespace Libs;
+
 use \Libs\interfaces\SessionInterface;
 
 class Session implements SessionInterface

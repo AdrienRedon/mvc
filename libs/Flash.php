@@ -2,12 +2,14 @@
 
 namespace Libs;
 
+use \Libs\Interfaces\SessionInterface;
+
 class Flash
 {
     protected $session;
     const KEY = 'flash';
 
-    public function __construct(\Libs\interfaces\SessionInterface $session)
+    public function __construct(SessionInterface $session)
     {
         $this->session = $session;
     }
