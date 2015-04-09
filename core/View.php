@@ -16,14 +16,15 @@ class View
 
     public function __construct()
     {
+        $app = DIC::getInstance();
+        
         $this->layout = Config::getInstance()->get('default_layout');
         $this->title  = Config::getInstance()->get('default_title');
 
-        $this->session = new \Libs\Session;
-        $this->flash = new \Libs\Flash($this->session);
-        $this->html = new \Libs\Html;
-        $this->asset = new \Libs\Asset;
-        $this->form = new \Libs\Form($this->session);
+        $this->flash = $app->get('Flash');
+        $this->html = $app->get('Html');
+        $this->asset = $app->get('Asset');
+        $this->form = $app->get('Form');
     }
 
     /**
