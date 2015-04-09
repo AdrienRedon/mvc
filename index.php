@@ -34,4 +34,24 @@ $app->set('Database', function() {
     return new \Core\Database($host, $base, $login, $password);
 });
 
+$app->set('Session', function() {
+    return new \Libs\Session();
+});
+
+$app->set('Flash', function() use ($app) {
+    return new \Libs\Flash($app->get('Session'));
+});
+
+$app->set('Html', function() use ($app) {
+    return new \Libs\Html();
+});
+
+$app->set('Asset', function() use ($app) {
+    return new \Libs\Asset();
+});
+
+$app->set('Form', function() use ($app) {
+    return new \Libs\Form($app->get('Session'));
+});
+
 $bootstrap = new \Core\Bootstrap();
