@@ -2,12 +2,16 @@
 
 namespace Core;
 
+use \ReflectionClass;
+use \Exception;
+
 class DIC 
 {
+    protected static $_instance;
 
-    public $registry = array();
-    public $factories = array();
-    private $instances = array();
+    protected $registry = array();
+    protected $factories = array();
+    protected $instances = array();
 
     public function set($key, Callable $resolver)
     {
@@ -74,6 +78,15 @@ class DIC
             }
         }
         return $this->instances[$key];
+    }
+
+    public static function getInstance() 
+    {
+        if(is_null(self::$_instance))
+        {
+            self::$_instance = new DIC();
+        }
+        return self::$_instance;
     }
 
 }
