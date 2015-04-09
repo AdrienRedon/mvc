@@ -2,15 +2,18 @@
 
 namespace Libs;
 
+use \Core\Model;
+use \Libs\Interfaces\SessionInterface;
+
 class Auth 
 {
     protected $session;
     protected $user;
     const KEY = 'user';
 
-    public function __construct(\Libs\interfaces\SessionInterface $session)
+    public function __construct(SessionInterface $session)
     {
-        $this->user = \Core\Model::load('user');
+        $this->user = Model::load('user');
         $this->session = $session;
     }
 

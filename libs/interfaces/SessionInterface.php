@@ -1,6 +1,6 @@
 <?php
 
-namespace Libs\interfaces; 
+namespace Libs\Interfaces; 
 
 interface SessionInterface
 {
