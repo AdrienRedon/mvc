@@ -24,6 +24,14 @@ require_once(ROOT . 'core/Autoloader.php');
 require_once(ROOT . 'controllers/Autoloader.php');
 \Controllers\Autoloader::register();
 
+$app = \Core\DIC::getInstance();
 
+$app->set('Database', function() {
+    $host = \Core\Config::getInstance()->get('sql_host');
+    $base = \Core\Config::getInstance()->get('sql_base');
+    $login = \Core\Config::getInstance()->get('sql_login');
+    $password = \Core\Config::getInstance()->get('sql_password');
+    return new \Core\Database($host, $base, $login, $password);
+});
 
-$app = new \Core\Bootstrap();
+$bootstrap = new \Core\Bootstrap();
