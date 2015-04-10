@@ -2,14 +2,13 @@
 
 namespace Core;
 
-use \Libs\Session;
+use \Core\View;
 use \Libs\Auth;
 use \Libs\Redirect;
 use \Libs\Flash;
 
 class Controller
 {
-    protected $session;
     protected $view;
     protected $auth;
     protected $redirect;
@@ -17,24 +16,24 @@ class Controller
     protected $validation;
 
     /**
-     * Données passées en POST
+     * Data given throw $_REQUEST  POST
      * @var Array
      */
     protected $data;
 
     public function __construct()
     {
-        $this->session = new Session;
-
-        $this->auth = new Auth($this->session);
-        $this->redirect = new Redirect($this->session);
-        $this->flash = new Flash($this->session);
+        $app = DIC::getInstance();
         
-        $this->view = new View;
+        $this->view = $app->get('\Core\View');
+        $this->auth = $app->get('\Libs\Auth');
+        $this->redirect = $app->get('\Libs\Redirect');
+        $this->flash = $app->get('\Libs\Flash');
+        
 
-        if(isset($_POST))
+        if(isset($_REQUEST))
         {
-            $this->data = $_POST;
+            $this->data = $_REQUEST;
         }
     }
 
