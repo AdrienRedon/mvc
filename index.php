@@ -26,32 +26,43 @@ require_once(ROOT . 'controllers/Autoloader.php');
 
 $app = \Core\DIC::getInstance();
 
-$app->set('Database', function() {
-    $host = \Core\Config::getInstance()->get('sql_host');
-    $base = \Core\Config::getInstance()->get('sql_base');
-    $login = \Core\Config::getInstance()->get('sql_login');
-    $password = \Core\Config::getInstance()->get('sql_password');
+$app->set('\Core\Controller', function() use ($app) {
+    return new \Core\Controller($app->get('\Core\View'), $app->get('\Libs\Auth'), $app->get('\Libs\Redirect'), $app->get('\Libs\Flash'));
+});
+
+$app->set('\Core\Database', function() {
+    $config = \Core\Config::getInstance();
+    $host = $config->get('sql_host');
+    $base = $config->get('sql_base');
+    $login = $config->get('sql_login');
+    $password = $config->get('sql_password');
     return new \Core\Database($host, $base, $login, $password);
 });
 
-$app->set('Session', function() {
-    return new \Libs\Session();
+$app->set('\Core\View', function() use ($app) {
+    return new \Core\View($app->get('\Libs\Flash'), $app->get('\Libs\Html'), $app->get('\Libs\Asset'), $app->get('\Libs\Form'));
 });
 
-$app->set('Flash', function() use ($app) {
-    return new \Libs\Flash($app->get('Session'));
+$app->set('\Libs\Flash', function() use ($app) {
+    return new \Libs\Flash($app->get('\Libs\Session'));
 });
 
-$app->set('Html', function() use ($app) {
-    return new \Libs\Html();
+$app->set('\Libs\Form', function() use ($app) {
+    return new \Libs\Form($app->get('\Libs\Session'));
 });
 
-$app->set('Asset', function() use ($app) {
-    return new \Libs\Asset();
+$app->set('\Libs\Auth', function() use ($app) {
+    return new \Libs\Auth($app->get('\Libs\Session'));
 });
 
-$app->set('Form', function() use ($app) {
-    return new \Libs\Form($app->get('Session'));
+$app->set('\Libs\Redirect', function() use ($app) {
+    return new \Libs\Redirect($app->get('\Libs\Session'));
+});
+
+$app->set('\Libs\Mail', function() {
+    $config = \Core\Config::getInstance();
+    $email = $congig->get('email');
+    return new \Libs\Mail($email);
 });
 
 $bootstrap = new \Core\Bootstrap();
