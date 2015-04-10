@@ -26,43 +26,29 @@ require_once(ROOT . 'controllers/Autoloader.php');
 
 $app = \Core\DIC::getInstance();
 
-$app->set('\Core\Controller', function() use ($app) {
-    return new \Core\Controller($app->get('\Core\View'), $app->get('\Libs\Auth'), $app->get('\Libs\Redirect'), $app->get('\Libs\Flash'));
-});
-
 $app->set('\Core\Database', function() {
     $config = \Core\Config::getInstance();
     $host = $config->get('sql_host');
     $base = $config->get('sql_base');
     $login = $config->get('sql_login');
     $password = $config->get('sql_password');
+
     return new \Core\Database($host, $base, $login, $password);
 });
 
-$app->set('\Core\View', function() use ($app) {
-    return new \Core\View($app->get('\Libs\Flash'), $app->get('\Libs\Html'), $app->get('\Libs\Asset'), $app->get('\Libs\Form'));
+$app->set('Libs\Interfaces\SessionInterface', function() {
+    return new \Libs\Session();
 });
 
-$app->set('\Libs\Flash', function() use ($app) {
-    return new \Libs\Flash($app->get('\Libs\Session'));
-});
-
-$app->set('\Libs\Form', function() use ($app) {
-    return new \Libs\Form($app->get('\Libs\Session'));
-});
-
-$app->set('\Libs\Auth', function() use ($app) {
-    return new \Libs\Auth($app->get('\Libs\Session'));
-});
-
-$app->set('\Libs\Redirect', function() use ($app) {
-    return new \Libs\Redirect($app->get('\Libs\Session'));
-});
-
-$app->set('\Libs\Mail', function() {
+$app->set('\Libs\Interfaces\MailerInterface', function() {
     $config = \Core\Config::getInstance();
     $email = $congig->get('email');
+
     return new \Libs\Mail($email);
 });
 
+
+/**
+ * Find controller and method to call
+ */
 $bootstrap = new \Core\Bootstrap();
