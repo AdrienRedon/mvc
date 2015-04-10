@@ -26,6 +26,11 @@ return [
 	 * Configuration des vues
 	 */
 	'default_layout' => 'default',
-	'default_title' => 'MVC'
+	'default_title' => 'MVC',
+
+	/**
+	 * Configuration de l'adresse Mail
+	 */
+	'email' => 'no-reply@mvc.com'
 
 ];

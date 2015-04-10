@@ -40,7 +40,7 @@ $app->set('Libs\Interfaces\SessionInterface', function() {
     return new \Libs\Session();
 });
 
-$app->set('\Libs\Interfaces\MailerInterface', function() {
+$app->set('Libs\Interfaces\MailerInterface', function() {
     $config = \Core\Config::getInstance();
     $email = $congig->get('email');
 
