@@ -265,7 +265,7 @@ class Model
 
         $app = DIC::getInstance();
 
-        $object = new $class($app->get('Database'));
+        $object = new $class($app->get('\Core\Database'));
         foreach($result as $attribute=>$value)
         {
             $object->$attribute = $value;
@@ -297,7 +297,7 @@ class Model
     {
         $app = DIC::getInstance();
         require_once(ROOT."models/".ucfirst($name).".php");
-        return new $name($app->get('Database'));
+        return new $name($app->get('\Core\Database'));
     }
 
 /**
