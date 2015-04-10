@@ -2,6 +2,11 @@
 
 namespace Core;
 
+use \Libs\Flash;
+use \Libs\Html;
+use \Libs\Asset;
+use \Libs\Form;
+
 class View
 {
     protected $content;
@@ -14,17 +19,15 @@ class View
     protected $asset;
     protected $form;
 
-    public function __construct()
-    {
-        $app = DIC::getInstance();
-        
+    public function __construct(Flash $flash, Html $html, Asset $asset, Form $form)
+    {        
         $this->layout = Config::getInstance()->get('default_layout');
         $this->title  = Config::getInstance()->get('default_title');
 
-        $this->flash = $app->get('Flash');
-        $this->html = $app->get('Html');
-        $this->asset = $app->get('Asset');
-        $this->form = $app->get('Form');
+        $this->flash = $flash;
+        $this->html = $html;
+        $this->asset = $asset;
+        $this->form = $form;
     }
 
     /**
