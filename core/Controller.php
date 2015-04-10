@@ -23,12 +23,10 @@ class Controller
 
     public function __construct()
     {
-        $app = DIC::getInstance();
-        
-        $this->view = $app->get('\Core\View');
-        $this->auth = $app->get('\Libs\Auth');
-        $this->redirect = $app->get('\Libs\Redirect');
-        $this->flash = $app->get('\Libs\Flash');
+        $this->view = App::get('\Core\View');
+        $this->auth = App::get('\Libs\Auth');
+        $this->redirect = App::get('\Libs\Redirect');
+        $this->flash = App::get('\Libs\Flash');
         
 
         if(isset($_REQUEST))
