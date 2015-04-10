@@ -2,6 +2,8 @@
 
 namespace Libs;
 
+use \DateTime;
+
 class Validation
 {
     /**
@@ -93,8 +95,8 @@ class Validation
                     else if(substr($rule, 0, 6) == 'before')
                     {
                         $rule = explode(':', $rule);
-                        $date1 = new \DateTime($value);
-                        $date2 = new \DateTime($$rule[1]);
+                        $date1 = new DateTime($value);
+                        $date2 = new DateTime($$rule[1]);
                         $date1->diff($date2);
                     }
                 }
