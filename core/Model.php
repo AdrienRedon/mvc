@@ -190,6 +190,8 @@ class Model
      */
     public function where(array $conditions)
     {
+        $app = DIC::getInstance();
+
         $sql = "SELECT * FROM {$this->table} WHERE 1 = 1";
         foreach($conditions as $fields => $value)
         {
@@ -201,7 +203,7 @@ class Model
         foreach($results as $k=>$result)
         {
             $class = get_class($this);
-            $object = new $class;
+            $object = SELF::load($class);
             foreach($result as $attribute=>$value)
             {
                 $object->$attribute = $value;
