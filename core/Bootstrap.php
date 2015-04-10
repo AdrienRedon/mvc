@@ -14,6 +14,8 @@ class Bootstrap
 
     public function __construct()
     {
+        $app = DIC::getInstance();
+
         $this->routes = Router::getInstance();
 
         $config = Config::getInstance();
@@ -39,7 +41,7 @@ class Bootstrap
 
         $controller = '\Controllers\\' . $this->controller;
 
-        $this->controller = new $controller;
+        $this->controller = $app->get($controller);
 
         unset($url[0]);
 
@@ -104,7 +106,8 @@ class Bootstrap
      */
     private function errors()
     {
-        $this->controller = new Controller;
+        $app = DIC::getInstance();
+        $this->controller = $app->get('\Core\Controller');
         $this->controller->notFound();
         exit;
     }
