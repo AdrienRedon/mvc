@@ -190,8 +190,6 @@ class Model
      */
     public function where(array $conditions)
     {
-        $app = DIC::getInstance();
-
         $sql = "SELECT * FROM {$this->table} WHERE 1 = 1";
         foreach($conditions as $fields => $value)
         {
@@ -265,9 +263,7 @@ class Model
 
         $class = get_class($this);
 
-        $app = DIC::getInstance();
-
-        $object = new $class($app->get('\Core\Database'));
+        $object = SELF::load($class);
         foreach($result as $attribute=>$value)
         {
             $object->$attribute = $value;
@@ -297,9 +293,8 @@ class Model
      */
     static function load($name)
     {
-        $app = DIC::getInstance();
         require_once(ROOT."models/".ucfirst($name).".php");
-        return new $name($app->get('\Core\Database'));
+        return new $name(App::get('\Core\Database'));
     }
 
 /**
@@ -314,7 +309,7 @@ class Model
             if(!isset($this->$key))
             {
                 $field = strtolower(get_class($this)).'_id';
-                $this->$key = Model::load($this->has_one[$key])->where([$field => $this->id])->first();
+                $this->$key = SELF::load($this->has_one[$key])->where([$field => $this->id])->first();
             }
             return $this->$key;
         }
@@ -324,7 +319,7 @@ class Model
             if(!isset($this->$key))
             {
                 $field = strtolower(get_class($this)).'_id';
-                $this->$key = Model::load($this->has_many[$key])->where([$field => $this->id]);
+                $this->$key = SELF::load($this->has_many[$key])->where([$field => $this->id]);
             }
             return $this->$key;
         }
@@ -334,7 +329,7 @@ class Model
             if(!isset($this->$key))
             {
                 $field = strtolower(get_class($this)).'_id';
-                $this->$key = Model::load($this->has_one[$key])->find($this->$field);
+                $this->$key = SELF::load($this->has_one[$key])->find($this->$field);
             }
             return $this->$key;
         }
@@ -356,7 +351,7 @@ class Model
 
                 $this->$key = new Collection();
 
-                $model = Model::load($this->belongs_to_many[$key][0]);
+                $model = SELF::load($this->belongs_to_many[$key][0]);
 
                 foreach($ids as $id) 
                 {
