@@ -37,7 +37,7 @@ class Model
     /**
      * Constructor
      */ 
-    public function __construct(Database $db)
+    public function __construct(\Libs\Interfaces\DatabaseInterface $db)
     {
         $this->db = $db;
     }
