@@ -4,9 +4,16 @@
  * By Adrien REDON (@AdrienRedon)
  */
 
-function dd($var) 
+/**
+ * Function to debug 
+ */
+function dd() 
 {
-    die(var_dump($var));
+    foreach(func_get_args() as $var)
+    {
+        var_dump($var);
+    }
+    die();
 }
 
 define('WEBROOT', str_replace('index.php', '', $_SERVER['SCRIPT_NAME']));
@@ -24,29 +31,10 @@ require_once(ROOT . 'core/Autoloader.php');
 require_once(ROOT . 'controllers/Autoloader.php');
 \Controllers\Autoloader::register();
 
-$app = \Core\DIC::getInstance();
-
-$app->set('\Core\Database', function() {
-    $config = \Core\Config::getInstance();
-    $host = $config->get('sql_host');
-    $base = $config->get('sql_base');
-    $login = $config->get('sql_login');
-    $password = $config->get('sql_password');
-
-    return new \Core\Database($host, $base, $login, $password);
-});
-
-$app->set('Libs\Interfaces\SessionInterface', function() {
-    return new \Libs\Session();
-});
-
-$app->set('Libs\Interfaces\MailerInterface', function() {
-    $config = \Core\Config::getInstance();
-    $email = $congig->get('email');
-
-    return new \Libs\Mail($email);
-});
-
+/**
+ * Service Provider
+ */
+\Core\App::register();
 
 /**
  * Find controller and method to call
