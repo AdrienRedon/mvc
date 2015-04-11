@@ -5,7 +5,7 @@
  */
 
 /**
- * Function to debug 
+ * Function for debugging
  */
 function dd() 
 {
