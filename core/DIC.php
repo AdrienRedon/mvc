@@ -12,6 +12,14 @@ class DIC
     protected $registry = array();
     protected $factories = array();
     protected $instances = array();
+    protected $implementations = array();
+
+    public function bind($interface, $class)
+    {
+        $this->set($interface, function() use ($class) {
+            return $this->get($class);
+        });
+    }
 
     public function set($key, Callable $resolver)
     {
