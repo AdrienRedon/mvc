@@ -2,15 +2,16 @@
 
 namespace Controllers;
 
-use \Core\Model;
+use \Core\Controller;
+use \Core\App;
 
 class PostController extends \Core\Controller
 {
     public function __construct()
     {
         parent::__construct();
-        $this->post = Model::load('post');
-        $this->user = Model::load('user');
+        $this->post = App::get('\Models\Post');
+        $this->user = App::get('\Models\User');
     }
 
     public function index()

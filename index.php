@@ -27,6 +27,10 @@ require_once(ROOT . 'libs/Autoloader.php');
 require_once(ROOT . 'core/Autoloader.php');
 \Core\Autoloader::register();
 
+// Autoload for the models
+require_once(ROOT . 'models/Autoloader.php');
+\Models\Autoloader::register();
+
 // Autoload for the controllers
 require_once(ROOT . 'controllers/Autoloader.php');
 \Controllers\Autoloader::register();

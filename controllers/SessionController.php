@@ -2,9 +2,10 @@
 
 namespace Controllers;
 
+use \Core\Controller;
 use \Libs\Validation;
 
-class SessionController extends \Core\Controller
+class SessionController extends Controller
 {
     public function login()
     {

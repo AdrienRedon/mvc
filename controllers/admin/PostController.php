@@ -2,18 +2,18 @@
 
 namespace Controllers\Admin;
 
-use \Core\Model;
+use \Core\Controller;
 use \Libs\Validation;
 
-class PostController extends \Core\Controller
+class PostController extends Controller
 {
     protected $posts;
 
     public function __construct()
     {
         parent::__construct();
-        $this->post = Model::load('post');
-        $this->user = Model::load('user');
+        $this->post = App::get('\Models\Post');
+        $this->user = App::get('\Models\User');
 
         if(!$this->auth->check())
         {

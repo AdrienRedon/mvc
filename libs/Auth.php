@@ -4,6 +4,7 @@ namespace Libs;
 
 use \Core\Model;
 use \Libs\Interfaces\SessionInterface;
+use \Core\App;
 
 class Auth 
 {
@@ -13,7 +14,7 @@ class Auth
 
     public function __construct(SessionInterface $session)
     {
-        $this->user = Model::load('user');
+        $this->user = App::get('\Models\User');
         $this->session = $session;
     }
 

@@ -2,16 +2,17 @@
 
 namespace Controllers;
 
-use \Core\Model;
+use \Core\Controller;
+use \Core\App;
 
-class PageController extends \Core\Controller
+class PageController extends Controller
 {
     public function __construct()
     {
         parent::__construct();
-        $this->page = Model::load('page');
-        $this->post = Model::load('post');
-        $this->user = Model::load('user');
+        $this->page = App::get('\Models\Page');
+        $this->post = App::get('\Models\Post');
+        $this->user = App::get('\Models\User');
     }
 
     public function index()

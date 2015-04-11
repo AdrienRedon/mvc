@@ -2,6 +2,7 @@
 
 namespace Core;
 
+use \Libs\Interfaces\DatabaseInterface;
 use \Libs\Collection;
 
 class Model
@@ -37,7 +38,7 @@ class Model
     /**
      * Constructor
      */ 
-    public function __construct(\Libs\Interfaces\DatabaseInterface $db)
+    public function __construct(DatabaseInterface $db)
     {
         $this->db = $db;
     }
@@ -201,7 +202,7 @@ class Model
         foreach($results as $k=>$result)
         {
             $class = get_class($this);
-            $object = SELF::load($class);
+            $object = App::get($class);
             foreach($result as $attribute=>$value)
             {
                 $object->$attribute = $value;
@@ -263,7 +264,7 @@ class Model
 
         $class = get_class($this);
 
-        $object = SELF::load($class);
+        $object = App::get($class);
         foreach($result as $attribute=>$value)
         {
             $object->$attribute = $value;
@@ -286,17 +287,6 @@ class Model
         $this->db->query($sql);
     }
 
-    /**
-     * Load the given model
-     * @param string $name Name of the model to load
-     * @return Object Model loaded
-     */
-    static function load($name)
-    {
-        require_once(ROOT."models/".ucfirst($name).".php");
-        return new $name(App::get('\Core\Database'));
-    }
-
 /**
  * Get and create (if first time) field from relationship between models
  * @param  string $key Name of the field
@@ -309,7 +299,7 @@ class Model
             if(!isset($this->$key))
             {
                 $field = strtolower(get_class($this)).'_id';
-                $this->$key = SELF::load($this->has_one[$key])->where([$field => $this->id])->first();
+                $this->$key = App::get($this->has_one[$key])->where([$field => $this->id])->first();
             }
             return $this->$key;
         }
@@ -319,7 +309,7 @@ class Model
             if(!isset($this->$key))
             {
                 $field = strtolower(get_class($this)).'_id';
-                $this->$key = SELF::load($this->has_many[$key])->where([$field => $this->id]);
+                $this->$key = App::get($this->has_many[$key])->where([$field => $this->id]);
             }
             return $this->$key;
         }
@@ -329,7 +319,7 @@ class Model
             if(!isset($this->$key))
             {
                 $field = strtolower(get_class($this)).'_id';
-                $this->$key = SELF::load($this->has_one[$key])->find($this->$field);
+                $this->$key = App::get($this->has_one[$key])->find($this->$field);
             }
             return $this->$key;
         }
@@ -351,7 +341,7 @@ class Model
 
                 $this->$key = new Collection();
 
-                $model = SELF::load($this->belongs_to_many[$key][0]);
+                $model = App::get($this->belongs_to_many[$key][0]);
 
                 foreach($ids as $id) 
                 {

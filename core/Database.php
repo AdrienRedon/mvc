@@ -3,8 +3,9 @@
 namespace Core;
 
 use \Libs\Interfaces\DatabaseInterface;
-use \PDO;
 use \Libs\Collection;
+use \Core\Config;
+use \PDO;
 
 class Database implements DatabaseInterface
 {
@@ -13,7 +14,7 @@ class Database implements DatabaseInterface
 
     public function __construct()
     {
-        $config = \Core\Config::getInstance();
+        $config = Config::getInstance();
         
         $host = $config->get('sql_host');
         $base = $config->get('sql_base');

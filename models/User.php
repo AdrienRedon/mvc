@@ -1,9 +1,13 @@
 <?php
 
-class User extends \Core\Model
+namespace Models;
+
+use \Core\Model;
+
+class User extends Model
 {
     protected $table = "users";
     protected $fields = ['login'];
     protected $hidden = ['password'];
-    protected $has_many = ['posts' => 'post'];
+    protected $has_many = ['posts' => '\Models\Post'];
 }
