@@ -2,16 +2,24 @@
 
 namespace Core;
 
+use \Libs\Interfaces\DatabaseInterface;
 use \PDO;
 use \Libs\Collection;
 
-class Database
+class Database implements DatabaseInterface
 {
 
     protected $db;
 
-    public function __construct($host, $base, $login, $password)
+    public function __construct()
     {
+        $config = \Core\Config::getInstance();
+        
+        $host = $config->get('sql_host');
+        $base = $config->get('sql_base');
+        $login = $config->get('sql_login');
+        $password = $config->get('sql_password');
+
         $this->db = new PDO("mysql:host=$host;dbname=$base", $login, $password);
     }
 
