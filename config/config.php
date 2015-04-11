@@ -31,6 +31,15 @@ return [
 	/**
 	 * Configuration de l'adresse Mail
 	 */
-	'email' => 'no-reply@mvc.com'
+	'email' => 'no-reply@mvc.com',
 
+
+	/**
+	 * Service Providers
+	 */
+	'providers' => array(
+		'Libs\Interfaces\DatabaseInterface' => '\Core\Database',
+		'Libs\Interfaces\SessionInterface'  => 'Libs\Session',
+		'Libs\Interfaces\MailerInterface'   => 'Libs\Mail',
+	),
 ];
