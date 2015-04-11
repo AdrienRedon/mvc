@@ -3,15 +3,17 @@
 namespace Libs;
 
 use \Libs\Interfaces\Mailer;
+use \Core\Config;
 
 class Mail implements MailerInterface
 {
 
     protected $sender;
 
-    public function __construct($sender)
+    public function __construct()
     {
-        $this->sender = $sender;
+        $config = Config::getInstance();
+        $this->sender = $config->get('email');
     }
 
     public function send($receiver, $subject, $message)
