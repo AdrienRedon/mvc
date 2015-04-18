@@ -1,13 +1,13 @@
 <?php 
 
-namespace Core;
+namespace Libs;
 
 use \Libs\Interfaces\DatabaseInterface;
 use \Libs\Collection;
 use \Core\Config;
 use \PDO;
 
-class Database implements DatabaseInterface
+class MySQLDatabase implements DatabaseInterface
 {
 
     protected $db;
