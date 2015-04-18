@@ -38,7 +38,7 @@ return [
 	 * Service Providers
 	 */
 	'providers' => array(
-		'Libs\Interfaces\DatabaseInterface' => '\Core\Database',
+		'Libs\Interfaces\DatabaseInterface' => 'Libs\MySQLDatabase',
 		'Libs\Interfaces\SessionInterface'  => 'Libs\Session',
 		'Libs\Interfaces\MailerInterface'   => 'Libs\Mail',
 	),
