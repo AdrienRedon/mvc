@@ -199,17 +199,17 @@ class Model
 
         $results = $this->db->query($sql);
 
-        foreach($results as $k=>$result)
+
+        foreach($results as $k => $result)
         {
             $class = get_class($this);
             $object = App::get($class);
-            foreach($result as $attribute=>$value)
+            foreach($result as $attribute => $value)
             {
                 $object->$attribute = $value;
             }
-            $results[$k] = $object;
+            $results->set($k, $object);
         }
-
 
         foreach ($this->hidden as $hidden)
         {
@@ -275,83 +275,197 @@ class Model
 
     /**
      * Delete a line from the table
+     * 
      * @param int $id
      */
     public function delete($id = null)
     {
-        if ($id == null) 
+        if($id == null) 
         {
             $id = $this->id;
         }
+
+        $this->deleteCascade();
+
         $sql = "DELETE FROM {$this->table} WHERE id=$id";
         $this->db->query($sql);
     }
 
-/**
- * Get and create (if first time) field from relationship between models
- * @param  string $key Name of the field
- * @return Object $this->$key
- */
+    /**
+     * Delete in cascade item from another model depending on current item
+     * 
+     */
+    private function deleteCascade()
+    {
+        if(count($this->has_one))
+        {
+            $this->deleteHasOne();
+        }
+
+        if(count($this->has_many))
+        {
+            $this->deleteHasMany();
+        }
+
+        if(count($this->belongs_to_many))
+        {
+            $this->deleteBelongsToMany();
+        }
+    }
+
+    /**
+     * Delete item that belongs to the current item (has one)
+     * 
+     */
+    private function deleteHasOne()
+    {
+        foreach($this->has_one as $key => $v)
+        {
+            $this->getHasOne($key)->delete();
+        }
+    }
+
+    /**
+     * Delete item that belongs to the current item (has many)
+     * 
+     */
+    private function deleteHasMany()
+    {
+        foreach($this->has_many as $key => $v)
+        {
+            var_dump($this->getHasMany($key));
+            foreach($this->getHasMany($key) as $k => $item)
+            {
+                $item->delete();
+            }
+        }
+    }
+
+    /**
+     * Delete relation with an item and the current item (belongs to many)
+     * 
+     */
+    private function deleteBelongsToMany()
+    {
+        foreach($this->belongs_to_many as $relation)
+        {
+            $table = $relation[1];
+            $field = strtolower(get_class($this)) . '_id';
+            $sql = "DELETE FROM $table WHERE $field = { $this->id }";
+            $this->db->execute($sql);
+        }
+    }
+
+    /**
+     * Get and create (if first time) field from relationship between models
+     * 
+     * @param  string $key Name of the field
+     * @return Object $this->$key
+     */
     public function __get($key)
     {
         if(array_key_exists($key, $this->has_one)) 
         {
-            if(!isset($this->$key))
-            {
-                $field = strtolower(get_class($this)).'_id';
-                $this->$key = App::get($this->has_one[$key])->where([$field => $this->id])->first();
-            }
-            return $this->$key;
+            return $this->getHasOne($key);
         }
 
         if(array_key_exists($key, $this->has_many)) 
         {
-            if(!isset($this->$key))
-            {
-                $field = strtolower(get_class($this)).'_id';
-                $this->$key = App::get($this->has_many[$key])->where([$field => $this->id]);
-            }
-            return $this->$key;
+           return $this->getHasMany($key);
         }
 
         if(array_key_exists($key, $this->belongs_to))
         {
-            if(!isset($this->$key))
-            {
-                $field = strtolower(get_class($this)).'_id';
-                $this->$key = App::get($this->has_one[$key])->find($this->$field);
-            }
-            return $this->$key;
+            return $this->getBelongsTo($key);
         }
         
         if(array_key_exists($key, $this->belongs_to_many))
         {
-            if(!isset($this->$key))
-            {
-                $first = strtolower(get_class($this));
-                $second = strtolower($this->belongs_to_many[$key][0]);
-
-                $first_field = $first.'_id';
-                $second_field = $second.'_id';
-
-                $ids = $this->db->query("
-                    SELECT $second_field 
-                    FROM {$this->belongs_to_many[$key][1]} 
-                    WHERE $first_field = {$this->id}");
-
-                $this->$key = new Collection();
-
-                $model = App::get($this->belongs_to_many[$key][0]);
-
-                foreach($ids as $id) 
-                {
-                    $item = array($model->find($id->$second_field));
-                    $this->$key->add($item);
-                }
-            }
-            return $this->$key;
+            return $this->getBelongsToMany($key);
         }
         
+    }
+
+    /**
+     * Return model $key having a has one relation
+     * 
+     * @param  sting $key Name of the model
+     * @return Model      Model $key
+     */
+    private function getHasOne($key)
+    {
+        if(!isset($this->$key))
+        {
+            $field = strtolower(join('', array_slice(explode('\\', get_class($this)), -1))) . '_id';
+            $this->$key = App::get($this->has_one[$key])->where([$field => $this->id])->first();
+        }
+        return $this->$key;
+    }
+
+    /**
+     * Return collection of model $key having a has many relation
+     * 
+     * @param  sting $key      Name of the model
+     * @return Collection      Collection of model $key
+     */
+    private function getHasMany($key)
+    {
+        if(!isset($this->$key))
+        {
+            $field = strtolower(join('', array_slice(explode('\\', get_class($this)), -1))) . '_id';
+            $this->$key = App::get($this->has_many[$key])->where([$field => $this->id]);
+        }
+        return $this->$key;
+    }
+
+    /**
+     * Return model $key having a belongs to relation
+     * 
+     * @param  sting $key Name of the model
+     * @return Model      Model $key
+     */
+    private function getBelongsTo($key)
+    {
+        if(!isset($this->$key))
+        {
+            $field = strtolower(join('', array_slice(explode('\\', get_class($this)), -1))) . '_id';
+            $this->$key = App::get($this->has_one[$key])->find($this->$field);
+        }
+        return $this->$key;
+    }
+
+    /**
+     * Return collection of model $key having a belongs to many relation
+     * 
+     * @param  sting $key      Name of the model
+     * @return Collection      Collection of model $key
+     */
+    private function getBelongsToMany($key)
+    {
+        if(!isset($this->$key))
+        {
+            $first = strtolower(join('', array_slice(explode('\\', get_class($this)), -1)));
+            $second = strtolower(join('', array_slice(explode('\\', $this->belongs_to_many[$key][0]), -1)));
+
+            $first_field = $first.'_id';
+            $second_field = $second.'_id';
+
+            $ids = $this->db->query("
+                SELECT $second_field 
+                FROM {$this->belongs_to_many[$key][1]} 
+                WHERE $first_field = {$this->id}");
+
+            $this->$key = new Collection();
+
+            $model = App::get($this->belongs_to_many[$key][0]);
+
+            foreach($ids as $id) 
+            {
+                $item = array($model->find($id->$second_field));
+                $this->$key->add($item);
+            }
+        }
+        return $this->$key;
     }
 
 }
