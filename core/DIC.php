@@ -10,13 +10,12 @@ class DIC
     protected static $_instance;
 
     protected $registry = array();
-    protected $factories = array();
+    protected $singletons = array();
     protected $instances = array();
-    protected $implementations = array();
 
     public function bind($interface, $class)
     {
-        $this->set($interface, function() use ($class) {
+        $this->setSingleton($interface, function() use ($class) {
             return $this->get($class);
         });
     }
@@ -26,9 +25,9 @@ class DIC
         $this->registry[$key] = $resolver;
     }
 
-    public function setFactory($key, Callable $resolver)
+    public function setSingleton($key, Callable $resolver)
     {
-        $this->factories[$key] = $resolver;
+        $this->singletons[$key] = $resolver;
     }
 
     public function setInstance($instance)
@@ -40,50 +39,43 @@ class DIC
 
     public function get($key)
     {
-        if(array_key_exists($key, $this->factories))
+        if(array_key_exists($key, $this->singletons))
         {
-            return $this->factories[$key]();
+            if(!array_key_exists($key, $this->instances)) {
+                $this->instances[$key] = $this->singletons[$key]();
+            }
+            return $this->singletons[$key]();
         }
 
-        if(!array_key_exists($key, $this->instances))
+        $reflected_class = new ReflectionClass($key);
+        if($reflected_class->isInstantiable())
         {
-            if(isset($this->registry[$key]))
-            {
-                $this->instances[$key] = $this->registry[$key]();
-            }
-            else 
-            {
-                $reflected_class = new ReflectionClass($key);
-                if($reflected_class->isInstantiable())
-                {
-                    $constructor = $reflected_class->getConstructor();
+            $constructor = $reflected_class->getConstructor();
 
-                    if($constructor) {
-                        $parameters = $constructor->getParameters();
-                        $constructor_parameters = array();
-                        foreach ($parameters as $parameter) 
-                        {
-                            if($parameter->getClass()) 
-                            {
-                                $constructor_parameters[] = $this->get($parameter->getClass()->getName());
-                            }
-                            else 
-                            {
-                                $constructor_parameters[] = $parameter->getDefaultValue();
-                            }
-                        }
-                        $this->instances[$key] = $reflected_class->newInstanceArgs($constructor_parameters);
+            if($constructor) {
+                $parameters = $constructor->getParameters();
+                $constructor_parameters = array();
+                foreach ($parameters as $parameter) 
+                {
+                    if($parameter->getClass()) 
+                    {
+                        $constructor_parameters[] = $this->get($parameter->getClass()->getName());
                     }
                     else 
                     {
-                        $this->instances[$key] = $reflected_class->newInstance();
+                        $constructor_parameters[] = $parameter->getDefaultValue();
                     }
                 }
-                else 
-                {
-                    throw new Exception('Unable to resolve '. $key);
-                }
+                $this->instances[$key] = $reflected_class->newInstanceArgs($constructor_parameters);
             }
+            else 
+            {
+                $this->instances[$key] = $reflected_class->newInstance();
+            }
+        }
+        else 
+        {
+            throw new Exception('Unable to resolve '. $key);
         }
         return $this->instances[$key];
     }
