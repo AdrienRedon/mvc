@@ -19,21 +19,11 @@ function dd()
 define('WEBROOT', str_replace('index.php', '', $_SERVER['SCRIPT_NAME']));
 define('ROOT', str_replace('index.php', '', $_SERVER['SCRIPT_FILENAME']));
 
-// Autoload for the librairies
-require_once(ROOT . 'libs/Autoloader.php');
-\Libs\Autoloader::register();
-
-// Autoload for the core
-require_once(ROOT . 'core/Autoloader.php');
-\Core\Autoloader::register();
-
-// Autoload for the models
-require_once(ROOT . 'models/Autoloader.php');
-\Models\Autoloader::register();
-
-// Autoload for the controllers
-require_once(ROOT . 'controllers/Autoloader.php');
-\Controllers\Autoloader::register();
+/**
+ * Autoloader
+ */
+require_once(ROOT . 'Autoloader.php');
+Autoloader::register();
 
 /**
  * Service Provider
