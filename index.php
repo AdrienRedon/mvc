@@ -4,6 +4,8 @@
  * By Adrien REDON (@AdrienRedon)
  */
 
+require_once(ROOT . 'Autoloader.php');
+
 /**
  * Function for debugging
  */
@@ -22,7 +24,6 @@ define('ROOT', str_replace('index.php', '', $_SERVER['SCRIPT_FILENAME']));
 /**
  * Autoloader
  */
-require_once(ROOT . 'Autoloader.php');
 Autoloader::register();
 
 /**
@@ -33,4 +34,4 @@ Autoloader::register();
 /**
  * Find controller and method to call
  */
-$bootstrap = new \Core\Bootstrap();
+\Core\App::get('Core\Bootstrap');
