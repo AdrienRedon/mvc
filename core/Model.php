@@ -396,7 +396,7 @@ class Model
     {
         if(!isset($this->$key))
         {
-            $field = strtolower(join('', array_slice(explode('\\', get_class($this)), -1))) . '_id';
+            $field = strtolower(stristr(get_class($this), '\\')) . '_id';
             $this->$key = App::get($this->has_one[$key])->where([$field => $this->id])->first();
         }
         return $this->$key;
@@ -412,7 +412,7 @@ class Model
     {
         if(!isset($this->$key))
         {
-            $field = strtolower(join('', array_slice(explode('\\', get_class($this)), -1))) . '_id';
+            $field = strtolower(stristr(get_class($this), '\\')) . '_id';
             $this->$key = App::get($this->has_many[$key])->where([$field => $this->id]);
         }
         return $this->$key;
@@ -428,7 +428,7 @@ class Model
     {
         if(!isset($this->$key))
         {
-            $field = strtolower(join('', array_slice(explode('\\', get_class($this)), -1))) . '_id';
+            $field = strtolower(stristr(get_class($this), '\\')) . '_id';
             $this->$key = App::get($this->has_one[$key])->find($this->$field);
         }
         return $this->$key;
@@ -444,8 +444,8 @@ class Model
     {
         if(!isset($this->$key))
         {
-            $first = strtolower(join('', array_slice(explode('\\', get_class($this)), -1)));
-            $second = strtolower(join('', array_slice(explode('\\', $this->belongs_to_many[$key][0]), -1)));
+            $first = strtolower(stristr(get_class($this), '\\'));
+            $second = strtolower(stristr($this->belongs_to_many[$key][0], '\\'));
 
             $first_field = $first.'_id';
             $second_field = $second.'_id';
