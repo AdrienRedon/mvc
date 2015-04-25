@@ -18,4 +18,4 @@ Route::get('admin/post', 'Admin\PostController@index');
 Route::get('admin/post/create', 'Admin\PostController@create');
 Route::get('admin/post/update/{id}', 'Admin\PostController@update');
 Route::post('admin/post/save', 'Admin\PostController@save');
-Route::get('admin/post/delete', 'Admin\PostController@delete');
+Route::get('admin/post/delete/{id}', 'Admin\PostController@delete');
