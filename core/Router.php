@@ -6,16 +6,6 @@ class Router
 {
 
     private $routes = array();
-    private static $_instance;
-
-    public static function getInstance() 
-    {
-        if(is_null(self::$_instance))
-        {
-            self::$_instance = new Router();
-        }
-        return self::$_instance;
-    }
 
     public function __construct()
     {
