@@ -2,6 +2,7 @@
 
 namespace Libs;
 
+use \Core\App;
 use \Core\Config;
 use \Libs\interfaces\SessionInterface;
 
@@ -39,7 +40,7 @@ class Redirect
 
 	public function home()
 	{
-		$config = Config::getInstance();
-		$this->to($config->get('default_controller') . '/' . $config->get('default_method'));
+		$config = App::get('Core\Config');
+		$this->to($config->get('home_route'));
 	}
 }
