@@ -9,7 +9,7 @@ class Router
 
     public function __construct()
     {
-        $this->routes = require dirname(__DIR__) . '/config/routes.php';
+        $this->routes = require (ROOT . '/config/routes.php');
     }
 
     public function get($key)
