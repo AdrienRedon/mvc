@@ -34,4 +34,9 @@ Autoloader::register();
 /**
  * Find controller and method to call
  */
-\Core\App::get('Core\Bootstrap');
+// \Core\App::get('Core\Bootstrap');
+ 
+
+require_once(ROOT . 'routes.php');
+
+\Core\Route::bootstrap();
