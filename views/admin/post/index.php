@@ -1,4 +1,4 @@
-<?= $this->html->link('admin/post/new', 'Ajouter') ?>
+<?= $this->html->link('admin/post/create', 'Ajouter') ?>
 
 <br>
 

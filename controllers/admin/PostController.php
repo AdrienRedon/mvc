@@ -38,7 +38,7 @@ class PostController extends Controller
 
     public function create()
     {
-        $this->view->render('admin/post/new');
+        $this->view->render('admin/post/create');
     }
 
     public function update($id)
