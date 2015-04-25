@@ -12,10 +12,8 @@ class MySQLDatabase implements DatabaseInterface
 
     protected $db;
 
-    public function __construct()
+    public function __construct(Config $config)
     {
-        $config = Config::getInstance();
-        
         $host = $config->get('sql_host');
         $base = $config->get('sql_base');
         $login = $config->get('sql_login');
