@@ -16,11 +16,9 @@ return [
 	'sql_password' => '',
 
 	/**
-	 * Configuration du controller et de la méthode à appeler par défaut
+	 * Home route
 	 */
-	'default_controller' => 'page',
-	'default_method' => 'index',
-	'default_args' => null,
+	'home_route' => '',
 
 	/**
 	 * Configuration des vues
