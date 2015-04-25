@@ -12,11 +12,10 @@ class Bootstrap
     protected $method;
     protected $params;
 
-    public function __construct()
+    public function __construct(Router $routes, Config $config)
     {
-        $this->routes = Router::getInstance();
+        $this->routes = $routes;
 
-        $config = Config::getInstance();
         $this->controller = $config->get('default_controller');
         $this->method     = $config->get('default_method');
         $this->params     = $config->get('default_args');
