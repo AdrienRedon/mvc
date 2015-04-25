@@ -19,10 +19,10 @@ class View
     protected $asset;
     protected $form;
 
-    public function __construct(Flash $flash, Html $html, Asset $asset, Form $form)
+    public function __construct(Config $config, Flash $flash, Html $html, Asset $asset, Form $form)
     {        
-        $this->layout = Config::getInstance()->get('default_layout');
-        $this->title  = Config::getInstance()->get('default_title');
+        $this->layout = $config->get('default_layout');
+        $this->title  = $config->get('default_title');
 
         $this->flash = $flash;
         $this->html = $html;
