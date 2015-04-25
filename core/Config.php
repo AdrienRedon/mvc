@@ -6,22 +6,17 @@ class Config
 {
 
     private $settings = array();
-    private static $_instance;
-
-    public static function getInstance() 
-    {
-        if(is_null(self::$_instance))
-        {
-            self::$_instance = new Config();
-        }
-        return self::$_instance;
-    }
 
     public function __construct()
     {
-        $this->settings = require dirname(__DIR__) . '/config/config.php';
+        $this->settings = require (ROOT . '/config/config.php');
     }
 
+    /**
+     * Get value from the config
+     * @param  [type] $key [description]
+     * @return [type]      [description]
+     */
     public function get($key)
     {
         if(!isset($this->settings[$key]))
