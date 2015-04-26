@@ -46,8 +46,16 @@ class DIC
             }
             return $this->instances[$key];
         }
+        else 
+        {
+            return $this->make($key);
+        }
+    }
 
+    public function make($key)
+    {
         $reflected_class = new ReflectionClass($key);
+
         if($reflected_class->isInstantiable())
         {
             $constructor = $reflected_class->getConstructor();
@@ -66,18 +74,19 @@ class DIC
                         $constructor_parameters[] = $parameter->getDefaultValue();
                     }
                 }
-                $this->instances[$key] = $reflected_class->newInstanceArgs($constructor_parameters);
+                $class = $reflected_class->newInstanceArgs($constructor_parameters);
             }
             else 
             {
-                $this->instances[$key] = $reflected_class->newInstance();
+                $class = $reflected_class->newInstance();
             }
         }
         else 
         {
             throw new Exception('Unable to resolve '. $key);
         }
-        return $this->instances[$key];
+
+        return $class;
     }
 
     public static function getInstance() 
