@@ -44,7 +44,7 @@ class DIC
             if(!array_key_exists($key, $this->instances)) {
                 $this->instances[$key] = $this->singletons[$key]();
             }
-            return $this->singletons[$key]();
+            return $this->instances[$key];
         }
 
         $reflected_class = new ReflectionClass($key);
