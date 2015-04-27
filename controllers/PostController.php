@@ -32,6 +32,11 @@ class PostController extends \Core\Controller
     {
         $post = $this->post->find($id);
 
+        if(!$post)
+        {
+            $this->notFound();
+        }
+
         if($this->isAjax())
         {
             $this->view->json(compact('post'));
