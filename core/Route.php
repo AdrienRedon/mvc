@@ -66,14 +66,14 @@ class Route
 
                     if(is_callable($action))
                     {
-                        return $action(extract($params));
+                        return call_user_func_array($action, $params);
                     }
 
                     if(is_string($action) && strpos($action, '@') !== false)
                     {
                         $name = explode('@', $action);
                         $controller = App::get('Controllers\\' . $name[0]);
-                        return $controller->$name[1](extract($params));
+                        return call_user_func_array(array($controller, $name[1]), $params);
                     }
 
                 }
