@@ -41,59 +41,72 @@ class PostController extends Controller
         $this->view->render('admin/post/create');
     }
 
+    public function store()
+    {
+        $input = array(
+            'name'    => $this->data['name'],
+            'content' => $this->data['content']
+        );
+
+        $rules = [
+            'name'    => 'required',
+            'content' => 'required'
+        ];
+
+        $this->validation = new Validation($input, $rules);
+
+        if($this->validation->passes())
+        {
+            $this->post->save($input);
+            $this->redirect->to('admin/post');
+        }
+        else
+        {
+            $this->redirect->backWithInput($input);
+        }
+    }
+
     public function update($id)
     {
         $post = $this->post->find($id);
         $this->view->render('admin/post/update', compact('post'));
     }
 
-    public function save()
+    public function save($id)
     {
-        if($this->data)
+        $post = $this->post->find($id);
+
+        if(!$post)
         {
-            if(array_key_exists('id', $this->data)) // update
-            {
-                $input = array(
-                    'id'      => $this->data['id'],
-                    'name'    => $this->data['name'],
-                    'content' => $this->data['content']
-                );
+            $this->notFound();
+        }
 
-                $rules = [
-                    'id'      => 'required',
-                    'name'    => 'required',
-                    'content' => 'required'
-                ];
-            }
-            else // create
-            {
-                $input = array(
-                    'name'    => $this->data['name'],
-                    'content' => $this->data['content']
-                );
+        $input = array(
+            'name'    => $this->data['name'],
+            'content' => $this->data['content']
+        );
 
-                $rules = [
-                    'name'    => 'required',
-                    'content' => 'required'
-                ];
-            }
+        $rules = [
+            'name'    => 'required',
+            'content' => 'required'
+        ];
 
-            $this->validation = new Validation($input, $rules);
+        $this->validation = new Validation($input, $rules);
 
-            if($this->validation->passes())
-            {
-                $this->post->save($input);
-                $this->redirect->to('post');
-            }
-            else
-            {
-                $this->redirect->backWithInput($input);
-            }
+        if($this->validation->passes())
+        {
+            $post->save($input);
+            $this->redirect->to('admin/post');
+        }
+        else
+        {
+            $this->redirect->backWithInput($input);
         }
     }
 
     public function delete($id)
     {
         $this->post->delete($id);
+        $this->redirect->back();
     }
 }
