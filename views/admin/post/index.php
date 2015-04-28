@@ -3,8 +3,8 @@
 <br>
 
 <?php foreach($posts as $post) : ?>
-    <?= $this->html->link('admin/post/delete/'. $post->id, 'Supprimer') ?>
-    <?= $this->html->link('admin/post/update/'. $post->id, 'Modifier') ?>
+    <?= $this->html->link('admin/post/' . $post->id . '/delete', 'Supprimer') ?>
+    <?= $this->html->link('admin/post/' . $post->id . '/update', 'Modifier') ?>
     
     <h2><?= $post->name ?></h2>
     <p><?= $post->content ?></p>
