@@ -1,4 +1,4 @@
-<?= $this->form->open('post/save') ?>
+<?= $this->form->open('admin/post/' . $post->id . '/save') ?>
 
     <div>
         <?= $this->form->text('name', $post->name, 'Title') ?>
