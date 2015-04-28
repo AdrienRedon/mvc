@@ -136,36 +136,38 @@ class Model
         $sql = "UPDATE {$this->table} SET ";
         if(empty($data))
         {
-            $id = $this->id;
             foreach ($this->fields as $field) 
             {
                 if(isset($this->field))
                 {
-                    $sql .= "$field = ?, ";
+                    $sql .= "$field=?, ";
                 }
             }
         } 
         else
         {
-            $id = $data['id'];
             foreach ($data as $field => $value) 
             {
-                if($k != 'id')
+                if($field != 'id')
                 {
-                    $sql .= "$field = ?, ";
+                    $sql .= "$field=?, ";
                 }
             }
         }
-        if($timestamps)
+        if($this->timestamps)
         {
-            $sql .= "updated_at = ?, ";
+            $sql .= "updated_at=?, ";
             $data[] = date('d/m/Y H:i:s');
         }
         
         $sql = substr($sql, 0, -2);
-        $sql .= "WHERE id=$id";
-        
-        $this->db->execute($sql, $data); 
+        $sql .= " WHERE id=?";
+
+        if(!isset($data['id']))
+        {
+            $data['id'] = $this->id;
+        }
+        $this->db->execute($sql, array_values($data)); 
     }
 
     /**
