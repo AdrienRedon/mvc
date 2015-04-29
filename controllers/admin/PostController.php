@@ -66,13 +66,19 @@ class PostController extends Controller
         }
     }
 
-    public function update($id)
+    public function edit($id)
     {
         $post = $this->post->find($id);
-        $this->view->render('admin/post/update', compact('post'));
+
+        if(!$post)
+        {
+            $this->notFound();
+        }
+        
+        $this->view->render('admin/post/edit', compact('post'));
     }
 
-    public function save($id)
+    public function update($id)
     {
         $post = $this->post->find($id);
 
