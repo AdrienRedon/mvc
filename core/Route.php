@@ -4,6 +4,11 @@ namespace Core;
 
 use Core\Controller;
 
+/**
+ * Get the route
+ */
+require_once(ROOT . 'routes.php');
+
 class Route 
 {
     protected static $routes;
@@ -11,6 +16,56 @@ class Route
     public static function __callStatic($method, $args)
     {
         SELF::$routes[$method][$args[0]] = $args[1];
+    }
+
+    public static function resource($name, $controller = null, $options = array())
+    {
+        if (!$controller)
+        {
+            $controller = ucfirst($name) . 'Controller';
+        }
+
+        if(!(array_key_exists('only', $options) && !in_array('index', $options['only'])) && 
+            !(array_key_exists('except', $options) && in_array('index', $options['except'])))
+        {
+           SELF::get($name, $controller . '@index');        
+        }
+
+        if(!(array_key_exists('only', $options) && !in_array('create', $options['only'])) && 
+            !(array_key_exists('except', $options) && in_array('create', $options['except'])))
+        {
+            SELF::get($name . '/create', $controller . '@create');
+        }
+
+        if(!(array_key_exists('only', $options) && !in_array('store', $options['only'])) && 
+            !(array_key_exists('except', $options) && in_array('store', $options['except'])))
+        {
+            SELF::post($name, $controller . '@store');
+        }
+
+        if(!(array_key_exists('only', $options) && !in_array('show', $options['only'])) && 
+            !(array_key_exists('except', $options) && in_array('show', $options['except']))) 
+        {
+            SELF::get($name . '/{id}', $controller . '@show');
+        }
+
+        if(!(array_key_exists('only', $options) && !in_array('edit', $options['only'])) && 
+            !(array_key_exists('except', $options) && in_array('edit', $options['except'])))
+        {
+            SELF::get($name . '/{id}/edit', $controller . '@edit');
+        }
+
+        if(!(array_key_exists('only', $options) && !in_array('update', $options['only'])) && 
+            !(array_key_exists('except', $options) && in_array('update', $options['except'])))
+        {
+            SELF::put($name . '/{id}', $controller . '@update');
+        }
+
+        if(!(array_key_exists('only', $options) && !in_array('delete', $options['only'])) && 
+            !(array_key_exists('except', $options) && in_array('delete', $options['except'])))
+        {
+            SELF::delete($name . '/{id}', $controller . '@delete');
+        }
     }
 
     public static function bootstrap()
