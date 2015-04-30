@@ -70,7 +70,16 @@ class Route
 
     public static function bootstrap()
     {
-        foreach (SELF::$routes[strtolower($_SERVER['REQUEST_METHOD'])] as $route => $action) 
+        $method = $_SERVER['REQUEST_METHOD'];
+        if($method == 'POST')
+        {
+            if(array_key_exists('_method', $_POST) && in_array($_POST['_method'], ['GET', 'PUT', 'DELETE']))
+            {
+                $method = $_POST['_method'];
+            }
+        }
+
+        foreach (SELF::$routes[strtolower($method)] as $route => $action) 
         {
             $url = substr($_SERVER['REQUEST_URI'], strlen(WEBROOT));
 
