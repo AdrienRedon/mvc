@@ -23,7 +23,8 @@ class Form
     public function open($url, $method = 'POST', $token = false, $file = false)
     {
         ?>
-            <form action="<?= WEBROOT . $url ?>" method="<?= $method ?>"<?php if($file) { ?> enctype="multipart/form-data"<?php } ?>>
+            <form action="<?= WEBROOT . $url ?>" method="POST"<?php if($file) { ?> enctype="multipart/form-data"<?php } ?>>
+                <input type="hidden" name="_method" value="<?= $method ?>">
             <?php if($token) { ?>
                 <input type="hidden" name="token" value="<?= 'token' ?>">
             <?php } ?>
