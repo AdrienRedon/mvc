@@ -4,7 +4,7 @@ namespace Libs;
 
 class Html
 {
-    public function link($url, $text = false)
+    public function link($url, $text = null)
     {
         if(!$text)
         {
