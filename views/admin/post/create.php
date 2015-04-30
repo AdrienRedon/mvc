@@ -1,4 +1,4 @@
-<?= $this->form->open('admin/post/store') ?>
+<?= $this->form->open('admin/post') ?>
 
     <div>
         <?= $this->form->text('name', '', 'Title') ?>
