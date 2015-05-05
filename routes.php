@@ -11,7 +11,6 @@ Route::get('phpinfo', function() {
 Route::post('login', 'SessionController@login');
 Route::get('logout', 'SessionController@logout');
 
-Route::get('post', 'PostController@index');
-Route::get('post/{id}', 'PostController@show');
+Route::resource('post', 'PostController', ['only' => ['index', 'show']]);
 
 Route::resource('admin/post', 'Admin\PostController', ['except' =>['show']]);
