@@ -72,8 +72,6 @@ class Migration
         $sql = substr($sql, 0, -2);
         $sql .= ")";
 
-        var_dump($sql);
-
         $this->db->execute($sql);
     }
 }
