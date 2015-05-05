@@ -69,7 +69,11 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         return array_key_exists($key, $this->items);
     }
 
-    public function is_empty()
+    /**
+     * Check if the collection is empty
+     * @return boolean
+     */
+    public function isEmpty()
     {
         return empty($this->items);
     }
@@ -230,7 +234,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     /**
      * Order the collection by a specific key given
      * @param $key
-     * @param string $direction
+     * @param string $direction ASC for ascending, DESC for descending
      * @return Collection
      */
     public function orderBy($key, $direction = 'ASC')
