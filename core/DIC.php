@@ -13,6 +13,11 @@ class DIC
     protected $singletons = array();
     protected $instances = array();
 
+    /**
+     * Bind an implementation to an interface
+     * @param  string $interface Name (with namespace) of the interface
+     * @param  string $class     Name (with namespace) of the class
+     */
     public function bind($interface, $class)
     {
         $this->setSingleton($interface, function() use ($class) {
@@ -20,23 +25,42 @@ class DIC
         });
     }
 
+    /**
+     * Set a resolver to a class
+     * @param string   $key      Name of the class
+     * @param Callable $resolver Function to call in order to resolve a class
+     */
     public function set($key, Callable $resolver)
     {
         $this->registry[$key] = $resolver;
     }
 
+    /**
+     * Set a resolver to a singleton class
+     * @param string   $key      Name of the class
+     * @param Callable $resolver Function to call in ordr to resolve a class
+     */
     public function setSingleton($key, Callable $resolver)
     {
         $this->singletons[$key] = $resolver;
     }
 
+    /**
+     * Save a object as a singleton
+     * @param Object $instance Object to save
+     */
     public function setInstance($instance)
     {
         $reflection = new ReflectionClass($instance);
         $key = $reflection->getName();
+        $this->singletons[$key] = $instance;
         $this->instances[$key] = $instance;
     }
 
+    /**
+     * Get an object
+     * @param  string $key Name of the class
+     */
     public function get($key)
     {
         if(array_key_exists($key, $this->singletons))
@@ -52,6 +76,10 @@ class DIC
         }
     }
 
+    /**
+     * Create an object
+     * @param  string $key Name of the class
+     */
     public function make($key)
     {
         $reflected_class = new ReflectionClass($key);
@@ -89,6 +117,10 @@ class DIC
         return $class;
     }
 
+    /**
+     * Get instance of the Dependency Injection Container
+     * @return DIC Dependency Injection Container
+     */
     public static function getInstance() 
     {
         if(is_null(self::$_instance))
