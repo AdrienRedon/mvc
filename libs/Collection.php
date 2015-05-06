@@ -40,6 +40,15 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
+     * Push an item at the end of the collection
+     * @param  $item Item to add at the end
+     */
+    public function push($item)
+    {
+        array_push($this->items, $item);
+    }
+
+    /**
      * Get a value by its key
      * @param $key
      * @return $value
