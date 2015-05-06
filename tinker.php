@@ -1,5 +1,16 @@
 <?php
 
+define('WEBROOT', str_replace('tinker.php', '', $_SERVER['SCRIPT_NAME']));
+define('ROOT', str_replace('tinker.php', '', $_SERVER['SCRIPT_FILENAME']));
+
+require_once('Autoloader.php');
+
+use \Core\App;
+
+Autoloader::register();
+App::register();
+
+
 if($argv[1] == 'generate' && isset($argv[2]))
 {
     if($argv[2] == 'resource' && isset($argv[3]))
@@ -57,6 +68,24 @@ else if($argv[1] == 'delete' && isset($argv[2]))
     }
 
     die("{$argv[3]} {$argv[2]} has been deleted");
+    exit;
+}
+else if($argv[1] == 'migrate' && isset($argv[2]))
+{
+    if($argv[2] == 'rollback' && isset($argv[3]))
+    {
+        $migration = App::get('\Migrations\\' . ucfirst($argv[2]));
+        $migration->down();
+    }
+    else if(file_exists('migrations/' . $argv[2] . '.php'))
+    {
+        $migration = App::get('\Migrations\\' . ucfirst($argv[2]));
+        $migration->up();
+    }
+}
+else 
+{
+    die("Wrong command !");
     exit;
 }
 
