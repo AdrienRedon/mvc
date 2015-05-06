@@ -12,8 +12,8 @@ class UsersMigration extends Migration
     public function up()
     {
         $this->id();
-        $this->varchar('email');
-        $this->varchar('password');
+        $this->varchar('email')->required();
+        $this->varchar('password')->required();
 
         $this->create();
     }
