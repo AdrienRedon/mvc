@@ -2,6 +2,10 @@
 
 namespace Core;
 
+use \Core\App;
+use \Core\Field;
+use \Libs\Interfaces\DatabaseInterface;
+
 class Migration 
 {
 
@@ -9,11 +13,12 @@ class Migration
 
     protected $table;
 
-    protected $fields = array();
+    protected $fields;
 
-    public function __construct(\Libs\Interfaces\DatabaseInterface $db)
+    public function __construct(DatabaseInterface $db)
     {
         $this->db = $db;
+        $this->fields = App::get('\Libs\Collection');
     }
 
     public function drop($table = null)
@@ -27,7 +32,7 @@ class Migration
 
     public function id()
     {
-        array_push($this->fields, array('id', "INT(8) UNSIGNED AUTO_INCREMENT PRIMARY KEY"));
+        return $this->integer('id')->size(8)->unsigned()->auto_increment()->primary();
     }
 
     public function timestamps()
@@ -38,22 +43,44 @@ class Migration
 
     public function integer($name, $size = null)
     {
-        array_push($this->fields, array($name, "INT($size)"));
+        $field = new Field();
+        $field->name = $name;
+        $field->type = 'INT';
+        $field->size = $size;
+
+        $this->fields->push($field);
+        return $this->fields->last();
     }
 
     public function varchar($name, $size = 255)
     {
-        array_push($this->fields, array($name, "VARCHAR($size)"));
+        $field = new Field();
+        $field->name = $name;
+        $field->type = 'VARCHAR';
+        $field->size = $size;
+
+        $this->fields->push($field);
+        return $this->fields->last();
     }
 
     public function text($name)
     {
-        array_push($this->fields, array($name, "TEXT"));
+        $field = new Field();
+        $field->name = $name;
+        $field->type = 'TEXT';
+
+        $this->fields->push($field);
+        return $this->fields->last();
     }
 
     public function timestamp($name)
     {
-        array_push($this->fields, array($name, "TIMESTAMPS"));
+        $field = new Field();
+        $field->name = $name;
+        $field->type = 'TIMESTAMP';
+
+        $this->fields->push($field);
+        return $this->fields->last();
     }
 
     public function create($table = null)
@@ -65,9 +92,7 @@ class Migration
         $sql = "CREATE TABLE $table (";
         foreach ($this->fields as $field) 
         {
-            $name = $field[0];
-            $type = $field[1];
-            $sql .= "$name $type, ";
+            $sql .= "$field, ";
         }
         $sql = substr($sql, 0, -2);
         $sql .= ")";
