@@ -13,11 +13,22 @@ class Route
 {
     protected static $routes;
 
+    /**
+     * Register a new route
+     * @param  string $method Name of the HTTP method
+     * @param  array $args    List of the arguments for the route
+     */
     public static function __callStatic($method, $args)
     {
         SELF::$routes[$method][$args[0]] = $args[1];
     }
 
+    /**
+     * Register RESTful route associated to a resource
+     * @param  string $name       Name of the resource
+     * @param  string $controller Controller associated to the resource
+     * @param  array  $options    Options for the routes
+     */
     public static function resource($name, $controller = null, $options = array())
     {
         if (!$controller)
@@ -68,6 +79,9 @@ class Route
         }
     }
 
+    /**
+     * Call the action associated to the curent url
+     */
     public static function bootstrap()
     {
         $method = $_SERVER['REQUEST_METHOD'];

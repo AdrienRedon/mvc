@@ -4,9 +4,15 @@ namespace Core;
 
 class Config
 {
-
+    /**
+     * Settings in the config files
+     * @var array
+     */
     private $settings = array();
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->settings = require (ROOT . '/config/config.php');

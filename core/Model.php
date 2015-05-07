@@ -7,12 +7,28 @@ use \Libs\Collection;
 
 class Model
 {
+    /**
+     * Implementation of the database interface
+     * @var \Libs\Interfaces\DatabaseInterface
+     */
     protected $db;
     
+    /**
+     * Name of the table to alter
+     * @var string
+     */
     protected $table;
     
+    /**
+     * If the model has a created_at and a updated_at field
+     * @var boolean
+     */
     protected $timestamps = false;
     
+    /**
+     * id of the active record
+     * @var int
+     */
     public $id;
 
     /**
@@ -23,6 +39,7 @@ class Model
 
     /**
      * Hidden fields
+     * @var array
      */
     protected $hidden = array();
 

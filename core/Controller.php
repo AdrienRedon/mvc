@@ -9,10 +9,34 @@ use \Libs\Flash;
 
 class Controller
 {
+    /**
+     * View
+     * @var \Core\View
+     */
     protected $view;
+
+    /**
+     * Auth
+     * @var \Libs\Auth
+     */
     protected $auth;
+
+    /**
+     * Redirect
+     * @var \Libs\Redirect
+     */
     protected $redirect;
+
+    /**
+     * Flash
+     * @var \Libs\Flash
+     */
     protected $flash;
+
+    /**
+     * Validation
+     * @var \Libs\Validation
+     */
     protected $validation;
 
     /**
@@ -21,6 +45,9 @@ class Controller
      */
     protected $data;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->view = App::get('\Core\View');
@@ -36,7 +63,7 @@ class Controller
     }
 
     /**
-     * Determine si l'appel a été fait en Ajax
+     * Check if this is an AJAX call
      * @return bool
      */
     public function isAjax()
@@ -44,6 +71,10 @@ class Controller
         return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
     }
 
+    /**
+     * When the action is not found
+     * @return View JSON or HTML view
+     */
     public function notFound()
     {
         if($this->isAjax())
@@ -56,6 +87,10 @@ class Controller
         }
     }
 
+    /**
+     * When the acion is not allowed
+     * @return View JSON or HTML view
+     */
     public function notAllowed()
     {
         if($this->isAjax())

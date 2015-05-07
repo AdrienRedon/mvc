@@ -7,10 +7,28 @@ use \Exception;
 
 class DIC 
 {
+    /**
+     * Unique instance of the DIC
+     * @var DIC
+     */
     protected static $_instance;
 
+    /**
+     * List of all registered custom constructor
+     * @var array
+     */
     protected $registry = array();
+
+    /**
+     * List of all singletons
+     * @var array
+     */
     protected $singletons = array();
+
+    /**
+     * List of all instances already created
+     * @var array
+     */
     protected $instances = array();
 
     /**
