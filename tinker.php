@@ -29,9 +29,13 @@ if($argv[1] == 'generate' && isset($argv[2]))
         createModel($argv[3]);
 
     }
-    else if($arg[2] == 'view' && isset($argv[3], $argv[4]))
+    else if($argv[2] == 'view' && isset($argv[3], $argv[4]))
     {
         createView($argv[3], $argv[4]);
+    }
+    else if($argv[2] == 'migration' && isset($argv[3]))
+    {
+        createMigration($argv[3]);
     }
     else
     {
@@ -91,15 +95,15 @@ else
 
 function createController($name, $methods = array())
 {
-    $filename = "controllers/{$name}_controller.php";
+    $filename = "controllers/" . ucfirst($name) . "Controller.php";
 
     if(!file_exists($filename))
     {
         $file = fopen($filename, 'w') or die('Unable to open the file');
-        $str = "<?php\n\nclass {$name}Controller extends \Core\Controller\n{\n\tpublic function __construct()\n\t{\n\t\tparent::__construct();\n\t\t\$this->page = \Core\Model::load('model_name');\n\t}";
-        for($i = 0; $i < count($methods); $i++)
+        $str = "<?php\n\nnamespace Controllers\n\nuse \Core\Controller;\nuse \Core\App;\n\nclass " . ucfirst($name) . "Controller extends Controller\n{\n\tpublic function __construct()\n\t{\n\t\tparent::__construct();\n\t\t\$this->$name = App::get('\Models\\" . ucfirst($name) . "');\n\t}";
+        foreach($methods as $method)
         {
-            $str .= "\n\n\tpublic function {$methods[$i]}()\n\t{\n\t}";
+            $str .= "\n\n\tpublic function $method()\n\t{\n\t\t\n\t}\n";
         }
         $str .= "\n}";
         fwrite($file, $str);
@@ -113,17 +117,18 @@ function createController($name, $methods = array())
 
 function deleteController($name)
 {
-    $filename = "controllers/$name.php";
+    $filename = "controllers/". ucfirst($name) . "Controller.php";
     unlink($filename);
 }
 
 function createModel($name)
 {
-    $filename = "models/$name.php";
+    $filename = "models/" . ucfirst($name) . ".php";
 
     if (!file_exists($filename)) {
         $file = fopen($filename, 'w') or die('Unable to open the file');
-        fwrite($file, "<?php\n\nclass $name extends \Core\Model\n{\n\tpublic function __construct()\n\t{\n\t\tparent::__construct();\n\t\t\$this->table = 'table_name';\n\t\t\$this->hidden = [];\n\t}\n}");
+        $str = "<?php\n\nnamespace Models;\n\nuse \Core\Model;\n\nclass " . ucfirst($name). " extends Model\n{\n\tprotected \$table = 'table_name';\n\tprotected \$fields = [];\n\tprotected \$hidden = [];\n\tprotected \$has_one = [];\n\tprotected \$has_many = [];\n\tprotected \$belongs_to = [];\n\tprotected \$belongs_to_many = [];\n}";
+        fwrite($file, $str);
         fclose($file);
     }
     else
@@ -134,7 +139,7 @@ function createModel($name)
 
 function deleteModel($name)
 {
-    $filename = "models/$name.php";
+    $filename = "models/" . ucfirst($name) . ".php";
     unlink($filename);
 }
 
@@ -170,6 +175,7 @@ function createResource($name, $methods)
 {
     createController($name, $methods);
     createModel($name);
+    createMigration($name);
     for($i = 0; $i < count($methods); $i++)
     {
         createView($name, $methods[$i]);
@@ -180,11 +186,34 @@ function deleteResource($name, $methods)
 {
     deleteController($name);
     deleteModel($name);
-    for($i = 0; $i < count($methods); $i++)
+    deleteMigration($name);
+    foreach($methods as $method)
     {
-        DeleteView($name, $methods[$i]);
+        deleteView($name, $method);
     }
 }
 
+function createMigration($name)
+{
+    $filename = "migrations/{$name}Migration.php";
+
+    if(!file_exists($filename))
+    {
+        $file = fopen($filename, 'w') or die('Unable to open the file');
+        $str = "<?php\n\nnamespace Migrations;\n\nuse \Core\Migration;\n\nclass {$name}Migration extends Migration\n{\n\tprotected \$table = 'table_name';\n\n\tpublic function up()\n\t{\n\t\t\n\t\t\$this->create();\n\t}\n\n\tpublic function down()\n\t{\n\t\t\$this->drop();\t\n}";
+        fwrite($file, $str);
+        fclose($file);
+    }
+    else
+    {
+        die("The $name migration already exists");
+    }
+}
+
+function deleteMigration($name)
+{
+    $filename = "migrations/$name.php";
+    unlink($filename);
+}
 
 
