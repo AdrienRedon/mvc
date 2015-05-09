@@ -217,7 +217,7 @@ function deleteResource($name, $methods)
 
 function createMigration($name)
 {
-    $filename = "migrations/{$name}Migration.php";
+    $filename = "migrations/" . ucfirst($name) . "Migration.php";
 
     if(!file_exists($filename))
     {
