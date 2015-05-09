@@ -173,6 +173,10 @@ function deleteView($resource, $name)
 
 function createResource($name, $methods)
 {
+    if(empty($methods))
+    {
+        $methods = ['index', 'show', 'create', 'store', 'edit', 'update', 'delete'];
+    }
     createController($name, $methods);
     createModel($name);
     createMigration($name);
