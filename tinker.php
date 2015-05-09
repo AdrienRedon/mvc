@@ -204,7 +204,7 @@ function createMigration($name)
     if(!file_exists($filename))
     {
         $file = fopen($filename, 'w') or die('Unable to open the file');
-        $str = "<?php\n\nnamespace Migrations;\n\nuse \Core\Migration;\n\nclass {$name}Migration extends Migration\n{\n\tprotected \$table = 'table_name';\n\n\tpublic function up()\n\t{\n\t\t\n\t\t\$this->create();\n\t}\n\n\tpublic function down()\n\t{\n\t\t\$this->drop();\t\n}";
+        $str = "<?php\n\nnamespace Migrations;\n\nuse \Core\Migration;\n\nclass " . ucfirst($name) . "Migration extends Migration\n{\n\tprotected \$table = 'table_name';\n\n\tpublic function up()\n\t{\n\t\t\n\t\t\$this->create();\n\t}\n\n\tpublic function down()\n\t{\n\t\t\$this->drop();\t\n}";
         fwrite($file, $str);
         fclose($file);
     }
