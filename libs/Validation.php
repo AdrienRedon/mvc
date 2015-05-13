@@ -92,12 +92,51 @@ class Validation
                             return false;
                         }
                     }
+                    else if($rule == 'url')
+                    {
+                        if(!filter_var($value, FILTER_VALIDATE_URL))
+                        {
+                            $this->errors = "Le champs $data doit contenir une URL valide.";
+                            return false;
+                        }
+                    }
                     else if(substr($rule, 0, 6) == 'before')
                     {
                         $rule = explode(':', $rule);
                         $date1 = new DateTime($value);
-                        $date2 = new DateTime($$rule[1]);
-                        $date1->diff($date2);
+                        $date2 = new DateTime($rule[1]);
+                        $before = $date1->diff($date2)->invert;
+                        if($before > 0)
+                        {
+                            return false;
+                        }
+                    }
+                    else if(substr($rule, 0, 5) == 'after')
+                    {
+                        $rule = explode(':', $rule);
+                        $date1 = new DateTime($value);
+                        $date2 = new DateTime($rule[1]);
+                        $after = !($date1->diff($date2)->invert);
+
+                        if($after)
+                        {
+                            return false;
+                        }
+                    }
+                    else if(substr($rule, 0, 7) == 'between')
+                    {
+                        $rule = explode(':', $rule);
+                        $dates = explode('..', $rule[1]);
+                        $date1 = new DateTime($value);
+                        $date2 = new DateTime($dates[0]);
+                        $date3 = new DateTime($dates[1]);
+                        $before = $date1->diff($date2)->invert;
+                        $after = !($date1->diff($date3)->invert);
+
+                        if($before || $after)
+                        {
+                            return false;
+                        }
                     }
                 }
             }
