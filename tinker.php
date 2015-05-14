@@ -184,24 +184,6 @@ function createResource($name, $methods)
     {
         createView($name, $method);
     }
-
-    $routes = fopen('routes.php', 'a');
-    $str = "\n\n";
-    if($methods == ['index', 'show', 'create', 'store', 'edit', 'update', 'delete'])
-    {
-        $str .= "Route::resource('{$name}', '" . ucfirst($name) . "Controller')";
-    }
-    else {
-        $str .= "Route::resource('{$name}', '" . ucfirst($name) . "Controller', ['only' => [";
-        foreach($methods as $method)
-        {
-            $str .= "'$method', ";
-        }
-        $str = substr($str, 0, -2);
-        $str .= "]])";
-    }
-    fwrite($routes, $str);
-    fclose($routes);
 }
 
 function deleteResource($name, $methods)
