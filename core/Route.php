@@ -2,164 +2,127 @@
 
 namespace Core;
 
-use Core\Controller;
+use \Core\App;
 
-/**
- * Get the route
- */
-require_once(ROOT . 'routes.php');
-
-class Route 
+class Route
 {
-    protected static $routes;
+    /**
+     * Path of the route
+     * @var [type]
+     */
+    protected $path;
 
     /**
-     * Register a new route
-     * @param  string $method Name of the HTTP method
-     * @param  array $args    List of the arguments for the route
+     * Action associated to the route
+     * @var [type]
      */
-    public static function __callStatic($method, $args)
+    protected $action;
+
+    /**
+     * List of params for the action 
+     * @var array
+     */
+    protected $params = array();
+
+    /**
+     * Regular expression for the params
+     * @var array
+     */
+    protected $paramsRegex = array();
+
+    /**
+     * Constructor
+     * @param string $path   Path of the route
+     * @param        $action Action associated (Callable or 'Controller@method')
+     */
+    public function __construct($path, $action)
     {
-        SELF::$routes[$method][$args[0]] = $args[1];
+        $this->path = trim($path, '/');
+        $this->action = $action;
     }
 
     /**
-     * Register RESTful route associated to a resource
-     * @param  string $name       Name of the resource
-     * @param  string $controller Controller associated to the resource
-     * @param  array  $options    Options for the routes
+     * Call the action associated to the route
      */
-    public static function resource($name, $controller = null, $options = array())
+    public function call()
     {
-        if (!$controller)
+        if(is_callable($this->action)) 
         {
-            $controller = ucfirst($name) . 'Controller';
+            return call_user_func_array($this->action, $this->params);
         }
-
-        if(!(array_key_exists('only', $options) && !in_array('index', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('index', $options['except'])))
+        else if(is_string($this->action) && strpos($this->action, '@'))
         {
-           SELF::get($name, $controller . '@index');        
+            $name = explode('@', $this->action);
+            $controller = App::get('Controllers\\' . $name[0]);
+            return call_user_func_array([$controller, $name[1]], $this->params);
         }
-
-        if(!(array_key_exists('only', $options) && !in_array('create', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('create', $options['except'])))
+        else
         {
-            SELF::get($name . '/create', $controller . '@create');
-        }
-
-        if(!(array_key_exists('only', $options) && !in_array('store', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('store', $options['except'])))
-        {
-            SELF::post($name, $controller . '@store');
-        }
-
-        if(!(array_key_exists('only', $options) && !in_array('show', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('show', $options['except']))) 
-        {
-            SELF::get($name . '/{id}', $controller . '@show');
-        }
-
-        if(!(array_key_exists('only', $options) && !in_array('edit', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('edit', $options['except'])))
-        {
-            SELF::get($name . '/{id}/edit', $controller . '@edit');
-        }
-
-        if(!(array_key_exists('only', $options) && !in_array('update', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('update', $options['except'])))
-        {
-            SELF::put($name . '/{id}', $controller . '@update');
-        }
-
-        if(!(array_key_exists('only', $options) && !in_array('delete', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('delete', $options['except'])))
-        {
-            SELF::delete($name . '/{id}', $controller . '@delete');
+            $controller = App::get('Core\Controller');
+            /**
+             * @todo internal error : action not callable
+             */
+            return $controller->notFound(); 
         }
     }
 
     /**
-     * Call the action associated to the curent url
+     * Check if the url match the route
+     * @param  string $url Url to check
+     * @return bool
      */
-    public static function bootstrap()
+    public function match($url)
     {
-        $method = $_SERVER['REQUEST_METHOD'];
-        if($method == 'POST')
+        $url = trim($url, '/');
+        $path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $this->path);
+        $regex = "#^$path$#i";
+        if(!preg_match($regex, $url, $matches))
         {
-            if(array_key_exists('_method', $_POST) && in_array($_POST['_method'], ['GET', 'PUT', 'DELETE']))
-            {
-                $method = $_POST['_method'];
-            }
+            return false;
         }
+        array_shift($matches);
+        $this->params = $matches;
+        return true;
+    }
 
-        foreach (SELF::$routes[strtolower($method)] as $route => $action) 
+    /**
+     * Callback to get the regular expression for each params
+     * @param  string $match Params matched by preg_replace
+     * @return string        Regular expression
+     */
+    protected function paramMatch($match)
+    {
+        if(isset($this->paramsRegex[$match[1]]))
         {
-            $url = substr($_SERVER['REQUEST_URI'], strlen(WEBROOT));
-
-            if(!$url) 
-            {
-                $url = '/';
-            }
-
-            $isRoute = false;
-
-            $routeParam = explode('/', $route);
-
-            if($routeParam[count($routeParam) - 1] == '') 
-            {
-                unset($routeParam[count($routeParam) - 1]);
-            }
-
-            $urlParam = explode('/', $url);
-
-            if($urlParam[count($urlParam) - 1] == '') 
-            {
-                unset($urlParam[count($urlParam) - 1]);
-            }
-
-            if(count($routeParam) == count($urlParam))
-            {
-                $isRoute = true;
-                $params = array();
-
-                foreach($urlParam as $k => $param)
-                {
-                    if(preg_match("@\{(\w+)}@", $routeParam[$k])) 
-                    {
-                        $params[substr($routeParam[$k], 1, count($routeParam[$k]) - 2)] = $urlParam[$k];
-                    }
-                    else if(!preg_match("@{$routeParam[$k]}@i", $param, $p)) 
-                    {
-                        $isRoute = false;
-                    }
-                } 
-
-                if($routeParam[0] == '' && $urlParam[0] != '') 
-                {
-                    $isRoute = false;
-                }
-
-                if($isRoute) {
-
-                    if(is_callable($action))
-                    {
-                        return call_user_func_array($action, $params);
-                    }
-
-                    if(is_string($action) && strpos($action, '@') !== false)
-                    {
-                        $name = explode('@', $action);
-                        $controller = App::get('Controllers\\' . $name[0]);
-                        return call_user_func_array(array($controller, $name[1]), $params);
-                    }
-
-                }
-            }
-
+            return '(' . $this->paramsRegex[$match[1]] . ')';
         }
-       
-        $controller = App::get('Core\Controller');
-        return $controller->notFound();
+        return '([^/]+)';
+    }
+
+    /**
+     * Add a custom regular expression to a param
+     * @param  string $param Name of the param
+     * @param  string $regex Regular expression
+     * @return Route $this
+     */
+    public function with($param, $regex)
+    {
+        $this->paramsRegex[$param] = str_replace('(', '(?:', $regex);
+        return $this;
+    }
+
+    /**
+     * Get the url of the route with the given params
+     * @param  array  $params Params for the url
+     * @return string
+     */
+    public function getUrl($params)
+    {
+        $path = $this->path;
+        foreach ($params as $k => $v) 
+        {
+            $path = str_replace(":$k", $v, $path);
+        }
+        return $path;
     }
 }

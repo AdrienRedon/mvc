@@ -1,16 +1,25 @@
 <?php 
 
-use Core\Route;
+use Core\App;
 
-Route::get('/', 'PageController@index');
+$router = App::get('Core\Router');
 
-Route::get('phpinfo', function() {
+$router->get('/', 'PageController@index', 'home');
+
+$router->get('phpinfo', function() {
     phpinfo();
 });
 
-Route::post('login', 'SessionController@login');
-Route::get('logout', 'SessionController@logout');
+$router->post('login', 'SessionController@login', 'login');
+$router->get('logout', 'SessionController@logout', 'logout');
 
-Route::resource('post', 'PostController', ['only' => ['index', 'show']]);
+$router->resource('post', 'PostController', ['only' => ['index', 'show']]);
 
-Route::resource('admin/post', 'Admin\PostController', ['except' =>['show']]);
+$router->resource('admin/post', 'Admin\PostController', ['except' =>['show']]);
+
+/**
+ * Store the instance of the router
+ */
+App::setInstance($router);
+
+$router->run();
