@@ -31,15 +31,6 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * Add the items to the collection
-     * @param array $items
-     */
-    public function add(array $items)
-    {
-        $this->items = array_merge($this->items, $items);
-    }
-
-    /**
      * Push an item at the end of the collection
      * @param  $item Item to add at the end
      */
