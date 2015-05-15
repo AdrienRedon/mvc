@@ -6,11 +6,6 @@ use \Core\Route;
 use \Core\App;
 use \Libs\Collection;
 
-/**
- * Get the route
- */
-require_once(ROOT . 'routes.php');
-
 class Router 
 {
 
