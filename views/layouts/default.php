@@ -20,5 +20,6 @@
 		<?= $content_for_layout ?>
 
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="<?= WEBROOT ?>/public/js/app.js"></script>
 	</body>
 </html>
