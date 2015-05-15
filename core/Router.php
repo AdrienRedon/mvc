@@ -26,6 +26,8 @@ class Router
      */
     protected $namedRoutes = array();
 
+    protected $verbs = array('GET', 'POST', 'PUT', 'PATCH', 'DELETE');
+
     /**
      * Register a new route
      * @param  string $method Name of the HTTP method
@@ -34,7 +36,7 @@ class Router
     public function __call($method, $args)
     {
         $method = strtoupper($method);
-        if(in_array($method, ['GET', 'POST', 'PUT', 'DELETE']))
+        if(in_array($method, $this->verbs))
         {
             $route = new Route($args[0], $args[1]);
             $this->routes[$method][] = $route;
@@ -110,10 +112,10 @@ class Router
      */
     public function any($path, $action, $name = null)
     {
-        $this->get($path, $action, $name);
-        $this->post($path, $action, $name);
-        $this->put($path, $action, $name);
-        $this->delete($path, $action, $name);
+        foreach($this->verbs as $verb)
+        {
+            $this->$verb($path, $action, $name);
+        }
     }
 
     /**
