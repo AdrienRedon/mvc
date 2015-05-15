@@ -116,7 +116,12 @@ class Router
             }
         }
 
-        $url = substr(strstr($_SERVER['REQUEST_URI'], '?', true), strlen(WEBROOT));
+        $url = substr($_SERVER['REQUEST_URI'], strlen(WEBROOT));
+
+        if(strpos($url, '?') !== false)
+        {
+            $url = strstr($url, '?', true);
+        }
 
         foreach ($this->routes[$method] as $route) 
         {
