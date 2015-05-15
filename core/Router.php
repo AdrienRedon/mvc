@@ -103,6 +103,20 @@ class Router
     }
 
     /**
+     * Register a new route responding to all verbs
+     * @param  string $path     Path of the route
+     * @param         $action   Action (Callable or 'Controller@method')
+     * @param  string $name     Name of the route
+     */
+    public function any($path, $action, $name = null)
+    {
+        $this->get($path, $action, $name);
+        $this->post($path, $action, $name);
+        $this->put($path, $action, $name);
+        $this->delete($path, $action, $name);
+    }
+
+    /**
      * Call the action associated to the curent url
      */
     public function run()
