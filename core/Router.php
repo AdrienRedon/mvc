@@ -21,6 +21,10 @@ class Router
      */
     protected $namedRoutes = array();
 
+    /**
+     * List of HTTP verbs
+     * @var array
+     */
     protected $verbs = array('GET', 'POST', 'PUT', 'PATCH', 'DELETE');
 
     /**
