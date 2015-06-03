@@ -13,7 +13,7 @@ return [
 	'sql_host' => 'localhost',
 	'sql_base' => 'mvc',
 	'sql_login' => 'root',
-	'sql_password' => '',
+	'sql_password' => 'root',
 
 	/**
 	 * Home route
