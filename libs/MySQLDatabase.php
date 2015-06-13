@@ -6,6 +6,7 @@ use \Libs\Interfaces\DatabaseInterface;
 use \Libs\Collection;
 use \Core\Config;
 use \PDO;
+use \Exception;
 
 class MySQLDatabase implements DatabaseInterface
 {
@@ -19,7 +20,11 @@ class MySQLDatabase implements DatabaseInterface
         $login = $config->get('sql_login');
         $password = $config->get('sql_password');
 
-        $this->db = new PDO("mysql:host=$host;dbname=$base", $login, $password);
+        try {
+            $this->db = new PDO("mysql:host=$host;dbname=$base", $login, $password);
+        } catch(Exception $e) {
+            die("Unable to connect to MySQL Database");
+        }
     }
 
     /**
