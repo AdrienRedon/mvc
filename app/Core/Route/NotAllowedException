@@ -1,0 +1,10 @@
+<?php 
+
+namespace App\Core\Route;
+
+use \Exception;
+
+class NotAllowedException extends Exception 
+{
+    protected $message = 'Route not allowed';
+}

@@ -1,4 +1,0 @@
-mvc
-===
-
-PHP MVC Framework
