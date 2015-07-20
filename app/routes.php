@@ -21,5 +21,5 @@ try {
 } catch (NotFoundException $e) {
     die($e->getMessage());
 } catch (NotAllowedException $e) {
-    die($é->getMessage());
+    die($e->getMessage());
 }
