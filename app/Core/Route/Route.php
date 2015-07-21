@@ -66,7 +66,7 @@ class Route
     }
 
     /**
-     * Check if the url match the route
+     * Check if the url match the route and store the params
      * @param  string $url Url to check
      * @return bool
      */
