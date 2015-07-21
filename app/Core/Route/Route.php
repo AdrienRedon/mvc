@@ -45,18 +45,13 @@ class Route
      */
     public function call()
     {
-        if(is_callable($this->action)) 
-        {
+        if(is_callable($this->action)) {
             return call_user_func_array($this->action, $this->params);
-        }
-        else if(is_string($this->action) && strpos($this->action, '@'))
-        {
+        } else if(is_string($this->action) && strpos($this->action, '@')) {
             $name = explode('@', $this->action);
             $controller = App::get('Controllers\\' . $name[0]);
             return call_user_func_array([$controller, $name[1]], $this->params);
-        }
-        else
-        {
+        } else {
             $controller = App::get('Core\Controller');
             /**
              * @todo internal error : action not callable
@@ -75,8 +70,7 @@ class Route
         $url = trim($url, '/');
         $path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $this->path);
         $regex = "#^$path$#i";
-        if(!preg_match($regex, $url, $matches))
-        {
+        if(!preg_match($regex, $url, $matches)) {
             return false;
         }
         array_shift($matches);
@@ -91,8 +85,7 @@ class Route
      */
     protected function paramMatch($match)
     {
-        if(isset($this->paramsRegex[$match[1]]))
-        {
+        if(isset($this->paramsRegex[$match[1]])) {
             return '(' . $this->paramsRegex[$match[1]] . ')';
         }
         return '([^/]+)';
@@ -118,8 +111,7 @@ class Route
     public function getUrl($params)
     {
         $path = $this->path;
-        foreach ($params as $k => $v) 
-        {
+        foreach ($params as $k => $v) {
             $path = str_replace(":$k", $v, $path);
         }
         return $path;
