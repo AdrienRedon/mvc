@@ -115,6 +115,11 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $result = $router->run();
         $this->assertEquals($result, 'any ok');
 
+        $_SERVER['REQUEST_METHOD'] = 'PATCH';
+        $_SERVER['REQUEST_URI'] = '/test-any';
+        $result = $router->run();
+        $this->assertEquals($result, 'any ok');
+
         $_SERVER['REQUEST_METHOD'] = 'DELETE';
         $_SERVER['REQUEST_URI'] = '/test-any';
         $result = $router->run();
