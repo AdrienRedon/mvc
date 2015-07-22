@@ -35,12 +35,10 @@ class Router
     public function __call($method, $args)
     {
         $method = strtoupper($method);
-        if(in_array($method, $this->verbs))
-        {
+        if(in_array($method, $this->verbs)) {
             $route = new Route($args[0], $args[1]);
             $this->routes[$method][] = $route;
-            if(isset($args[2]))
-            {
+            if(isset($args[2])) {
                 $this->namedRoutes[$args[2]] = $route;
             }
             return $route;
