@@ -30,6 +30,7 @@ class Router
      * Register a new route
      * @param  string $method Name of the HTTP method
      * @param  array $args    List of the arguments for the route
+     * @return Route $route   Route created
      */
     public function __call($method, $args)
     {
