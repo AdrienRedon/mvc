@@ -55,43 +55,36 @@ class Router
      */
     public function resource($name, $controller = null, $options = array())
     {
-        if (!$controller)
-        {
+        if (!$controller) {
             $controller = ucfirst($name) . 'Controller';
         }
+
         if(!(array_key_exists('only', $options) && !in_array('index', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('index', $options['except'])))
-        {
+            !(array_key_exists('except', $options) && in_array('index', $options['except']))) {
            $this->get($name, $controller . '@index', $name . '.index');        
         }
         if(!(array_key_exists('only', $options) && !in_array('create', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('create', $options['except'])))
-        {
+            !(array_key_exists('except', $options) && in_array('create', $options['except']))) {
             $this->get($name . '/create', $controller . '@create', $name . '.create');
         }
         if(!(array_key_exists('only', $options) && !in_array('store', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('store', $options['except'])))
-        {
+            !(array_key_exists('except', $options) && in_array('store', $options['except']))) {
             $this->post($name, $controller . '@store', $name . '.store');
         }
         if(!(array_key_exists('only', $options) && !in_array('show', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('show', $options['except']))) 
-        {
+            !(array_key_exists('except', $options) && in_array('show', $options['except']))) {
             $this->get($name . '/:id', $controller . '@show', $name . '.show');
         }
         if(!(array_key_exists('only', $options) && !in_array('edit', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('edit', $options['except'])))
-        {
+            !(array_key_exists('except', $options) && in_array('edit', $options['except']))) {
             $this->get($name . '/:id/edit', $controller . '@edit', $name . '.edit');
         }
         if(!(array_key_exists('only', $options) && !in_array('update', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('update', $options['except'])))
-        {
+            !(array_key_exists('except', $options) && in_array('update', $options['except']))) {
             $this->put($name . '/:id', $controller . '@update', $name . '.update');
         }
         if(!(array_key_exists('only', $options) && !in_array('delete', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('delete', $options['except'])))
-        {
+            !(array_key_exists('except', $options) && in_array('delete', $options['except']))) {
             $this->delete($name . '/:id', $controller . '@delete', $name . '.delete');
         }
     }
@@ -115,24 +108,19 @@ class Router
     public function run()
     {
         $method = $_SERVER['REQUEST_METHOD'];
-        if($method == 'POST')
-        {
-            if(array_key_exists('_method', $_POST) && in_array($_POST['_method'], ['GET', 'PUT', 'DELETE']))
-            {
+        if($method == 'POST') {
+            if(array_key_exists('_method', $_POST) && in_array($_POST['_method'], ['GET', 'PUT', 'DELETE'])) {
                 $method = $_POST['_method'];
             }
         }
 
         $url = substr($_SERVER['REQUEST_URI'], strlen(WEBROOT));
-        if(strpos($url, '?') !== false)
-        {
+        if(strpos($url, '?') !== false) {
             $url = strstr($url, '?', true);
         }
 
-        foreach ($this->routes[$method] as $route) 
-        {
-            if($route->match($url))
-            {
+        foreach ($this->routes[$method] as $route) {
+            if($route->match($url)) {
                 return $route->call();
             }
         }
@@ -148,8 +136,7 @@ class Router
      */
     public function url($name, $params = array())
     {
-        if(!array_key_exists($name, $this->namedRoutes))
-        {
+        if(!array_key_exists($name, $this->namedRoutes)) {
             return '';
         }
         return $this->namedRoutes[$name]->getUrl($params);
