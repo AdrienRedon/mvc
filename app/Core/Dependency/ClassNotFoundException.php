@@ -1,6 +1,8 @@
 <?php 
 
-namespace App\Core\DI;
+namespace App\Core\Dependency;
+
+use \Exception;
 
 class ClassNotFoundException extends Exception 
 {

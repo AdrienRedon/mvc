@@ -10,119 +10,62 @@ define('WEBROOT', '');
 class RouterTest extends PHPUnit_Framework_TestCase 
 {
 
-    public function testInitRoute()
+    public function setUp()
     {
-        $router = new Router();
-        $router->get('/test-get', function() {
+        $this->router = new Router();
+        $this->router->get('/test-get', function() {
             return 'get ok';
         });
-        $router->post('/test-post', function() {
+        $this->router->post('/test-post', function() {
             return 'post ok';
         });
-        $router->any('/test-any', function() {
+        $this->router->any('/test-any', function() {
             return 'any ok';
         });
-        return $router;
+    }
+
+    public function requestedValidRoutes()
+    {
+        return [
+            ['GET', '/test-get', 'get ok'],
+            ['POST', '/test-post', 'post ok'],
+            ['GET', '/test-any', 'any ok'],
+            ['POST', '/test-any', 'any ok'],
+            ['PUT', '/test-any', 'any ok'],
+            ['PATCH', '/test-any', 'any ok'],
+            ['DELETE', '/test-any', 'any ok']
+        ];
+    }
+
+    public function requestedNotFoundRoutes()
+    {
+        return [
+            ['GET', 'test'],
+            ['POST', 'test'],
+            ['POST', 'test-get'],
+            ['GET', 'test-post']
+        ];
     }
 
     /**
-     * @depends testInitRoute
+     * @dataProvider requestedValidRoutes
      */
-    public function testRouteGet(Router $router)
+    public function testRun($method, $url, $result)
     {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['REQUEST_URI'] = '/test-get';
-        $result = $router->run();
-        $this->assertEquals($result, 'get ok');
+        $_SERVER['REQUEST_METHOD'] = $method;
+        $_SERVER['REQUEST_URI'] = $url;
+        $this->assertEquals($this->router->run(), $result);
     }
 
     /**
-     * @depends testInitRoute
+     * @dataProvider requestedNotFoundRoutes
+     * @expectedException App\Core\Route\NotFoundException
      */
-    public function testRouteGetInvalidMethod(Router $router)
+    public function testThrowsExceptionIfRouteNotFound($method, $url)
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_SERVER['REQUEST_URI'] = '/test-get';
-        $this->setExpectedException('App\Core\Route\NotFoundException');
-        $result = $router->run();
-        $this->fail('Exception not thrown');
+        $_SERVER['REQUEST_METHOD'] = $method;
+        $_SERVER['REQUEST_URI'] = $url;
+        $this->router->run();
     }
 
-    /**
-     * @depends testInitRoute
-     */
-    public function testRouteGetNotFound(Router $router)
-    {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['REQUEST_URI'] = '/test';
-        $this->setExpectedException('App\Core\Route\NotFoundException');
-        $result = $router->run();
-        $this->fail('Exception not thrown');
-    }
-
-    /**
-     * @depends testInitRoute
-     */
-    public function testRoutePost(Router $router)
-    {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_SERVER['REQUEST_URI'] = '/test-post';
-        $result = $router->run();
-        $this->assertEquals($result, 'post ok');
-    }
-
-    /**
-     * @depends testInitRoute
-     */
-    public function testRoutePostInvalidMethod(Router $router)
-    {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['REQUEST_URI'] = '/test-post';
-        $this->setExpectedException('App\Core\Route\NotFoundException');
-        $result = $router->run();
-        $this->fail('Exception not thrown');
-    }
-
-    /**
-     * @depends testInitRoute
-     */
-    public function testRoutePostNotFound(Router $router)
-    {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_SERVER['REQUEST_URI'] = '/test';
-        $this->setExpectedException('App\Core\Route\NotFoundException');
-        $result = $router->run();
-        $this->fail('Exception not thrown');
-    }
-
-    /**
-     * @depends testInitRoute
-     */
-    public function testRouteAny(Router $router)
-    {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['REQUEST_URI'] = '/test-any';
-        $result = $router->run();
-        $this->assertEquals($result, 'any ok');
-
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_SERVER['REQUEST_URI'] = '/test-any';
-        $result = $router->run();
-        $this->assertEquals($result, 'any ok');
-
-        $_SERVER['REQUEST_METHOD'] = 'PUT';
-        $_SERVER['REQUEST_URI'] = '/test-any';
-        $result = $router->run();
-        $this->assertEquals($result, 'any ok');
-
-        $_SERVER['REQUEST_METHOD'] = 'PATCH';
-        $_SERVER['REQUEST_URI'] = '/test-any';
-        $result = $router->run();
-        $this->assertEquals($result, 'any ok');
-
-        $_SERVER['REQUEST_METHOD'] = 'DELETE';
-        $_SERVER['REQUEST_URI'] = '/test-any';
-        $result = $router->run();
-        $this->assertEquals($result, 'any ok');
-    }
 }
