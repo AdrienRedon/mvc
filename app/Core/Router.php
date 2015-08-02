@@ -3,7 +3,7 @@
 namespace App\Core;
 
 use App\Core\Route\Route;
-use App\Core\Route\NotFoundException;
+use App\Core\Route\Exception\NotFoundException;
 
 class Router 
 {

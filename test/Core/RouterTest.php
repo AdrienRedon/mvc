@@ -59,7 +59,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider requestedNotFoundRoutes
-     * @expectedException App\Core\Route\NotFoundException
+     * @expectedException App\Core\Route\Exception\NotFoundException
      */
     public function testThrowsExceptionIfRouteNotFound($method, $url)
     {
