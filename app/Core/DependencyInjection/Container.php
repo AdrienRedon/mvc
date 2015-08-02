@@ -1,10 +1,10 @@
 <?php 
 
-namespace App\Core;
+namespace App\Core\DependencyInjection;
 
-use App\Core\Dependency\ClassNotFoundException;
+use App\Core\DependencyInjection\Exception\ServiceNotFoundException;
 
-class IoC
+class Container implements ContainerInterface
 {
 
     /**
@@ -30,9 +30,12 @@ class IoC
     public function resolve($name)
     {
         if(!isset($this->registry[$name])) {
-            throw new ClassNotFoundException();
+            throw new ServiceNotFoundException();
+        } elseif (is_callable($this->registry[$name])) {
+            return $this->registry[$name]();
+        } else {
+            return $this->registry[$name];
         }
-        return $this->registry[$name]();
     }
 
 }
