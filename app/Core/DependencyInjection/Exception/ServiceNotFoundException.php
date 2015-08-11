@@ -6,5 +6,13 @@ use \Exception;
 
 class ServiceNotFoundException extends Exception 
 {
-    protected $message = 'Class not found';
+    protected $message = 'Service not found';
+
+    public function __construct($service = '')
+    {
+        $this->message = 'Service not found';
+        if ($service != '') {
+            $this->message .= ': ' . $service;
+        }
+    }
 }

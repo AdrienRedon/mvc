@@ -2,7 +2,12 @@
 
 namespace App\Core\Route;
 
-class Route
+use App\Core\DependencyInjection\ContainerInterface;
+use App\Core\DependencyInjection\ContainerAware;
+use App\Core\Route\Exception\InvalidRouteException;
+use App\Core\Controller\ControllerResolver;
+
+class Route extends ContainerAware
 {
 
     /**
@@ -34,10 +39,11 @@ class Route
      * @param string $path   Path of the route
      * @param        $action Action associated (Callable or 'Controller@method')
      */
-    public function __construct($path, $action)
+    public function __construct($path, $action, ContainerInterface $container = null)
     {
         $this->path = trim($path, '/');
         $this->action = $action;
+        $this->setContainer($container);
     }
 
     /**
@@ -48,15 +54,11 @@ class Route
         if(is_callable($this->action)) {
             return call_user_func_array($this->action, $this->params);
         } else if(is_string($this->action) && strpos($this->action, '@')) {
-            $name = explode('@', $this->action);
-            $controller = App::get('Controllers\\' . $name[0]);
-            return call_user_func_array([$controller, $name[1]], $this->params);
+            $resolver = new ControllerResolver($this->container);
+            $func = $resolver->create($this->action);
+            return call_user_func_array($func, $this->params);
         } else {
-            $controller = App::get('Core\Controller');
-            /**
-             * @todo internal error : action not callable
-             */
-            return $controller->notFound(); 
+            throw(new InvalidRouteException());
         }
     }
 
