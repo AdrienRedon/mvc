@@ -25,11 +25,11 @@ class ControllerResolver
     }
 
     /**
-     * Create and return the controller
+     * Create the controller and return the action
      * 
-     * @return Callable
+     * @return array Controller & method
      */
-    public function create($name)
+    public function getAction($name)
     {
         $controllerParams = explode('@', $name);
 
