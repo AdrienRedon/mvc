@@ -4,6 +4,7 @@ namespace App\Core\Controller;
 
 use App\Core\DependencyInjection\ContainerInterface;
 use App\Core\DependencyInjection\ContainerAwareInterface;
+use App\Core\Controller\Exception\MethodNotFoundException;
 
 class ControllerResolver
 {
@@ -25,15 +26,19 @@ class ControllerResolver
     }
 
     /**
-     * Create and return the controller
+     * Create the controller and return the action
      * 
-     * @return Callable
+     * @return array Controller & method
      */
-    public function create($name)
+    public function getAction($name)
     {
         $controllerParams = explode('@', $name);
 
         $controller = $this->container->resolve('App\Controller\\' . $controllerParams[0]);
+
+        if (!method_exists($controller, $controllerParams[1])) {
+            throw new MethodNotFoundException($controllerParams[1]);
+        }
 
         if ($controller instanceof ContainerAwareInterface) {
             $controller->setContainer($this->container);

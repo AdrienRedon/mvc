@@ -4,6 +4,7 @@ namespace App\Core;
 
 use App\Core\Route\Route;
 use App\Core\Route\Exception\NotFoundException;
+use App\Core\Controller\ControllerResolver;
 
 class Router 
 {
@@ -26,6 +27,11 @@ class Router
      */
     protected $verbs = array('GET', 'POST', 'PUT', 'PATCH', 'DELETE');
 
+    public function __construct(ControllerResolver $resolver)
+    {
+        $this->resolver = $resolver;
+    }
+
     /**
      * Register a new route
      * @param  string $method Name of the HTTP method
@@ -35,10 +41,10 @@ class Router
     public function __call($method, $args)
     {
         $method = strtoupper($method);
-        if(in_array($method, $this->verbs)) {
-            $route = new Route($args[0], $args[1]);
+        if (in_array($method, $this->verbs)) {
+            $route = new Route($args[0], $args[1], $this->resolver);
             $this->routes[$method][] = $route;
-            if(isset($args[2])) {
+            if (isset($args[2])) {
                 $this->namedRoutes[$args[2]] = $route;
             }
             return $route;
@@ -57,19 +63,19 @@ class Router
             $controller = ucfirst($name) . 'Controller';
         }
 
-        if(!(array_key_exists('only', $options) && !in_array('index', $options['only'])) && 
+        if (!(array_key_exists('only', $options) && !in_array('index', $options['only'])) && 
             !(array_key_exists('except', $options) && in_array('index', $options['except']))) {
            $this->get($name, $controller . '@index', $name . '.index');        
         }
-        if(!(array_key_exists('only', $options) && !in_array('create', $options['only'])) && 
+        if (!(array_key_exists('only', $options) && !in_array('create', $options['only'])) && 
             !(array_key_exists('except', $options) && in_array('create', $options['except']))) {
             $this->get($name . '/create', $controller . '@create', $name . '.create');
         }
-        if(!(array_key_exists('only', $options) && !in_array('store', $options['only'])) && 
+        if (!(array_key_exists('only', $options) && !in_array('store', $options['only'])) && 
             !(array_key_exists('except', $options) && in_array('store', $options['except']))) {
             $this->post($name, $controller . '@store', $name . '.store');
         }
-        if(!(array_key_exists('only', $options) && !in_array('show', $options['only'])) && 
+        if (!(array_key_exists('only', $options) && !in_array('show', $options['only'])) && 
             !(array_key_exists('except', $options) && in_array('show', $options['except']))) {
             $this->get($name . '/:id', $controller . '@show', $name . '.show');
         }
@@ -77,11 +83,11 @@ class Router
             !(array_key_exists('except', $options) && in_array('edit', $options['except']))) {
             $this->get($name . '/:id/edit', $controller . '@edit', $name . '.edit');
         }
-        if(!(array_key_exists('only', $options) && !in_array('update', $options['only'])) && 
+        if (!(array_key_exists('only', $options) && !in_array('update', $options['only'])) && 
             !(array_key_exists('except', $options) && in_array('update', $options['except']))) {
             $this->put($name . '/:id', $controller . '@update', $name . '.update');
         }
-        if(!(array_key_exists('only', $options) && !in_array('delete', $options['only'])) && 
+        if (!(array_key_exists('only', $options) && !in_array('delete', $options['only'])) && 
             !(array_key_exists('except', $options) && in_array('delete', $options['except']))) {
             $this->delete($name . '/:id', $controller . '@delete', $name . '.delete');
         }
@@ -94,8 +100,7 @@ class Router
      */
     public function any($path, $action, $name = null)
     {
-        foreach($this->verbs as $verb)
-        {
+        foreach($this->verbs as $verb) {
             $this->$verb($path, $action, $name);
         }
     }
@@ -106,19 +111,19 @@ class Router
     public function run()
     {
         $method = $_SERVER['REQUEST_METHOD'];
-        if($method == 'POST') {
-            if(array_key_exists('_method', $_POST) && in_array($_POST['_method'], ['GET', 'PUT', 'DELETE'])) {
+        if ($method == 'POST') {
+            if (array_key_exists('_method', $_POST) && in_array($_POST['_method'], ['GET', 'PUT', 'DELETE'])) {
                 $method = $_POST['_method'];
             }
         }
 
         $url = substr($_SERVER['REQUEST_URI'], strlen(WEBROOT));
-        if(strpos($url, '?') !== false) {
+        if (strpos($url, '?') !== false) {
             $url = strstr($url, '?', true);
         }
 
         foreach ($this->routes[$method] as $route) {
-            if($route->match($url)) {
+            if ($route->match($url)) {
                 return $route->call();
             }
         }
@@ -134,7 +139,7 @@ class Router
      */
     public function url($name, $params = array())
     {
-        if(!array_key_exists($name, $this->namedRoutes)) {
+        if (!array_key_exists($name, $this->namedRoutes)) {
             return '';
         }
         return $this->namedRoutes[$name]->getUrl($params);

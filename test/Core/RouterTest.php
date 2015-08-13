@@ -3,6 +3,8 @@
 namespace Test\Core;
 
 use App\Core\Router;
+use App\Core\Controller\ControllerResolver;
+use App\Core\DependencyInjection\Container;
 use \PHPUnit_Framework_TestCase;
 
 define('WEBROOT', '');
@@ -12,7 +14,9 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->router = new Router();
+        $this->container = new Container();
+        $this->resolver = new ControllerResolver($this->container);
+        $this->router = new Router($this->resolver);
         $this->router->get('/test-get', function() {
             return 'get ok';
         });

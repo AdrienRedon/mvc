@@ -29,7 +29,7 @@ class Container implements ContainerInterface
      */
     public function resolve($name)
     {
-        if(!isset($this->registry[$name])) {
+        if (!isset($this->registry[$name])) {
             throw new ServiceNotFoundException($name);
         } elseif (is_callable($this->registry[$name])) {
             return $this->registry[$name]();
