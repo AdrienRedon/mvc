@@ -14,13 +14,7 @@ $resolver = new ControllerResolver($container);
 
 $router = new Router($resolver);
 
-/**
- * List of routes
- */
-
-$router->get('/', function() {
-    echo 'Hello World!';
-});
+include('routes.php');
 
 try {
     $router->run();
