@@ -5,7 +5,7 @@ namespace Test\Core\DependencyInjection;
 use App\Core\DependencyInjection\Container;
 use \PHPUnit_Framework_TestCase;
 
-class DICTest extends PHPUnit_Framework_TestCase
+class ContainerTest extends PHPUnit_Framework_TestCase
 {
 
     public function setUp()
