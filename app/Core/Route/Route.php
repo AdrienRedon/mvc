@@ -2,12 +2,10 @@
 
 namespace App\Core\Route;
 
-use App\Core\DependencyInjection\ContainerInterface;
-use App\Core\DependencyInjection\ContainerAware;
 use App\Core\Route\Exception\InvalidRouteException;
 use App\Core\Controller\ControllerResolver;
 
-class Route extends ContainerAware
+class Route
 {
 
     /**
@@ -39,11 +37,11 @@ class Route extends ContainerAware
      * @param string $path   Path of the route
      * @param        $action Action associated (Callable or 'Controller@method')
      */
-    public function __construct($path, $action, ContainerInterface $container = null)
+    public function __construct($path, $action, ControllerResolver $resolver)
     {
         $this->path = trim($path, '/');
         $this->action = $action;
-        $this->setContainer($container);
+        $this->resolver = $resolver;
     }
 
     /**
@@ -54,9 +52,7 @@ class Route extends ContainerAware
         if(is_callable($this->action)) {
             return call_user_func_array($this->action, $this->params);
         } else if(is_string($this->action) && strpos($this->action, '@')) {
-            $resolver = new ControllerResolver($this->container);
-            $func = $resolver->create($this->action);
-            return call_user_func_array($func, $this->params);
+            return call_user_func_array($this->resolver->getAction($this->action), $this->params);
         } else {
             throw(new InvalidRouteException());
         }
