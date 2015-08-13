@@ -39,7 +39,7 @@ class DICTest extends PHPUnit_Framework_TestCase
     /**
      * @expectedException App\Core\DependencyInjection\Exception\ServiceNotFoundException
      */
-    public function testResolveServiceNotFound()
+    public function testThrowsExceptionServiceNotFound()
     {
         $this->c->resolve('Error');        
     }
