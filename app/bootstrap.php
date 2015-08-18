@@ -8,6 +8,8 @@ use App\Core\DependencyInjection\Container;
 
 $container = new Container();
 
+include('services.php');
+
 $resolver = new ControllerResolver($container);
 
 $router = new Router($resolver);
