@@ -26,6 +26,19 @@ class Router
      * @var array
      */
     protected $verbs = array('GET', 'POST', 'PUT', 'PATCH', 'DELETE');
+    
+    /**
+     * List of RESTful action
+     * @var array
+     */
+    protected $actions = array(
+        'index' => array('verb' => 'get', 'url' => ''),
+        'create' => array('verb' => 'get', 'url' => '/create'),
+        'store' => array('verb' => 'post', 'url' => ''),
+        'edit' => array('verb' => 'get', 'url' => '/:id'),
+        'update' => array('verb' => 'put', 'url' => '/:id'),
+        'delete' => array('verb' => 'delete', 'url' => '/:id')
+    );
 
     public function __construct(ControllerResolver $resolver)
     {
@@ -62,34 +75,12 @@ class Router
         if (!$controller) {
             $controller = ucfirst($name) . 'Controller';
         }
-
-        if (!(array_key_exists('only', $options) && !in_array('index', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('index', $options['except']))) {
-           $this->get($name, $controller . '@index', $name . '.index');        
-        }
-        if (!(array_key_exists('only', $options) && !in_array('create', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('create', $options['except']))) {
-            $this->get($name . '/create', $controller . '@create', $name . '.create');
-        }
-        if (!(array_key_exists('only', $options) && !in_array('store', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('store', $options['except']))) {
-            $this->post($name, $controller . '@store', $name . '.store');
-        }
-        if (!(array_key_exists('only', $options) && !in_array('show', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('show', $options['except']))) {
-            $this->get($name . '/:id', $controller . '@show', $name . '.show');
-        }
-        if(!(array_key_exists('only', $options) && !in_array('edit', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('edit', $options['except']))) {
-            $this->get($name . '/:id/edit', $controller . '@edit', $name . '.edit');
-        }
-        if (!(array_key_exists('only', $options) && !in_array('update', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('update', $options['except']))) {
-            $this->put($name . '/:id', $controller . '@update', $name . '.update');
-        }
-        if (!(array_key_exists('only', $options) && !in_array('delete', $options['only'])) && 
-            !(array_key_exists('except', $options) && in_array('delete', $options['except']))) {
-            $this->delete($name . '/:id', $controller . '@delete', $name . '.delete');
+        
+        foreach($this->actions as $actionName=>$action) {
+            if (!(array_key_exists('only', $options) && !in_array($actionName, $options['only'])) && 
+                !(array_key_exists('except', $options) && in_array($actionName, $options['except']))) {
+                $this->$action['verb']($name . $action['url'], $controller . '@' . $actionName, "$name.$actionName");        
+            }
         }
     }
     /**
