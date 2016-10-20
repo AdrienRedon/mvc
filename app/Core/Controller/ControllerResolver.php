@@ -26,14 +26,14 @@ class ControllerResolver
         try {  
             $controller = $this->container->resolve('App\Controller\\' . $controller);
         } catch (ServiceNotFoundException $e) {
-            $filePath = ROOT . 'app/Controller/' . $controller . '.php';
+            $filePath = ROOT . 'app' . DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR. $controller . '.php';
             if (file_exists($filePath)) {
                 include_once($filePath);
                 $controllerName = 'App\Controller\\' . $controller;
                 $controller = new $controllerName($this->container);
                 $this->container->register($controllerName, $controller);
             } else {
-                throw $e; 
+                throw new ServiceNotFoundException("Le fichier $filePath n'a pas été trouvé"); 
             }
         }
         if (!method_exists($controller, $method)) {

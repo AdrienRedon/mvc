@@ -27,7 +27,7 @@ class ModelResolver
         try {
             $model = $this->container->resolve('App\Model\\' . $name);
         } catch (ServiceNotFoundException $e) {
-            $filepath = ROOT . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR .'Model' . DIRECTORY_SEPARATOR . $name . '.php';
+            $filepath = ROOT . 'app' . DIRECTORY_SEPARATOR .'Model' . DIRECTORY_SEPARATOR . $name . '.php';
             if (file_exists($filepath)) {
                 include_once($filepath);
                 $modelName = 'App\Model\\' . $name;

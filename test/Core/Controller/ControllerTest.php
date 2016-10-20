@@ -6,20 +6,19 @@ use \PHPUnit_Framework_TestCase;
 use App\Core\Controller\ControllerResolver;
 use App\Core\DependencyInjection\Container;
 
+define('ROOT', '');
+
 class ControllerTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
         $container = new Container();
-        $container->register('App\Controller\TestController', function() {
-            return new \Test\Controller\TestController;
-        });
         $this->controllerResolver = new ControllerResolver($container);
     }
 
     public function testCreateController()
     {
-        $this->assertEquals(call_user_func_array($this->controllerResolver->getAction('TestController@index'), array()), 'hello');
+        $this->assertEquals(call_user_func_array($this->controllerResolver->getAction('PageController@index'), array()), 'Hello World!');
     }
 
     /**
@@ -35,6 +34,6 @@ class ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testThrowsExceptionMethodNotFound()
     {
-        $this->controllerResolver->getAction('TestController@notFoundMethod');
+        $this->controllerResolver->getAction('PageController@notFoundMethod');
     }
 }
