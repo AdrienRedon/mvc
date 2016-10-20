@@ -7,6 +7,6 @@ class PageController extends Controller
 {
     public function index() 
     {
-        return 'Hello World!';
+        return $this->view->render('Page/index');
     }
 }

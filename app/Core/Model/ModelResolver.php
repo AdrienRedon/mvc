@@ -27,13 +27,13 @@ class ModelResolver
         try {
             $model = $this->container->resolve('App\Model\\' . $name);
         } catch (ServiceNotFoundException $e) {
-            $filepath = ROOT . 'app' . DIRECTORY_SEPARATOR .'Model' . DIRECTORY_SEPARATOR . $name . '.php';
-            if (file_exists($filepath)) {
-                include_once($filepath);
+            $filePath = ROOT . 'app' . DIRECTORY_SEPARATOR .'Model' . DIRECTORY_SEPARATOR . $name . '.php';
+            if (file_exists($filePath)) {
+                include_once($filePath);
                 $modelName = 'App\Model\\' . $name;
                 $model = new $modelName($db, $this);
             } else {
-                throw $e;
+                throw new ServiceNotFoundException("Unable to find $filePath"); 
             }
         }
         if ($model instanceof ContainerAwareInterface) {

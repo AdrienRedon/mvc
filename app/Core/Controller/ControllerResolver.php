@@ -33,7 +33,7 @@ class ControllerResolver
                 $controller = new $controllerName($this->container);
                 $this->container->register($controllerName, $controller);
             } else {
-                throw new ServiceNotFoundException("Le fichier $filePath n'a pas été trouvé"); 
+                throw new ServiceNotFoundException("Unable to find $filePath"); 
             }
         }
         if (!method_exists($controller, $method)) {
