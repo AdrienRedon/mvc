@@ -13,8 +13,8 @@ use App\Core\View\View;
 $container->register('ModelResolver', function() use ($container) {
     return new ModelResolver($container);
 });
-$container->register('View', function() use ($container) {
-    return new View($container);
+$container->register('ViewIterface', function() use ($container) {
+    return new ViewSmarty($container);
 });
 $container->register('Database', function() {
     return new MySQLDatabase(new Config());
