@@ -1,5 +1,7 @@
 <?php 
+
 namespace App\Core\View;
+
 use \Smarty;
 use App\Core\DependencyInjection\ContainerAware;
 use App\Core\DependencyInjection\ContainerInterface;
