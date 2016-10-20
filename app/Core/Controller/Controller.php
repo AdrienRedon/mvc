@@ -17,7 +17,7 @@ class Controller extends ContainerAware
     public function __construct(ContainerInterface $container)
     {
         $this->setContainer($container);
-        $this->view = $this->container->resolve('View');
+        $this->view = $this->container->resolve('ViewInterface');
         $this->redirect = $this->container->resolve('Redirection');
         $this->view->setDirectoryPath('app/View/');
         $this->model = $this->container->resolve('ModelResolver');
