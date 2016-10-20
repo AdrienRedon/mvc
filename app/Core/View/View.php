@@ -3,7 +3,7 @@ namespace App\Core\View;
 use \Smarty;
 use App\Core\DependencyInjection\ContainerAware;
 use App\Core\DependencyInjection\ContainerInterface;
-class View extends ContainerAware
+class View extends ContainerAware implements ViewInterface
 {
     protected $smarty;
     protected $directoryPath;
