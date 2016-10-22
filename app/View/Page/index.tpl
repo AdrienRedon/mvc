@@ -1,1 +1,1 @@
-{include file="templates/content/index.tpl"}
+{include file="templates/content/home.tpl"}
