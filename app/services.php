@@ -33,6 +33,9 @@ $container->register('Redirection', function() use ($container) {
 $container->register('Flash', function() use ($container) {
     return new Flash($container->resolve('SessionInterface'));
 });
-$container->register('Asset', function() {
-    return new Asset();
+$container->register('Asset', function() use($container) {
+    return new Asset($container);
+});
+$container->register('Config', function() {
+    return new Config();
 });

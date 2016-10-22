@@ -2,9 +2,24 @@
 
 namespace App\Libs;
 
-class Asset
+use App\Core\DependencyInjection\ContainerInterface;
+use App\Core\DependencyInjection\ContainerAwareInterface;
+
+class Asset implements ContainerAwareInterface
 {
   protected $json = null;
+  protected $container;
+  protected $config;
+
+  public function __construct(ContainerInterface $container)
+  {
+      $this->container = $container;
+      $this->config = $this->container->resolve('Config');
+  }
+
+  public function setContainer(ContainerInterface $container = null) {
+    $this->container = $container;
+  }
   
   public function path($file)
   {
@@ -23,7 +38,6 @@ class Asset
   
   public function isLocal()
   {
-    return true;
-    return strpos($_SERVER['HTTP_HOST'], 'localhost') !== false;
+    return $this->config->get('debug');
   }
 }
