@@ -6,14 +6,14 @@ use App\Core\Config;
 use App\Libs\Auth;
 use App\Libs\Redirection;
 use App\Libs\Flash;
-use App\Core\View\View;
+use App\Core\View\ViewSmarty;
 /**
  * List of services
  */
 $container->register('ModelResolver', function() use ($container) {
     return new ModelResolver($container);
 });
-$container->register('ViewIterface', function() use ($container) {
+$container->register('ViewInterface', function() use ($container) {
     return new ViewSmarty($container);
 });
 $container->register('Database', function() {
