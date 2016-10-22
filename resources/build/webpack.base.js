@@ -26,18 +26,6 @@ let webpack_base = {
     }
   },
   module: {
-    preLoaders: [
-      {
-        test: /\.vue$/,
-        loader: 'eslint',
-        exclude: [/node_modules/]
-      },
-      {
-        test: /\.js$/,
-        loader: 'eslint',
-        exclude: [/node_modules/,/libs/]
-      }
-    ],
     loaders: [
       {
         test: /\.vue$/,

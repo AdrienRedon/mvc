@@ -11,24 +11,29 @@ class ViewSmarty extends ContainerAware implements ViewInterface
     protected $smarty;
     protected $directoryPath;
     protected $defaultView;
+    protected $asset;
+
     public function __construct(ContainerInterface $container)
     {
         $this->setContainer($container);
         $this->smarty = new Smarty();
         $this->auth = $this->container->resolve('Auth');
+        $this->asset = $this->container->resolve('Asset');
         $this->smarty->debugging = false;
         $this->smarty->caching = false;
         $this->smarty->cache_lifetime = 120;
     }
+
     public function setDirectoryPath($directoryPath)
     {
         $this->directoryPath = $directoryPath;
         shell_exec('cd ../app/View && chmod 777 templates_c && chmod 777 cache'); // to make sure Smarty can write file
-        $this->smarty->setTemplateDir(ROOT . 'app/View');
-        $this->smarty->setCompileDir(ROOT . 'app/View/templates_c');
-        $this->smarty->setCacheDir(ROOT . 'app/View/cache');
-        $this->smarty->setConfigDir(ROOT . 'app/View/configs');
+        $this->smarty->setTemplateDir(ROOT . $this->directoryPath);
+        $this->smarty->setCompileDir(ROOT . $this->directoryPath . '/templates_c');
+        $this->smarty->setCacheDir(ROOT . $this->directoryPath . '/cache');
+        $this->smarty->setConfigDir(ROOT . $this->directoryPath . '/configs');
     }
+
     public function render($path, $vars = array())
     {
         foreach($vars as $key => $value) {
@@ -39,6 +44,7 @@ class ViewSmarty extends ContainerAware implements ViewInterface
             }
         }
         $this->smarty->assign('logged', $this->auth->check());
+        $this->smarty->assign('asset', $this->asset);
         $this->smarty->display(ROOT . $this->directoryPath . $path . '.tpl');
     }
 }

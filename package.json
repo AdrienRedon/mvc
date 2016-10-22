@@ -1,17 +1,17 @@
 {
   "name": "mvc",
-  "version": "2",
+  "version": "2.0.0",
   "description": "",
   "main": "",
   "scripts" : {
     "update": "npm-check-updates -u",
-    "build": "rm -rf dist && webpack --config build/webpack.prod.js",
-    "dev": "node build/server.js",
+    "build": "rm -rf public/assets && webpack --config resources/build/webpack.prod.js",
+    "dev": "node resources/build/server.js"
   },
   "author": "Adrien REDON",
   "license": "MIT",
   "dependencies": {
-    "vue": "^2.0.0-rc.4",
+    "vue": "^2.0.0-rc.4"
   },
   "devDependencies": {
     "assets-webpack-plugin": "^3.4.0",

@@ -1,1 +1,1 @@
-<h1>Hello World!</h1>
+{include file="templates/content/index.tpl"}

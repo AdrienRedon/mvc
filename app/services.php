@@ -7,6 +7,8 @@ use App\Libs\Auth;
 use App\Libs\Redirection;
 use App\Libs\Flash;
 use App\Core\View\ViewSmarty;
+use App\Libs\Asset;
+
 /**
  * List of services
  */
@@ -30,4 +32,7 @@ $container->register('Redirection', function() use ($container) {
 });
 $container->register('Flash', function() use ($container) {
     return new Flash($container->resolve('SessionInterface'));
+});
+$container->register('Asset', function() {
+    return new Asset();
 });
