@@ -21,17 +21,24 @@ class __TwigTemplate_3914ec57b5a7a47bc49bde41d8295374fb44b5760a83e839766aab6dfc9
 <html>
 <head>
     <title>MVC</title>
+    <link rel=\"stylesheet\" type=\"text/css\" href=\"";
+        // line 5
+        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["asset"]) ? $context["asset"] : null), "path", array(0 => "app.css"), "method"), "html", null, true);
+        echo "\">
 </head>
 <body>
     ";
-        // line 7
-        $this->displayBlock('content', $context, $blocks);
         // line 8
-        echo "</body>
+        $this->displayBlock('content', $context, $blocks);
+        // line 9
+        echo "    <script type=\"text/javascript\" src=\"";
+        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["asset"]) ? $context["asset"] : null), "path", array(0 => "app.js"), "method"), "html", null, true);
+        echo "\"></script>
+</body>
 </html>";
     }
 
-    // line 7
+    // line 8
     public function block_content($context, array $blocks = array())
     {
     }
@@ -41,9 +48,14 @@ class __TwigTemplate_3914ec57b5a7a47bc49bde41d8295374fb44b5760a83e839766aab6dfc9
         return "layout/main.twig";
     }
 
+    public function isTraitable()
+    {
+        return false;
+    }
+
     public function getDebugInfo()
     {
-        return array (  35 => 7,  30 => 8,  28 => 7,  20 => 1,);
+        return array (  42 => 8,  34 => 9,  32 => 8,  26 => 5,  20 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
@@ -60,9 +72,11 @@ class __TwigTemplate_3914ec57b5a7a47bc49bde41d8295374fb44b5760a83e839766aab6dfc9
 <html>
 <head>
     <title>MVC</title>
+    <link rel=\"stylesheet\" type=\"text/css\" href=\"{{ asset.path('app.css') }}\">
 </head>
 <body>
     {% block content %}{% endblock %}
+    <script type=\"text/javascript\" src=\"{{ asset.path('app.js') }}\"></script>
 </body>
 </html>", "layout/main.twig", "/Users/adrien/Sites/mvc/app/View/layout/main.twig");
     }
