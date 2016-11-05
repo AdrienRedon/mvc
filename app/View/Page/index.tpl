@@ -1,1 +1,0 @@
-{include file="templates/content/home.tpl"}

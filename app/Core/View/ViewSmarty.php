@@ -11,6 +11,7 @@ class ViewSmarty extends ContainerAware implements ViewInterface
     protected $smarty;
     protected $directoryPath;
     protected $defaultView;
+    protected $auth;
     protected $asset;
 
     public function __construct(ContainerInterface $container)
@@ -27,7 +28,6 @@ class ViewSmarty extends ContainerAware implements ViewInterface
     public function setDirectoryPath($directoryPath)
     {
         $this->directoryPath = $directoryPath;
-        shell_exec('cd ../app/View && chmod 777 templates_c && chmod 777 cache'); // to make sure Smarty can write file
         $this->smarty->setTemplateDir(ROOT . $this->directoryPath);
         $this->smarty->setCompileDir(ROOT . $this->directoryPath . '/templates_c');
         $this->smarty->setCacheDir(ROOT . $this->directoryPath . '/cache');

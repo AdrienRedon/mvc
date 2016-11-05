@@ -6,7 +6,7 @@ use App\Core\Config;
 use App\Libs\Auth;
 use App\Libs\Redirection;
 use App\Libs\Flash;
-use App\Core\View\ViewSmarty;
+use App\Core\View\ViewTwig;
 use App\Libs\Asset;
 
 /**
@@ -16,7 +16,7 @@ $container->register('ModelResolver', function() use ($container) {
     return new ModelResolver($container);
 });
 $container->register('ViewInterface', function() use ($container) {
-    return new ViewSmarty($container);
+    return new ViewTwig($container);
 });
 $container->register('Database', function() {
     return new MySQLDatabase(new Config());
