@@ -29,6 +29,7 @@ class __TwigTemplate_d3974f37bce55cb780f460ff4a8c09fe6c44ed6e6f79c5b9c8a6f760aeb
     {
         // line 4
         echo "    <h1>Hello World</h1>
+    <div id=\"app\"></div>
 ";
     }
 
@@ -61,6 +62,7 @@ class __TwigTemplate_d3974f37bce55cb780f460ff4a8c09fe6c44ed6e6f79c5b9c8a6f760aeb
 
 {% block content %}
     <h1>Hello World</h1>
+    <div id=\"app\"></div>
 {% endblock %}", "Page/index.twig", "/Users/adrien/Sites/mvc/app/View/Page/index.twig");
     }
 }
