@@ -18,7 +18,13 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
     public function testCreateController()
     {
-        $this->assertEquals(call_user_func_array($this->controllerResolver->getAction('PageController@index'), array()), 'Hello World!');
+        $this->assertEquals(
+            call_user_func_array(
+                $this->controllerResolver->getAction('PageController@index'),
+                array()
+            ),
+            'Hello World!'
+        );
     }
 
     /**
