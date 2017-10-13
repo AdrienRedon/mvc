@@ -8,11 +8,11 @@ class ServiceNotFoundException extends Exception
 {
     protected $message = 'Service not found';
 
-    public function __construct($service = '')
+    public function __construct($service = null)
     {
         $this->message = 'Service not found';
-        if ($service != '') {
-            $this->message .= ': ' . $service;
+        if ($service) {
+            $this->message .= ":  $service";
         }
     }
 }
