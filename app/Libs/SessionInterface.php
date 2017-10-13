@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Libs; 
+
 interface SessionInterface
 {
     public function get($key);
