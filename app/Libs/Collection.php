@@ -275,15 +275,4 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     {
         return new \ArrayIterator($this->items);
     }
-    /**
-     * Private function
-     */
-    private function asc($a, $b)
-    {
-        return $a < $b;
-    }
-    private function desc($a, $b)
-    {
-        return $a > $b;
-    }
 }
