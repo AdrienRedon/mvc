@@ -1,6 +1,9 @@
 <?php 
+
 namespace App\Libs;
+
 use App\Libs\SessionInterface;
+
 class Session implements SessionInterface
 {
     public function __construct()
